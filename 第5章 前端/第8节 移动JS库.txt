@@ -1,0 +1,181 @@
+******************************************************************************************
+移动端js事件
+移动端的操作方式和PC端是不同的，移动端主要用手指操作，所以有特殊的touch事件，touch事件包括如下几个事件：
+
+1、touchstart: //手指放到屏幕上时触发
+2、touchmove: //手指在屏幕上滑动式触发
+3、touchend: //手指离开屏幕时触发
+4、touchcancel: //系统取消touch事件的时候触发，比较少用
+
+移动端一般有三种操作，点击、滑动、拖动，这三种操作一般是组合使用上面的几个事件来完成的，所有上面的4个事件一般很少单独使用，一般是封装使用来实现这三种操作，可以使用封装成熟的js库。
+******************************************************************************************
+zeptojs
+Zepto是一个轻量级的针对现代高级浏览器的JavaScript库， 它与jquery有着类似的api。 如果你会用jquery，那么你也会用zepto。Zepto的一些可选功能是专门针对移动端浏览器的；它的最初目标是在移动端提供一个精简的类似jquery的js库。
+
+zepto官网：http://zeptojs.com/
+zepto中文api：http://www.css88.com/doc/zeptojs_api/
+zepto包含很多模块，默认下载版本包含的模块有Core, Ajax, Event, Form, IE模块，如果还需要其他的模块，可以自定义构建。
+zepto自定义构建地址：http://github.e-sites.nl/zeptobuilder/
+
+touch模块封装了针对移动端常用的事件，可使用此模块进行移动端特定效果开发，这些事件有：
+
+tap 元素tap的时候触发，此事件类似click，但是比click快。
+longTap 当一个元素被按住超过750ms触发。
+swipe, swipeLeft, swipeRight, swipeUp, swipeDown 当元素被划过时触发。(可选择给定的方向)
+******************************************************************************************
+swiper
+swiper.js是一款成熟稳定的应用于PC端和移动端的滑动效果插件，一般用来触屏焦点图、触屏整屏滚动等效果。 swiper分为2.x版本和3.x版本，2.x版本支持低版本浏览器(IE7)，3.x放弃支持低版本浏览器，适合应用在移动端。
+
+2.x版本中文网址：http://2.swiper.com.cn/
+3.x版本中文网地址：http://www.swiper.com.cn/
+
+swiper使用方法：
+<script type="text/javascript" src="js/swiper.min.js"></script>
+......
+
+<link rel="stylesheet" type="text/css" href="css/swiper.min.css">
+......
+
+<div class="swiper-container">
+  <div class="swiper-wrapper">
+    <div class="swiper-slide">slider1</div>
+    <div class="swiper-slide">slider2</div>
+    <div class="swiper-slide">slider3</div>
+  </div>
+    <div class="swiper-pagination"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+</div>
+
+<script> 
+var swiper = new Swiper('.swiper-container', {
+    pagination: '.swiper-pagination',
+  prevButton: '.swiper-button-prev',
+  nextButton: '.swiper-button-next',
+    initialSlide :1,
+  paginationClickable: true,
+  loop: true,
+  autoplay:3000,
+  autoplayDisableOnInteraction:false
+});
+</script>
+swiper使用参数：
+1、initialSlide：初始索引值，从0开始
+2、direction：滑动方向 horizontal | vertical
+3、speed：滑动速度，单位ms
+4、autoplay：设置自动播放及播放时间
+5、autoplayDisableOnInteraction：用户操作swipe后是否还自动播放，默认是true，不再自动播放
+6、pagination：分页圆点
+7、paginationClickable：分页圆点是否点击
+8、prevButton：上一页箭头
+9、nextButton：下一页箭头
+10、loop：是否首尾衔接
+11、onSlideChangeEnd：回调函数，滑动结束时执行
+
+swiper制作实例：
+1、swiper制作移动端焦点图实例
+2、swiper制作整页滚动效果
+******************************************************************************************
+bootstrap
+简单、直观、强悍的前端开发框架，让web开发更迅速、简单。 来自Twitter，是目前很受欢迎的前端框架之一。 Bootrstrap是基于HTML、CSS、JavaScript的，让书写代码更容易。 移动优先，响应式布局开发。
+
+bootstrap中文网址：http://www.bootcss.com/
+
+bootstrap 容器
+container-fluid 流体
+container
+1170
+970
+750
+100%
+bootstrap 栅格系统
+bootstrap将页面横向分为12等分，按照12等分定义了适应不同宽度等分的样式类，这些样式类组成了一套响应式、移动设备优先的流式栅格系统：
+
+1、col-lg-
+2、col-md-
+3、col-sm-
+4、col-xs-
+
+bootstrap响应式查询区间：
+1、大于等于768
+2、大于等于992
+3、大于等于1200
+
+bootstrap 表单
+1、form 声明一个表单域
+2、form-inline 内联表单域
+3、form-horizontal 水平排列表单域
+4、form-group 表单组、包括表单文字和表单控件
+5、form-control 文本输入框、下拉列表控件样式
+6、checkbox checkbox-inline 多选框样式
+7、radio radio-inline 单选框样式
+8、input-group 表单控件组
+9、input-group-addon 表单控件组物件样式 10、input-group-btn 表单控件组物件为按钮的样式
+10、form-group-lg 大尺寸表单
+11、form-group-sm 小尺寸表单
+
+bootstrap 按钮
+1、btn 声明按钮
+2、btn-default 默认按钮样式
+3、btn-primay
+4、btn-success
+5、btn-info
+6、btn-warning
+7、btn-danger
+8、btn-link
+9、btn-lg
+10、btn-md
+11、btn-xs
+12、btn-block 宽度是父级宽100%的按钮
+13、active
+14、disabled
+15、btn-group 定义按钮组
+
+bootstrap 图片
+img-responsive 声明响应式图片
+
+bootstrap 隐藏类
+1、hidden-xs
+2、hidden-sm
+3、hidden-md
+4、hidden-lg
+
+bootstrap 字体图标
+通过字体代替图标，font文件夹需要和css文件夹在同一目录
+
+bootstrap 下拉菜单
+1、dropdown-toggle
+2、dropdown-menu
+
+bootstrap 选项卡
+1、nav
+2、nav-tabs
+3、nav-pills
+4、tab-content
+
+bootstrap 导航条
+1、navbar 声明导航条
+2、navbar-default 声明默认的导航条样式
+3、navbar-inverse 声明反白的导航条样式
+4、navbar-static-top 去掉导航条的圆角
+5、navbar-fixed-top 固定到顶部的导航条
+6、navbar-fixed-bottom 固定到底部的导航条
+7、navbar-header 申明logo的容器
+8、navbar-brand 针对logo等固定内容的样式
+11、nav navbar-nav 定义导航条中的菜单
+12、navbar-form 定义导航条中的表单
+13、navbar-btn 定义导航条中的按钮
+14、navbar-text 定义导航条中的文本
+9、navbar-left 菜单靠左
+10、navbar-right 菜单靠右
+
+bootstrap 模态框
+1、modal 声明一个模态框
+2、modal-dialog 定义模态框尺寸
+3、modal-lg 定义大尺寸模态框
+4、modal-sm 定义小尺寸模态框
+5、modal-header
+6、modal-body
+7、modal-footer
+
+bootstrap 响应式专题网站实例

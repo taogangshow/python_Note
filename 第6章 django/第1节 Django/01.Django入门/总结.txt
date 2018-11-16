@@ -1,0 +1,31 @@
+高可扩展性
+向后兼容
+低耦合，高内聚
+
+项目的入口：manage.py
+项目的配置：test1
+项目的开发：自定义应用
+
+虚拟环境：workon,mkvirtualenv,rmvirtualenv,deactivate
+	pip list,pip install
+django的命令：django-admin startproject
+	python manage.py startapp
+	python manage.py makemigrations
+	python manage.py migrate
+	python manage.py runserver
+	python manage.py createsuperuser
+admin的使用admin.py
+	admin.site.register(模型类,admin类)
+
+
+用Django开发的流程:
+1.先定义models.py(模型类)
+2.用admin.py维护数据
+3.定义视图(views.py)来进行请求响应，定义视图前记得配置好ulr(urls.py),开发的时候一般都提前想好了ulr的规则
+4.定义模板(index.html....)在页面呈现内容
+
+MVT:三大块
+M:model复制与数据库交互
+V:view 视图 用语核心的逻辑处理
+T:template 模板 用于进行显示页面的布局
+使用数据表的时候为了能完成数据表数据维护增加修改删除可以有一个admin站点  Django已经维护好了 直接用就好了 也可以自己开发

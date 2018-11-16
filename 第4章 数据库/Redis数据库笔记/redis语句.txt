@@ -1,0 +1,542 @@
+问:为什么用NoSQL,它是用来干什么的？
+答:内存级的读写，加快读写速度
+*****************************************************************************
+Redis的安装----windows
+说明:Redis本身不支持windows，但是有微软的团队在维护着一个windows下的版本
+(1).打开cmd窗口
+D:\Redis>redis-server.exe redis.windows.conf
+(2).另开cmd窗口
+运行redis-cli.exe -h 127.0.0.1 -p 6379 .
+设置键值对 set key 123
+取出键值对 get key
+(3).在D:\Redis下创建logs文件夹
+修改redis.windows-service.conf文件中的logfile "server_log.txt"为logfile "logs/server_log.txt"
+(4).安装windowsredis服务
+D:\Redis>redis-server --service-install redis.windows-service.conf --port 6379
+(5).启动redis服务
+net start redis
+(6).配置环境变量
+(7).进入redis客户端
+D:\Redis>net start redis
+Redis 服务正在启动 .
+Redis 服务已经启动成功。
+D:\Redis>redis-cli
+127.0.0.1:6379>
+*****************************************************************************
+Redis的安装----linux
+(1).解压
+tar zxvf redis-3.2.5.tar.gz
+(2).复制：推荐放到usr/local目录下
+sudo mv -r redis-3.2.3/* /usr/local/redis/
+(3).进入redis目录
+cd /usr/local/redis/
+(4).生成
+sudo make
+(5).测试
+sudo make test
+这段运行时间会较长
+(6).安装：将redis的命令安装到/usr/bin/目录
+sudo make install
+(7).启动服务器：在桌面目录
+redis-server
+按ctrl+c停止
+(8).启动客户端：在新终端中运行如下代码
+redis-cli
+(9).停止redis服务
+ps ajx|grep redis
+sudo kill -9 redis的进程id
+*****************************************************************************
+<数据操作>
+1.redis是key-value的数据，所以每个数据都是一个键值对
+键的类型是字符串
+值的类型分为五种：
+(1).字符串string
+(2).哈希hash
+(3).列表list
+(4).集合set
+(5).有序集合zset
+2.string
+string是redis最基本的类型
+最大能存储512MB数据
+string类型是二进制安全的，即可以为任何数据，比如数字、图片、序列化对象等
+3.命令
+(1).设置键值
+set key value
+127.0.0.1:6379> set 'py3' hello
+OK
+(2).设置键值及过期时间，以秒为单位
+SETEX key seconds value
+127.0.0.1:6379> setex 'py31' 1 'hello1'
+OK
+127.0.0.1:6379> get py3
+"hello"
+127.0.0.1:6379> get py31  -----redis数据库空为nil
+(nil)
+(3).获取多个值
+127.0.0.1:6379> mget py3 py32
+1) "hello"
+2) "hello2"
+
+4.运算
+要求：值是数字
+(1).将key对应的value加1
+INCR key
+(2).将key对应的value加整数
+INCRBY key increment
+(3).将key对应的value减1
+DECR key
+(4)将key对应的value减整数
+DECRBY key decrement
+(5).追加值
+APPEND key value
+127.0.0.1:6379> append py3 'world'
+(integer) 10
+127.0.0.1:6379> get py3
+"helloworld"
+(6).获取值长度
+STRLEN key
+127.0.0.1:6379> strlen py3
+(integer) 10
+**************************************
+键命令
+(1).查找键，参数支持正则
+KEYS pattern
+127.0.0.1:6379> keys *
+1) "py32"
+2) "py3"
+127.0.0.1:6379> keys '*2*'
+1) "py32"
+
+(2).判断键是否存在，如果存在返回1，不存在返回0
+EXISTS key [key ...]
+127.0.0.1:6379> exists py3
+(integer) 1
+127.0.0.1:6379> exists py31
+(integer) 0
+
+(3).查看键对应的value的类型
+TYPE key
+127.0.0.1:6379> type py3
+string
+
+(4).删除键及对应的值
+DEL key [key ...]
+127.0.0.1:6379> del py32
+(integer) 1
+127.0.0.1:6379> keys *
+1) "py3"
+
+(5).设置过期时间，以秒为单位
+创建时没有设置过期时间则一直存在，直到使用使用DEL移除
+EXPIRE key seconds
+127.0.0.1:6379> expire py3 20
+(integer) 1
+
+(6).查看有效时间，以秒为单位
+TTL key
+127.0.0.1:6379> ttl py3
+(integer) 14
+127.0.0.1:6379> ttl py3
+(integer) -2
+127.0.0.1:6379> keys *
+(empty list or set)
+**************************************
+<hash>
+hash用于存储对象，对象的格式为键值对
+1.命令
+设置
+(1).设置单个属性
+HSET key field value
+127.0.0.1:6379> hset py3 name '郭靖'
+(integer) 1
+127.0.0.1:6379> type py3
+hash
+
+(2).设置多个属性
+HMSET key field value [field value ...]
+2.获取
+(1).获取一个属性的值
+HGET key field
+127.0.0.1:6379> hget py3 name
+"\xb9\xf9\xbe\xb8"
+
+(2).获取多个属性的值
+HMGET key field [field ...]
+(3).获取所有属性和值
+HGETALL key
+127.0.0.1:6379> hset py3 gender 1
+(integer) 1
+127.0.0.1:6379> hgetall py3
+1) "name"
+2) "\xb9\xf9\xbe\xb8"
+3) "gender"
+4) "1"
+
+(4).获取所有的属性(键的名称)
+HKEYS key
+127.0.0.1:6379> hkeys py3
+1) "name"
+2) "gender"
+127.0.0.1:6379>
+
+
+(5).返回包含属性的个数
+HLEN key
+127.0.0.1:6379> hlen py3
+(integer) 2
+
+(6).获取所有值
+HVALS key
+127.0.0.1:6379> hvals py3
+1) "\xb9\xf9\xbe\xb8"
+2) "1"
+
+3.其它
+(1).判断属性是否存在
+HEXISTS key field
+127.0.0.1:6379> hexists py3 name
+(integer) 1
+
+(2).删除属性及值
+HDEL key field [field ...]
+(3).返回值的字符串长度
+HSTRLEN key field
+127.0.0.1:6379> hstrlen py3 gender
+(integer) 1
+**************************************
+<list>
+列表的元素类型为string
+按照插入顺序排序
+在列表的头部或者尾部添加元素
+1.命令
+设置
+(1).在头部插入数据
+LPUSH key value [value ...]
+127.0.0.1:6379> lpush py4 'hehe' 'haha'
+(integer) 2
+
+(2).在尾部插入数据
+RPUSH key value [value ...]
+127.0.0.1:6379> rpush py5 'xixi' 'nono'
+(integer) 2
+
+(3).在一个元素的前|后插入新元素
+LINSERT key BEFORE|AFTER pivot value
+127.0.0.1:6379> linsert py4 after 'abc' 'hello'
+(integer) 3
+127.0.0.1:6379> lrange py4 0 -1
+1) "123"
+2) "abc"
+3) "hello"
+
+2.设置指定索引的元素值
+索引是基于0的下标
+(1).索引可以是负数，表示偏移量是从list尾部开始计数，如-1表示列表的最后一个元素
+LSET key index value
+3.获取
+(1).移除并且返回 key 对应的 list 的第一个元素  ----- pop(会弹出值并删除)
+LPOP key
+127.0.0.1:6379> lpop py4
+"haha"
+
+(2).移除并返回存于 key 的 list 的最后一个元素
+RPOP key
+127.0.0.1:6379> rpop py5
+"nono"
+
+(3).返回存储在 key 的列表里指定范围内的元素
+start 和 end 偏移量都是基于0的下标
+偏移量也可以是负数，表示偏移量是从list尾部开始计数，如-1表示列表的最后一个元素
+LRANGE key start stop
+127.0.0.1:6379> lpush py4 'abc'
+(integer) 1
+127.0.0.1:6379> lpush py4 '123'
+(integer) 2
+127.0.0.1:6379> lrange py4 0 -1
+1) "123"
+2) "abc"
+
+5.其它
+裁剪列表，改为原集合的一个子集
+start 和 end 偏移量都是基于0的下标
+(1).偏移量也可以是负数，表示偏移量是从list尾部开始计数，如-1表示列表的最后一个元素
+LTRIM key start stop
+127.0.0.1:6379> lpush py4 h1
+(integer) 4
+127.0.0.1:6379> lpush py4 h2
+(integer) 5
+127.0.0.1:6379> lpush py4 h3
+(integer) 6
+127.0.0.1:6379> lpush py4 h4
+(integer) 7
+127.0.0.1:6379> lrange py4 0 -1
+1) "h4"
+2) "h3"
+3) "h2"
+4) "h1"
+5) "123"
+6) "abc"
+7) "hello"
+127.0.0.1:6379> ltrim py4 1 3
+OK
+127.0.0.1:6379> lrange py4 0 -1
+1) "h3"
+2) "h2"
+3) "h1"
+
+(2).返回存储在 key 里的list的长度
+LLEN key
+127.0.0.1:6379> llen py4
+(integer) 3
+
+(3).返回列表里索引对应的元素
+LINDEX key index
+127.0.0.1:6379> lrange py4 0 -1
+1) "123"
+2) "abc"
+3) "hello"
+127.0.0.1:6379> lindex py4 1
+"abc"
+127.0.0.1:6379> lindex py4 0
+"123"
+**************************************
+<set>
+无序集合
+元素为string类型
+元素具有唯一性，不重复
+1.命令
+设置
+(1).添加元素
+SADD key member [member ...]
+127.0.0.1:6379> sadd py6 123 abc hello
+(integer) 3
+
+2.获取
+(1).返回key集合所有的元素
+SMEMBERS key
+127.0.0.1:6379> smembers py6
+1) "abc"
+2) "hello"
+3) "123"
+
+(2).返回集合元素个数
+SCARD key
+127.0.0.1:6379> scard py6
+(integer) 3
+
+3.其它
+(1).求多个集合的交集
+SINTER key [key ...]
+127.0.0.1:6379> smembers py6
+1) "abc"
+2) "hello"
+3) "123"
+127.0.0.1:6379> smembers py61
+1) "789"
+2) "456"
+3) "world"
+4) "123"
+127.0.0.1:6379> sinter py6 py61
+1) "123"
+
+(2).求某集合与其它集合的差集
+SDIFF key [key ...]
+127.0.0.1:6379> sdiff py6 py61
+1) "abc"
+2) "hello"
+
+(3).求多个集合的合集
+SUNION key [key ...]
+127.0.0.1:6379> sunion py6 py61
+1) "123"
+2) "hello"
+3) "world"
+4) "abc"
+5) "789"
+6) "456"
+
+(4).判断元素是否在集合中
+SISMEMBER key member
+127.0.0.1:6379> sismember py6 123
+(integer) 1
+127.0.0.1:6379> sismember py61 world
+(integer) 1
+127.0.0.1:6379> sismember py61 abc
+(integer) 0
+**************************************
+<zset>
+sorted set，有序集合
+元素为string类型
+元素具有唯一性，不重复
+每个元素都会关联一个double类型的score，表示权重，通过权重将元素从小到大排序
+元素的score可以相同
+1.命令
+设置
+(1).添加
+ZADD key score member [score member ...]
+127.0.0.1:6379>  zadd py7 1 hello 5 world 2 123   ----前面的数字代表权重
+(integer) 3
+
+2.获取
+(1).返回指定范围内的元素
+ZRANGE key start stop
+127.0.0.1:6379> zrange py7 0 -1
+1) "hello"
+2) "123"
+3) "world"
+
+(2).返回元素个数
+ZCARD key
+127.0.0.1:6379> zcard py7
+(integer) 3
+
+(3).返回有序集key中，score值在min和max之间的成员
+ZCOUNT key min max
+127.0.0.1:6379> zcount py7 2 10
+(integer) 2
+
+(4).返回有序集key中，成员member的score值(权重值)
+ZSCORE key member
+127.0.0.1:6379> zscore py7 world
+"5"
+*****************************************************************************
+高级
+1.发布订阅
+(1).发布者不是计划发送消息给特定的接收者（订阅者），而是发布的消息分到不同的频道，不需要知道什么样的订阅者订阅
+(2).订阅者对一个或多个频道感兴趣，只需接收感兴趣的消息，不需要知道什么样的发布者发布的
+(3).发布者和订阅者的解耦合可以带来更大的扩展性和更加动态的网络拓扑
+(4).客户端发到频道的消息，将会被推送到所有订阅此频道的客户端
+(5).客户端不需要主动去获取消息，只需要订阅频道，这个频道的内容就会被推送过来
+2.消息的格式
+推送消息的格式包含三部分
+part1:消息类型，包含三种类型
+(1).subscribe，表示订阅成功
+(2).unsubscribe，表示取消订阅成功
+(3).message，表示其它终端发布消息
+如果第一部分的值为subscribe，则第二部分是频道，第三部分是现在订阅的频道的数量
+如果第一部分的值为unsubscribe，则第二部分是频道，第三部分是现在订阅的频道的数量，如果为0则表示当前没有订阅任何频道，当在Pub/Sub以外状态，客户端可以发出任何redis命令
+如果第一部分的值为message，则第二部分是来源频道的名称，第三部分是消息的内容
+3.命令
+(1).订阅
+SUBSCRIBE 频道名称 [频道名称 ...]
+127.0.0.1:6379> subscribe py111 ---终端2
+127.0.0.1:6379> subscribe py111 ---终端3
+(2).取消订阅
+如果不写参数，表示取消所有订阅
+UNSUBSCRIBE 频道名称 [频道名称 ...]
+(3).发布
+PUBLISH 频道 消息
+127.0.0.1:6379> publish py111 hello ---终端1
+(integer) 2
+发布消息后终端显示接收的消息
+127.0.0.1:6379> subscribe py111     ---终端2
+Reading messages... (press Ctrl-C to quit)
+1) "subscribe"
+2) "py111"
+3) (integer) 1
+1) "message"
+2) "py111"
+3) "hello"
+
+127.0.0.1:6379>  subscribe py111    ---终端3
+Reading messages... (press Ctrl-C to quit)
+1) "subscribe"
+2) "py111"
+3) (integer) 1
+1) "message"
+2) "py111"
+3) "hello"
+
+切换数据库
+127.0.0.1:6379> select 0
+OK
+*************************************
+主从配置
+一个master可以拥有多个slave，一个slave又可以拥有多个slave，如此下去，形成了强大的多级服务器集群架构
+比如，将ip为192.168.1.10的机器作为主服务器，将ip为192.168.1.11的机器作为从服务器
+(1).设置主服务器的配置
+bind 192.168.1.10
+(2).设置从服务器的配置
+注意：在slaveof后面写主机ip，再写端口，而且端口必须写
+bind 192.168.1.11
+slaveof 192.168.1.10 6379
+(3).在master和slave分别执行info命令，查看输出信息
+在master上写数据
+set hello world
+(4).在slave上读数据
+get hello
+
+具体操作：(自己电脑无法操作，因为只有一个虚拟机ubuntu)
+1.打开xshell打开两个窗口，窗口1为连接ubuntu1(192.168.4.15)，窗口2为连接ubuntu2(192.168.4.16)
+
+2.在窗口1进行修改配置文件中的ip为主服务器ip
+python@ubuntu:/$ sudo vi /etc/redis/redis.conf 
+69 #bind 127.0.0.1
+70 bind 192.168.4.15
+
+3.在窗口2进行修改配置文件中的ip为从服务器ip，并配置端口
+python@ubuntu:/$ sudo vi /etc/redis/redis.conf
+69 #bind 127.0.0.1
+70 bind 192.168.4.16
+71 slaveof 192.168.4.15 6379
+
+4.重启redis服务
+sudo service redis restart ---窗口1
+sudo service redis restart ---窗口2
+
+5.在窗口1主服务器上启动redis
+(1).因为之前改了ip所以启动客户端时指定ip
+python@ubuntu:/$ redis-cli -h 192.168.4.15
+192.168.4.15:6379>
+
+6.在窗口2从服务器上启动redis
+python@ubuntu:/$ redis-cli -h 192.168.4.16
+192.168.4.16:6379>
+
+7.测试
+(1).在主服务器上写数据
+192.168.4.15:6379> set py100 'hello world'
+OK
+(2).在从服务器上获取数据
+192.168.4.16:6379> get py100
+''hello world''
+主从之间完成了备份的功能
+
+*****************************************************************************
+与python交互
+
+查看pycharm
+
+*****************************************************************************
+应用示例
+查看pycharm
+
+*****************************************************************************
+总结：
+key-value键值对结构
+string
+hash
+list
+set
+zset
+
+get
+set
+del
+
+主从配置
+
+python与redis交互
+StrictRedis()
+r.set()
+r.get()
+
+redis中文网站
+语句语法方法可以从上面查阅
+http://redis.cn/commands.html
+
+
+
+
+
+

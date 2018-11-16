@@ -1,0 +1,862 @@
+高级知识点包括：
+静态文件处理
+中间件
+上传图片
+Admin站点
+分页
+使用jquery完成ajax
+******************************************************************************************
+管理静态文件
+项目中的CSS、图片、js都是静态文件
+配置静态文件
+在settings 文件中定义静态内容
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+在项目根目录下创建static目录，再创建当前应用名称的目录
+mysite/static/myapp/
+在模板中可以使用硬编码
+/static/my_app/myexample.jpg
+在模板中可以使用static编码
+{ % load static from staticfiles %}
+<img src="{ % static "my_app/myexample.jpg" %}" alt="My image"/>
+******************************************************************************************
+中间件
+是一个轻量级、底层的插件系统，可以介入Django的请求和响应处理过程，修改Django的输入或输出
+激活：添加到Django配置文件中的MIDDLEWARE_CLASSES元组中
+每个中间件组件是一个独立的Python类，可以定义下面方法中的一个或多个
+_init _：无需任何参数，服务器响应第一个请求的时候调用一次，用于确定是否启用当前中间件
+process_request(request)：执行视图之前被调用，在每个请求上调用，返回None或HttpResponse对象
+process_view(request, view_func, view_args, view_kwargs)：调用视图之前被调用，在每个请求上调用，返回None或HttpResponse对象
+process_template_response(request, response)：在视图刚好执行完毕之后被调用，在每个请求上调用，返回实现了render方法的响应对象
+process_response(request, response)：所有响应返回浏览器之前被调用，在每个请求上调用，返回HttpResponse对象
+process_exception(request,response,exception)：当视图抛出异常时调用，在每个请求上调用，返回一个HttpResponse对象
+使用中间件，可以干扰整个处理过程，每次请求中都会执行中间件的这个方法
+示例：自定义异常处理
+与settings.py同级目录下创建myexception.py文件，定义类MyException，实现process_exception方法
+from django.http import HttpResponse
+class MyException():
+    def process_exception(request,response, exception):
+        return HttpResponse(exception.message)
+将类MyException注册到settings.py中间件中
+MIDDLEWARE_CLASSES = (
+    'test1.myexception.MyException',
+    ...
+)
+定义视图，并发生一个异常信息，则会运行自定义的异常处理
+******************************************************************************************
+上传图片
+当Django在处理文件上传的时候，文件数据被保存在request.FILES
+FILES中的每个键为<input type="file" name="" />中的name
+注意：FILES只有在请求的方法为POST 且提交的<form>带有enctype="multipart/form-data" 的情况下才会包含数据。否则，FILES 将为一个空的类似于字典的对象
+使用模型处理上传文件：将属性定义成models.ImageField类型
+pic=models.ImageField(upload_to='cars/')
+注意：如果属性类型为ImageField需要安装包Pilow
+pip install Pillow==3.4.1
+图片存储路径
+在项目根目录下创建media文件夹
+图片上传后，会被保存到“/static/media/cars/图片文件”
+打开settings.py文件，增加media_root项
+MEDIA_ROOT=os.path.join(BASE_DIR,"static/media")
+使用django后台管理，遇到ImageField类型的属性会出现一个file框，完成文件上传
+手动上传的模板代码
+<html>
+<head>
+    <title>文件上传</title>
+</head>
+<body>
+    <form method="post" action="upload/" enctype="multipart/form-data">
+        <input type="text" name="title"><br>
+        <input type="file" name="pic"/><br>
+        <input type="submit" value="上传">
+    </form>
+</body>
+</html>
+手动上传的视图代码
+from django.conf import settings
+
+def upload(request):
+    if request.method == "POST":
+        f1 = request.FILES['pic']
+        fname = '%s/cars/%s' % (settings.MEDIA_ROOT,f1.name)
+        with open(fname, 'w') as pic:
+            for c in f1.chunks():
+                pic.write(c)
+        return HttpResponse("ok")
+    else:
+        return HttpResponse("error")
+******************************************************************************************
+Admin站点
+通过使用startproject创建的项目模版中，默认Admin被启用
+1.创建管理员的用户名和密码
+python manage.py createsuperuser
+然后按提示填写用户名、邮箱、密码
+2.在应用内admin.py文件完成注册，就可以在后台管理中维护模型的数据
+from django.contrib import admin
+from models import *
+
+admin.site.register(HeroInfo)
+查找admin文件：在INSTALLED_APPS项中加入django.contrib.admin，Django就会自动搜索每个应用的admin模块并将其导入
+ModelAdmin对象
+ModelAdmin类是模型在Admin界面中的表示形式
+定义：定义一个类，继承于admin.ModelAdmin，注册模型时使用这个类
+class HeroAdmin(admin.ModelAdmin):
+    ...
+通常定义在应用的admin.py文件里
+使用方式一：注册参数
+admin.site.register(HeroInfo,HeroAdmin)
+使用方式二：注册装饰器
+@admin.register(HeroInfo)
+class HeroAdmin(admin.ModelAdmin):
+通过重写admin.ModelAdmin的属性规定显示效果，属性主要分为列表页、增加修改页两部分
+列表页选项
+“操作选项”的位置
+actions_on_top、actions_on_bottom：默认显示在页面的顶部
+class HeroAdmin(admin.ModelAdmin):
+    actions_on_top = True
+    actions_on_bottom = True
+list_display
+出现列表中显示的字段
+列表类型
+在列表中，可以是字段名称，也可以是方法名称，但是方法名称默认不能排序
+在方法中可以使用format_html()输出html内容
+在models.py文件中
+from django.db import models
+from tinymce.models import HTMLField
+from django.utils.html import format_html
+
+class HeroInfo(models.Model):
+    hname = models.CharField(max_length=10)
+    hcontent = HTMLField()
+    isDelete = models.BooleanField()
+    def hContent(self):
+        return format_html(self.hcontent)
+
+在admin.py文件中
+class HeroAdmin(admin.ModelAdmin):
+    list_display = ['hname', 'hContent']
+让方法排序，为方法指定admin_order_field属性
+在models.py中HeroInfo类的代码改为如下：
+    def hContent(self):
+        return format_html(self.hcontent)
+    hContent.admin_order_field = 'hname'
+标题栏名称：将字段封装成方法，为方法设置short_description属性
+在models.py中为HeroInfo类增加方法hName：
+    def hName(self):
+        return self.hname
+    hName.short_description = '姓名'
+    hContent.short_description = '内容'
+
+在admin.py页中注册
+class HeroAdmin(admin.ModelAdmin):
+    list_display = ['hName', 'hContent']
+list_filter
+右侧栏过滤器，对哪些属性的值进行过滤
+列表类型
+只能接收字段
+class HeroAdmin(admin.ModelAdmin):
+    ...
+    list_filter = ['hname', 'hcontent']
+list_per_page
+每页中显示多少项，默认设置为100
+class HeroAdmin(admin.ModelAdmin):
+    ...
+    list_per_page = 10
+search_fields
+搜索框
+列表类型，表示在这些字段上进行搜索
+只能接收字段
+class HeroAdmin(admin.ModelAdmin):
+    ...
+    search_fields = ['hname']
+增加与修改页选项
+fields：显示字段的顺序，如果使用元组表示显示到一行上
+class HeroAdmin(admin.ModelAdmin):
+    ...
+    fields = [('hname', 'hcontent')]
+fieldsets：分组显示
+class HeroAdmin(admin.ModelAdmin):
+    ...
+    fieldsets = (
+        ('base', {'fields': ('hname')}),
+        ('other', {'fields': ('hcontent')})
+    )
+fields与fieldsets两者选一
+InlineModelAdmin对象
+类型InlineModelAdmin：表示在模型的添加或修改页面嵌入关联模型的添加或修改
+子类TabularInline：以表格的形式嵌入
+子类StackedInline：以块的形式嵌入
+class HeroInline(admin.TabularInline):
+    model = HeroInfo
+
+class BookAdmin(admin.ModelAdmin):
+    inlines = [
+        HeroInline,
+    ]
+重写admin模板
+在项目所在目录中创建templates目录，再创建一个admin目录
+设置模板查找目录：修改settings.py的TEMPLATES项，加载模板时会在DIRS列表指定的目录中搜索
+'DIRS': [os.path.join(BASE_DIR, 'templates')],
+从Django安装的目录下（django/contrib/admin/templates）将模板页面的源文件admin/base_site.html拷贝到第一步建好的目录里
+编辑base_site.html文件
+刷新页面，发现以刚才编辑的页面效果显示
+其它管理后台的模板可以按照相同的方式进行修改
+******************************************************************************************
+分页
+Django提供了一些类实现管理数据分页，这些类位于django/core/paginator.py中
+Paginator对象
+Paginator(列表,int)：返回分页对象，参数为列表数据，每面数据的条数
+属性
+count：对象总数
+num_pages：页面总数
+page_range：页码列表，从1开始，例如[1, 2, 3, 4]
+方法
+page(num)：下标以1开始，如果提供的页码不存在，抛出InvalidPage异常
+异常exception
+InvalidPage：当向page()传入一个无效的页码时抛出
+PageNotAnInteger：当向page()传入一个不是整数的值时抛出
+EmptyPage：当向page()提供一个有效值，但是那个页面上没有任何对象时抛出
+Page对象
+创建对象
+Paginator对象的page()方法返回Page对象，不需要手动构造
+属性
+object_list：当前页上所有对象的列表
+number：当前页的序号，从1开始
+paginator：当前page对象相关的Paginator对象
+方法
+has_next()：如果有下一页返回True
+has_previous()：如果有上一页返回True
+has_other_pages()：如果有上一页或下一页返回True
+next_page_number()：返回下一页的页码，如果下一页不存在，抛出InvalidPage异常
+previous_page_number()：返回上一页的页码，如果上一页不存在，抛出InvalidPage异常
+len()：返回当前页面对象的个数
+迭代页面对象：访问当前页面中的每个对象
+示例
+创建视图pagTest
+from django.core.paginator import Paginator
+
+def pagTest(request, pIndex):
+    list1 = AreaInfo.objects.filter(aParent__isnull=True)
+    p = Paginator(list1, 10)
+    if pIndex == '':
+        pIndex = '1'
+    pIndex = int(pIndex)
+    list2 = p.page(pIndex)
+    plist = p.page_range
+    return render(request, 'booktest/pagTest.html', {'list': list2, 'plist': plist, 'pIndex': pIndex})
+配置url
+url(r'^pag(?P<pIndex>[0-9]*)/$', views.pagTest, name='pagTest'),
+定义模板pagTest.html
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<ul>
+{%for area in list%}
+<li>{{area.id}}--{{area.atitle}}</li>
+{%endfor%}
+</ul>
+
+{%for pindex in plist%}
+{%if pIndex == pindex%}
+{{pindex}}&nbsp;&nbsp;
+{%else%}
+<a href="/pag{{pindex}}/">{{pindex}}</a>&nbsp;&nbsp;
+{%endif%}
+{%endfor%}
+</body>
+</html>
+******************************************************************************************
+使用Ajax
+使用视图通过上下文向模板中传递数据，需要先加载完成模板的静态页面，再执行模型代码，生成最张的html，返回给浏览器，这个过程将页面与数据集成到了一起，扩展性差
+改进方案：通过ajax的方式获取数据，通过dom操作将数据呈现到界面上
+推荐使用框架的ajax相关方法，不要使用XMLHttpRequest对象，因为操作麻烦且不容易查错
+jquery框架中提供了$.ajax、$.get、$.post方法，用于进行异步交互
+由于csrf的约束，推荐使用$.get
+示例：实现省市区的选择
+最终实现效果如图：
+city
+
+引入js文件
+js文件属于静态文件，创建目录结构如图：
+static
+
+修改settings.py关于静态文件的设置
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+在models.py中定义模型
+class AreaInfo(models.Model):
+    aid = models.IntegerField(primary_key=True)
+    atitle = models.CharField(max_length=20)
+    aPArea = models.ForeignKey('AreaInfo', null=True)
+生成迁移
+python manage.py makemigrations
+python manage.py migrate
+通过workbench向表中填充示例数据
+参见“省市区.sql”
+注意将表的名称完成替换
+在views.py中编写视图
+index用于展示页面
+getArea1用于返回省级数据
+getArea2用于根据省、市编号返回市、区信息，格式都为字典对象
+from django.shortcuts import render
+from django.http import JsonResponse
+from models import AreaInfo
+
+def index(request):
+    return render(request, 'ct1/index.html')
+
+def getArea1(request):
+    list = AreaInfo.objects.filter(aPArea__isnull=True)
+    list2 = []
+    for a in list:
+        list2.append([a.aid, a.atitle])
+    return JsonResponse({'data': list2})
+
+def getArea2(request, pid):
+    list = AreaInfo.objects.filter(aPArea_id=pid)
+    list2 = []
+    for a in list:
+        list2.append({'id': a.aid, 'title': a.atitle})
+    return JsonResponse({'data': list2})
+在urls.py中配置urlconf
+from django.conf.urls import url
+from . import views
+
+urlpatterns = [
+    url(r'^$', views.index),
+    url(r'^area1/$', views.getArea1),
+    url(r'^([0-9]+)/$', views.getArea2),
+]
+主urls.py中包含此应用的url
+from django.conf.urls import include, url
+from django.contrib import admin
+
+urlpatterns = [
+    url(r'^', include('ct1.urls', namespace='ct1')),
+    url(r'^admin/', include(admin.site.urls)),
+]
+定义模板index.html
+在项目中的目录结构如图：
+templates
+
+修改settings.py的TEMPLATES项，设置DIRS值
+'DIRS': [os.path.join(BASE_DIR, 'templates')],
+定义模板文件：包含三个select标签，分别存放省市区的信息
+<!DOCTYPE html>
+<html>
+<head>
+    <title>省市区列表</title>
+</head>
+<body>
+<select id="pro">
+    <option value="">请选择省</option>
+</select>
+<select id="city">
+    <option value="">请选择市</option>
+</select>
+<select id="dis">
+    <option value="">请选择区县</option>
+</select>
+</body>
+</html>
+在模板中引入jquery文件
+<script type="text/javascript" src="static/ct1/js/jquery-1.12.4.min.js"></script>
+编写js代码
+绑定change事件
+发出异步请求
+使用dom添加元素
+    <script type="text/javascript">
+        $(function(){
+
+            $.get('area1/',function(dic) {
+                pro=$('#pro')
+                $.each(dic.data,function(index,item){
+                    pro.append('<option value='+item[0]+'>'+item[1]+'</option>');
+                })
+            });
+
+            $('#pro').change(function(){
+                $.post($(this).val()+'/',function(dic){
+                    city=$('#city');
+                    city.empty().append('<option value="">请选择市</option>');
+                    $.each(dic.data,function(index,item){
+                        city.append('<option value='+item.id+'>'+item.title+'</option>');
+                    })
+                });
+            });
+
+            $('#city').change(function(){
+                $.post($(this).val()+'/',function(dic){
+                    dis=$('#dis');
+                    dis.empty().append('<option value="">请选择区县</option>');
+                    $.each(dic.data,function(index,item){
+                        dis.append('<option value='+item.id+'>'+item.title+'</option>');
+                    })
+                })
+            });
+
+        });
+    </script>
+******************************************************************************************
+常用的第三方包或工具
+富文本编辑器
+缓存
+全文检索
+celery
+布署
+******************************************************************************************
+富文本编辑器
+借助富文本编辑器，管理员能够编辑出来一个包含html的页面，从而页面的显示效果，可以由管理员定义，而不用完全依赖于前期开发人员
+此处以tinymce为例，其它富文本编辑器的使用可以自行学习
+使用编辑器的显示效果为：
+富文本编辑器
+
+下载安装
+在网站pypi网站搜索并下载"django-tinymce-2.4.0"
+解压
+tar zxvf django-tinymce-2.4.0.tar.gz
+进入解压后的目录，工作在虚拟环境，安装
+python setup.py install
+应用到项目中
+在settings.py中为INSTALLED_APPS添加编辑器应用
+INSTALLED_APPS = (
+    ...
+    'tinymce',
+)
+在settings.py中添加编辑配置项
+TINYMCE_DEFAULT_CONFIG = {
+    'theme': 'advanced',
+    'width': 600,
+    'height': 400,
+}
+在根urls.py中配置
+urlpatterns = [
+    ...
+    url(r'^tinymce/', include('tinymce.urls')),
+]
+在应用中定义模型的属性
+from django.db import models
+from tinymce.models import HTMLField
+
+class HeroInfo(models.Model):
+    ...
+    hcontent = HTMLField()
+在后台管理界面中，就会显示为富文本编辑器，而不是多行文本框
+自定义使用
+定义视图editor，用于显示编辑器并完成提交
+def editor(request):
+    return render(request, 'other/editor.html')
+配置url
+urlpatterns = [
+    ...
+    url(r'^editor/$', views.editor, name='editor'),
+]
+创建模板editor.html
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript" src='/static/tiny_mce/tiny_mce.js'></script>
+    <script type="text/javascript">
+        tinyMCE.init({
+            'mode':'textareas',
+            'theme':'advanced',
+            'width':400,
+            'height':100
+        });
+    </script>
+</head>
+<body>
+<form method="post" action="/content/">
+    <input type="text" name="hname">
+    <br>
+    <textarea name='hcontent'>哈哈，这是啥呀</textarea>
+    <br>
+    <input type="submit" value="提交">
+</form>
+</body>
+</html>
+定义视图content，接收请求，并更新heroinfo对象
+def content(request):
+    hname = request.POST['hname']
+    hcontent = request.POST['hcontent']
+
+    heroinfo = HeroInfo.objects.get(pk=1)
+    heroinfo.hname = hname
+    heroinfo.hcontent = hcontent
+    heroinfo.save()
+
+    return render(request, 'other/content.html', {'hero': heroinfo})
+添加url项
+urlpatterns = [
+    ...
+    url(r'^content/$', views.content, name='content'),
+]
+定义模板content.html
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+姓名：{{hero.hname}}
+<hr>
+{%autoescape off%}
+{{hero.hcontent}}
+{%endautoescape%}
+</body>
+</html>
+******************************************************************************************
+缓存
+对于中等流量的网站来说，尽可能地减少开销是必要的。缓存数据就是为了保存那些需要很多计算资源的结果，这样的话就不必在下次重复消耗计算资源
+Django自带了一个健壮的缓存系统来保存动态页面，避免对于每次请求都重新计算
+Django提供了不同级别的缓存粒度：可以缓存特定视图的输出、可以仅仅缓存那些很难生产出来的部分、或者可以缓存整个网站
+设置缓存
+通过设置决定把数据缓存在哪里，是数据库中、文件系统还是在内存中
+通过setting文件的CACHES配置来实现
+参数TIMEOUT：缓存的默认过期时间，以秒为单位，这个参数默认是300秒，即5分钟；设置TIMEOUT为None表示永远不会过期，值设置成0造成缓存立即失效
+CACHES={
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'TIMEOUT': 60,
+    }
+}
+可以将cache存到redis中，默认采用1数据库，需要安装包并配置如下：
+安装包：pip install django-redis-cache
+
+CACHES = {
+    "default": {
+        "BACKEND": "redis_cache.cache.RedisCache",
+        "LOCATION": "localhost:6379",
+        'TIMEOUT': 60,
+    },
+}
+可以连接redis查看存的数据
+连接：redis-cli
+切换数据库：select 1
+查看键：keys *
+查看值：get 键
+单个view缓存
+django.views.decorators.cache定义了cache_page装饰器，用于对视图的输出进行缓存
+示例代码如下：
+from django.views.decorators.cache import cache_page
+
+@cache_page(60 * 15)
+def index(request):
+    return HttpResponse('hello1')
+    #return HttpResponse('hello2')
+cache_page接受一个参数：timeout，秒为单位，上例中缓存了15分钟
+视图缓存与URL无关，如果多个URL指向同一视图，每个URL将会分别缓存
+模板片断缓存
+使用cache模板标签来缓存模板的一个片段
+需要两个参数：
+缓存时间，以秒为单位
+给缓存片段起的名称
+示例代码如下：
+{% load cache %}
+{% cache 500 hello %}
+hello1
+<!--hello2-->
+{% endcache %}
+底层的缓存API
+from django.core.cache import cache
+
+设置：cache.set(键,值,有效时间)
+获取：cache.get(键)
+删除：cache.delete(键)
+清空：cache.clear()
+******************************************************************************************
+全文检索
+全文检索不同于特定字段的模糊查询，使用全文检索的效率更高，并且能够对于中文进行分词处理
+haystack：django的一个包，可以方便地对model里面的内容进行索引、搜索，设计为支持whoosh,solr,Xapian,Elasticsearc四种全文检索引擎后端，属于一种全文检索的框架
+whoosh：纯Python编写的全文搜索引擎，虽然性能比不上sphinx、xapian、Elasticsearc等，但是无二进制包，程序不会莫名其妙的崩溃，对于小型的站点，whoosh已经足够使用
+jieba：一款免费的中文分词包，如果觉得不好用可以使用一些收费产品
+操作
+1.在虚拟环境中依次安装包
+pip install django-haystack
+pip install whoosh
+pip install jieba
+2.修改settings.py文件
+添加应用
+INSTALLED_APPS = (
+    ...
+    'haystack',
+)
+添加搜索引擎
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_cn_backend.WhooshEngine',
+        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+    }
+}
+
+#自动生成索引
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+3.在项目的urls.py中添加url
+
+urlpatterns = [
+    ...
+    url(r'^search/', include('haystack.urls')),
+]
+4.在应用目录下建立search_indexes.py文件
+# coding=utf-8
+from haystack import indexes
+from models import GoodsInfo
+
+
+class GoodsInfoIndex(indexes.SearchIndex, indexes.Indexable):
+    text = indexes.CharField(document=True, use_template=True)
+
+    def get_model(self):
+        return GoodsInfo
+
+    def index_queryset(self, using=None):
+        return self.get_model().objects.all()
+5.在目录“templates/search/indexes/应用名称/”下创建“模型类名称_text.txt”文件
+#goodsinfo_text.txt，这里列出了要对哪些列的内容进行检索
+{{ object.gName }}
+{{ object.gSubName }}
+{{ object.gDes }}
+6.在目录“templates/search/”下建立search.html
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+{% if query %}
+    <h3>搜索结果如下：</h3>
+    {% for result in page.object_list %}
+        <a href="/{{ result.object.id }}/">{{ result.object.gName }}</a><br/>
+    {% empty %}
+        <p>啥也没找到</p>
+    {% endfor %}
+
+    {% if page.has_previous or page.has_next %}
+        <div>
+            {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; 上一页{% if page.has_previous %}</a>{% endif %}
+        |
+            {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}下一页 &raquo;{% if page.has_next %}</a>{% endif %}
+        </div>
+    {% endif %}
+{% endif %}
+</body>
+</html>
+7.建立ChineseAnalyzer.py文件
+保存在haystack的安装文件夹下，路径如“/home/python/.virtualenvs/django_py2/lib/python2.7/site-packages/haystack/backends”
+import jieba
+from whoosh.analysis import Tokenizer, Token
+
+
+class ChineseTokenizer(Tokenizer):
+    def __call__(self, value, positions=False, chars=False,
+                 keeporiginal=False, removestops=True,
+                 start_pos=0, start_char=0, mode='', **kwargs):
+        t = Token(positions, chars, removestops=removestops, mode=mode,
+                  **kwargs)
+        seglist = jieba.cut(value, cut_all=True)
+        for w in seglist:
+            t.original = t.text = w
+            t.boost = 1.0
+            if positions:
+                t.pos = start_pos + value.find(w)
+            if chars:
+                t.startchar = start_char + value.find(w)
+                t.endchar = start_char + value.find(w) + len(w)
+            yield t
+
+
+def ChineseAnalyzer():
+    return ChineseTokenizer()
+8.复制whoosh_backend.py文件，改名为whoosh_cn_backend.py
+注意：复制出来的文件名，末尾会有一个空格，记得要删除这个空格
+from .ChineseAnalyzer import ChineseAnalyzer 
+查找
+analyzer=StemmingAnalyzer()
+改为
+analyzer=ChineseAnalyzer()
+9.生成索引
+初始化索引数据
+python manage.py rebuild_index
+10.在模板中创建搜索栏
+<form method='get' action="/search/" target="_blank">
+    <input type="text" name="q">
+    <input type="submit" value="查询">
+</form>
+******************************************************************************************
+celery
+官方网站
+中文文档
+示例一：用户发起request，并等待response返回。在本些views中，可能需要执行一段耗时的程序，那么用户就会等待很长时间，造成不好的用户体验
+示例二：网站每小时需要同步一次天气预报信息，但是http是请求触发的，难道要一小时请求一次吗？
+使用celery后，情况就不一样了
+示例一的解决：将耗时的程序放到celery中执行
+示例二的解决：使用celery定时执行
+名词
+任务task：就是一个Python函数
+队列queue：将需要执行的任务加入到队列中
+工人worker：在一个新进程中，负责执行队列中的任务
+代理人broker：负责调度，在布置环境中使用redis
+使用
+安装包
+celery==3.1.25
+celery-with-redis==3.0
+django-celery==3.1.17
+配置settings
+INSTALLED_APPS = (
+  ...
+  'djcelery',
+}
+
+...
+
+import djcelery
+djcelery.setup_loader()
+BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_IMPORTS = ('应用名称.task')
+在应用目录下创建task.py文件
+import time
+from celery import task
+
+@task
+def sayhello():
+    print('hello ...')
+    time.sleep(2)
+    print('world ...')
+迁移，生成celery需要的数据表
+python manage.py migrate
+启动Redis
+sudo redis-server /etc/redis/redis.conf
+启动worker
+python manage.py celery worker --loglevel=info
+调用语法
+function.delay(parameters)
+使用代码
+#from task import *
+
+def sayhello(request):
+    print('hello ...')
+    import time
+    time.sleep(10)
+    print('world ...')
+
+    # sayhello.delay()
+
+    return HttpResponse("hello world")
+******************************************************************************************
+布署
+从uwsgi、nginx、静态文件三个方面处理
+服务器介绍
+服务器：私有服务器、公有服务器
+私有服务器：公司自己购买、自己维护，只布署自己的应用，可供公司内部或外网访问
+公有服务器：集成好运营环境，销售空间或主机，供其布署自己的应用
+私有服务器成本高，需要专业人员维护，适合大公司使用
+公有服务器适合初创公司使用，成本低
+常用的公有服务器，如阿里云、青云等，可根据需要，按流量收费或按时间收费
+此处的服务器是物理上的一台非常高、线路全、运行稳定的机器
+服务器环境配置
+在本地的虚拟环境中，项目根目录下，执行命令收集所有包
+pip freeze > plist.txt
+通过ftp软件将开发好的项目上传到此服务器的某个目录
+安装并创建虚拟环境，如果已有则跳过此步
+sudo apt-get install python-virtualenv
+sudo easy_install virtualenvwrapper
+mkvirtualenv [虚拟环境名称]
+在虚拟环境上工作，安装所有需要的包
+workon [虚拟环境名称]
+pip install -r plist.txt
+更改settings.py文件
+DEBUG = False
+ALLOW_HOSTS=['*',]表示可以访问服务器的ip
+启动服务器，运行正常，但是静态文件无法加载
+WSGI
+python manage.py runserver：这是一款适合开发阶段使用的服务器，不适合运行在真实的生产环境中
+在生产环境中使用WSGI
+WSGI：Web服务器网关接口，英文为Python Web Server Gateway Interface，缩写为WSGI，是Python应用程序或框架和Web服务器之间的一种接口，被广泛接受
+WSGI没有官方的实现, 因为WSGI更像一个协议，只要遵照这些协议,WSGI应用(Application)都可以在任何服务器(Server)上运行
+命令django-admin startproject会生成一个简单的wsgi.py文件，确定了settings、application对象
+application对象：在Python模块中使用application对象与应用服务器交互
+settings模块：Django需要导入settings模块，这里是应用定义的地方
+此处的服务器是一个软件，可以监听网卡端口、遵从网络层传输协议，收发http协议级别的数据
+uWSGI
+uWSGI实现了WSGI的所有接口，是一个快速、自我修复、开发人员和系统管理员友好的服务器
+uWSGI代码完全用C编写
+安装uWSGI
+pip install uwsgi
+配置uWSGI，在项目中新建文件uwsgi.ini，编写如下配置
+[uwsgi]
+socket=外网ip:端口（使用nginx连接时，使用socket）
+http=外网ip:端口（直接做web服务器，使用http）
+chdir=项目根目录
+wsgi-file=项目中wsgi.py文件的目录，相对于项目根目录
+processes=4
+threads=2
+master=True
+pidfile=uwsgi.pid
+daemonize=uswgi.log
+启动：uwsgi --ini uwsgi.ini
+停止：uwsgi --stop uwsgi.pid
+重启：uwsgi --reload uwsgi.pid
+使用http协议查看网站运行情况，运行正常，但是静态文件无法加载
+nginx
+使用nginx的作用
+负载均衡：多台服务器轮流处理请求
+反射代理：隐藏真实服务器
+实现构架：客户端请求nginx，再由nginx请求uwsgi，运行django框架下的python代码
+nginx+uwsgi也可以用于其它框架的python web代码，不限于django
+到官网下载nginx压缩文件或通过命令安装
+sudo apt-get nginx
+这里以下载压缩文件为例演示
+解压缩：
+tar zxvf nginx-1.6.3.tar.gz
+
+进入nginx-1.6.3目录依次执行如下命令进行安装：
+./configure
+make
+sudo make install
+默认安装到/usr/local/nginx目录，进入此目录执行命令
+查看版本：sudo sbin/nginx -v
+启动：sudo sbin/nginx
+停止：sudo sbin/nginx -s stop
+重启：sudo sbin/nginx -s reload
+通过浏览器查看nginx运行结果
+指向uwsgi项目：编辑conf/nginx.conf文件
+sudo conf/nginx.conf
+
+在server下添加新的location项，指向uwsgi的ip与端口
+location / {
+    include uwsgi_params;将所有的参数转到uwsgi下
+    uwsgi_pass uwsgi的ip与端口;
+}
+修改uwsgi.ini文件，启动socket，禁用http
+重启nginx、uwsgi
+在浏览器中查看项目，发现静态文件加载不正常，接下来解决静态文件的问题
+静态文件
+静态文件一直都找不到，现在终于可以解决了
+所有的静态文件都会由nginx处理，不会将请求转到uwsgi
+配置nginx的静态项，打开conf/nginx.conf文件，找到server，添加新location
+location /static {
+    alias /var/www/test5/static/;
+}
+在服务器上创建目录结构“/var/www/test5/”
+修改目录权限
+sudo chmod 777 /var/www/test5
+创建static目录，注意顺序是先分配权限，再创建目录
+mkdir static
+最终目录结构如下图：
+static
+
+修改settings.py文件
+STATIC_ROOT='/var/www/test5/static/'
+STATIC_URL='/static/'
+收集所有静态文件到static_root指定目录：python manage.py collectstatic
+重启nginx、uwsgi
+******************************************************************************************
+
+******************************************************************************************

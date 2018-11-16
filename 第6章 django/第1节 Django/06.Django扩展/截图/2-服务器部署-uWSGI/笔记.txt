@@ -1,0 +1,49 @@
+①将自己的开发环境的安装包导出到list.txt中(>重定向)
+pip freeze > list.txt
+②然后将这个文件用ftp软件传到你的服务器上去
+③在服务器上新建个虚拟环境
+sudo apt-get install python-virtualenv
+sudo easy_install virtualenvwrapper
+mkvirtualenv [虚拟环境名称]
+④在虚拟环境上工作，安装所有需要的包
+workon [虚拟环境名称] 
+pip install -r list.txt
+⑤更改settings.py文件
+DEBUG = False(关闭调试错误信息，不需要用户看到)
+ALLOW_HOSTS=['*',]表示任何主机都可以访问服务器的ip
+当DEBUG = False时静态文件就无法加载(!!!)
+⑥python manage.py runserver 8080 这是一款适合开发阶段
+使用的服务器，不适合运行在真实的生产环境中
+在生产环境中使用WSGI
+⑦WSGI是python代码在服务器运行的一个容器
+WSGI是一套规范，没有具体的实现
+python manage.py runserver开发阶段服务器就是遵循这个规定
+uWSGI也是遵照这个规定写的
+⑧uWSGI实现了WSGI的所有接口，是一个快速、自我修复、
+(1)开发人员和系统管理员友好的服务器
+在服务器上安装uWSGI，这个主机就会被uWSGI去监听网卡的某个端口
+当户用请求过来的报文信息就会交给django的代码去运行
+(2)命令django-admin startproject会生成一个简单的wsgi.py文件，
+确定了settings、application对象
+(3)安装uWSGI
+pip install uwsgi
+⑨安装好uWSGI后需配置
+(1)在项目中新建文件uwsgi.ini
+(2)编写如下配置
+[uwsgi]
+socket=外网ip:端口（使用nginx连接时，使用socket）
+http=外网ip:端口（直接做web服务器，使用http）
+chdir=项目根目录
+wsgi-file=项目中wsgi.py文件的目录，相对于项目根目录
+processes=4
+threads=2
+master=True
+pidfile=uwsgi.pid
+daemonize=uswgi.log
+(3)启动uWSGI配置服务
+启动：uwsgi --ini uwsgi.ini
+停止：uwsgi --stop uwsgi.pid
+重启：uwsgi --reload uwsgi.pid
+使用http协议查看网站运行情况，运行正常，但是静态文件无法加载
+
+

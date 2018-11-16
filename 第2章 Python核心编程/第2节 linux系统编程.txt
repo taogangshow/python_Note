@@ -1,0 +1,1546 @@
+IDE------->集成开发环境(PyCharm)
+面试时候问:小伙儿你用的什么IDE啊，就是说你用的什么集成开发环境 Pycharm
+Python调试(pdb)
+c/c++调试(gdb)
+****************************************************************************************
+调试的第一种方式:
+python -m pdb some.py 其中-m 的m表示模块
+python@ubuntu:~/Desktop$ python3 -m pdb test1.py 
+> /home/python/Desktop/test1.py(1)<module>()
+-> def getAvg(a,b):
+(Pdb) l
+  1  ->	def getAvg(a,b):
+  2  	    result = a+b
+  3  	    print("result=%d"%result)
+  4  	    return result
+  5  	a = 100
+  6  	b = 200
+  7  	c = a+b
+  8  	ret = getAvg(a,b)
+  9  	print(ret)
+[EOF]
+(Pdb) b 8
+Breakpoint 1 at /home/python/Desktop/test1.py:8
+(Pdb) c
+> /home/python/Desktop/test1.py(8)<module>()
+-> ret = getAvg(a,b)
+(Pdb) l
+  3  	    print("result=%d"%result)
+  4  	    return result
+  5  	a = 100
+  6  	b = 200
+  7  	c = a+b
+  8 B->	ret = getAvg(a,b)
+  9  	print(ret)
+[EOF]
+(Pdb) s
+--Call--
+> /home/python/Desktop/test1.py(1)getAvg()
+-> def getAvg(a,b):
+(Pdb) n
+> /home/python/Desktop/test1.py(2)getAvg()
+-> result = a+b
+(Pdb) r
+result=300
+--Return--
+> /home/python/Desktop/test1.py(4)getAvg()->300
+-> return result
+(Pdb) p a
+100
+(Pdb) p b
+200
+(Pdb) a
+a = 100
+b = 200
+(Pdb) b
+Num Type         Disp Enb   Where
+1   breakpoint   keep yes   at /home/python/Desktop/test1.py:8
+	breakpoint already hit 1 time
+(Pdb) clear 1
+Deleted breakpoint 1 at /home/python/Desktop/test1.py:8
+(Pdb) c
+300
+The program finished and will be restarted
+> /home/python/Desktop/test1.py(1)<module>()
+-> def getAvg(a,b):
+(Pdb) l
+  1  ->	def getAvg(a,b):
+  2  	    result = a+b
+  3  	    print("result=%d"%result)
+  4  	    return result
+  5  	a = 100
+  6  	b = 200
+  7  	c = a+b
+  8  	ret = getAvg(a,b)
+  9  	print(ret)
+[EOF]
+(Pdb) q
+python@ubuntu:~/Desktop$ 
+*****************************************************************************************
+总结: 
+  1 l--->next 显示当前代码
+  2 n--->list 向下执行一行代码
+  3 c--->continue 继续执行代码
+  4 b--->break 添加断点
+  5 s--->step 进入到一个函数
+  6 clear---> 删除断点 
+  7 p--->print 打印一个变量的值 
+  8 a--->args 打印所有形参的数据
+  9 q--->quit 退出调试
+ 10 r--->return 快速执行到函数的最后一行
+ ****************************************************************************************
+ 第二种调试方式就是交互调试
+ 进入python或ipython解释器
+import pdb
+pdb.run("testfun(args)") #此时会打开pdb调试，注意：先使用s跳转到这个testfun函数中，然后就可以使用l看到代码了
+In [2]: def testfun(a,b):
+   ...:     c = a+b
+   ...:     return c
+   ...: 
+In [3]: import pdb
+In [4]: pdb.run("testfun(11,22)")
+> <string>(1)<module>()
+(Pdb) s
+--Call--
+> <ipython-input-2-57608f990aa6>(1)testfun()
+-> def testfun(a,b):
+(Pdb) l
+  1  ->	def testfun(a,b):
+  2  	    c = a+b
+  3  	    return c
+  4  	
+[EOF]
+(Pdb) 
+*****************************************************************************************
+第三种调试方式:程序里埋点(在程序里import pdb 通过pdb.set_trace()选择你要调试的点)
+当程序执行到pdb.set_trace() 位置时停下来调试，运行的时候直接python3 test2.py即可
+  1 import pdb
+  2 def getAvg(a,b):
+  3     result = a+b
+  4     print("result=%d"%result)
+  5     return result
+  6 a = 100
+  7 b = 200
+  8 c = a+b
+  9 pdb.set_trace()
+ 10 ret = getAvg(a,b)
+ 11 print(ret)
+python@ubuntu:~/Desktop/pdb调试$ python3 test2.py 
+> /home/python/Desktop/pdb调试/test2.py(10)<module>()
+-> ret = getAvg(a,b)
+(Pdb) l
+  5  	    return result
+  6  	a = 100
+  7  	b = 200
+  8  	c = a+b
+  9  	pdb.set_trace()
+ 10  ->	ret = getAvg(a,b)
+ 11  	print(ret)
+[EOF]
+(Pdb) 
+*****************************************************************************************
+进程
+编写完毕的代码，在没有运行的时候，称之为程序
+进程:(正在运行着的代码或程序)简单一句话,一个exe程序，你没有双击运行时，称为程序，运行后称为进程
+进程是有生命的，而程序是没有生命的
+*******************************************
+fork():在Python程序中轻松创建子进程
+注意，fork函数，只在Unix/Linux/Mac上运行，windows不可以
+创建子进程:
+  1 import os
+  2 os.fork()
+  3 print("---haha---")
+python@ubuntu:~/Desktop/Python02-核心编程/04-系统编程-1$ python3 1-fork.py 
+---haha---
+---haha---
+*******************************************
+同时运行两个进程:
+  1 import os
+  2 import time
+  3 
+  4 ret = os.fork()
+  5 
+  6 if ret == 0:
+  7     while True:
+  8         print("---1---")
+  9         time.sleep(1)
+ 10 else:
+ 11     while True:
+ 12         print("---2---")
+ 13         time.sleep(1)
+运行结果是无限循环
+python@ubuntu:~/Desktop/Python02-核心编程/04-系统编程-1$ python3 2-fork.py 
+---2---
+---1---
+---2---
+---1---
+---2---
+---1---
+---2---
+*******************************************
+怎么判断是父进程运行的代码还是子进程运行的？
+一般os.fork()返回值>0代表父进程，等于0代表子进程
+  1 import os
+  2 ret = os.fork()
+  3 if ret>0:
+  4     print("---父进程---")
+  5 else:
+  6     print("---子进程---")
+注意:
+程序从上往下执行,执行到os.fork()时创建的父进程和子进程都会执行下面的代码，只是if只是拦截了一下
+程序运行结果:(都是同时执行了if判断里的代码，以前if只会满足一个，进程里同时满足和执行)
+python@ubuntu:~/Desktop/Python02-核心编程/04-系统编程-1$ python3 3-fork的返回值.py 
+---父进程---
+---子进程---
+*******************************************
+getpid()获取当前进程的pid值(识别码)，getppid()获取父进程的pid值(识别码)
+  1 import os
+  2 ret = os.fork()
+  3 print(ret)
+  4 if ret>0:
+  5     print("---父进程---%d"%os.getpid())
+  6 else:
+  7     print("---子进程---%d-%d"%(os.getpid(),os.getppid()))
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/04-系统编程-1$ python3 3-fork的返回值.py 
+7233
+---父进程---7232
+0
+---子进程---7233-7232
+总结:父进程中fork的返回值，就是刚刚创建出来的子进程的pid的值
+*******************************************
+
+  1 import os,time
+  2 
+  3 ret = os.fork()
+  4 if ret==0:
+  5     print("---子进程1---")
+  6     time.sleep(5)
+  7     print("---子进程2---")
+  8 else:
+  9     print("---父进程---")
+ 10     time.sleep(3)
+ 11 
+ 12 print("---over---")
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/04-系统编程-1$ python3 4-先退出.py 
+---父进程---
+---子进程1---
+---over---
+python@ubuntu:~/Desktop/Python02-核心编程/04-系统编程-1$ ---子进程2---
+---over---
+程序运行流程:
+当代码执行到ret = os.fork()时候产生父进程和子进程，(这个时候你不知道先执行父进程还是子进程，都是有可能的)，父进程和子进程同时运行下面代码，if，else只是拦截作用让父进程执行else里的代码，子进程执行if里的代码，打印---父进程---和---子进程1---然后父进程休眠3秒钟后，子进程休眠5秒钟，两者同时进行，父进程在if代码里面已经执行完了紧接着执行下面代码即打印了---over---然后再等两秒打印了---子进程2---,此时子进程在if代码里面也是执行完了紧接着执行下面的代码即打印了---over---(为什么是两秒，因为父进程和子进程都是同时运行的5秒减去3秒)
+为什么以上代码运行结果中多出了python@ubuntu:~/Desktop/Python02-核心编程/04-系统编程-1$，那是因为当父进程执行打印完了---over---时候相当于说已经把代码从上往下执行完了，系统以为代码执行完了，所以弹出了这个，此时子进程在休眠中，两秒后子进程运行出了结果
+*****************************************************************************************
+全局变量在多个进程中不共享
+  1 import os,time
+  2 
+  3 g_num = 100
+  4 ret = os.fork()
+  5 if ret == 0:
+  6     print("---process---1")
+  7     g_num+=1
+  8     print("---process---1-%d"%g_num)
+  9 else:
+ 10     time.sleep(3)
+ 11     print("---process---2")
+ 12     print("---process---2-%d"%g_num)
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/04-系统编程-1$ python3 5-修改全局变量.py 
+---process---1
+---process---1-101
+---process---2
+---process---2-100
+*****************************************************************************************
+多次fork
+  1 import os
+  2 #父进程
+  3 ret = os.fork()
+  4 if ret == 0:
+  5     #子进程
+  6     print("---1---")
+  7 else:
+  8     #父进程
+  9     print("---2---")
+ 10 #父子进程
+ 11 ret = os.fork()
+ 12 if ret == 0:
+ 13     #孙子
+ 14     #二儿子
+ 15     print("---11---")
+ 16 else:
+ 17     #儿子
+ 18     #父进程
+ 19     print("---22---")
+运行结果如下:
+python@ubuntu:~/Desktop/Python02-核心编程/04-系统编程-1$ python3 6-多次fork.py 
+---2---
+---22---
+---11---
+---1---
+---22---
+******************************************
+  1 import os
+  2 #父进程
+  3 ret = os.fork()
+  4 if ret == 0:
+  5     #子进程
+  6     print("---1---")
+  7 else:
+  8     #父进程
+  9     print("---2---")
+ 10 
+ 11     ret = os.fork()
+ 12     if ret == 0:
+ 13         #二儿子
+ 14         print("---11---")
+ 15     else:
+ 16         #父进程
+ 17         print("---22---")
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/04-系统编程-1$ python3 7-多次fork.py 
+---2---
+---22---
+---11---
+---1---
+总结:
+总之一句话，某一个进程里面再调用fork，那么将来只会增加一个进程，如果把ret = os.fork()放到父子进程都能够的着的地方，那么将来就相当于个人生一个儿子，所以说一共会增加两个进程
+******************************************
+  1 import os
+  2 
+  3 os.fork()
+  4 os.fork()
+  5 os.fork()
+  6 '''
+  7 #这是fork炸弹，会让电脑瞬间死机
+  8 while True:
+  9     os.fork()
+ 10 '''
+ 11 print("---1---")
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/04-系统编程-1$ python3 8-3个fork.py 
+---1---
+---1---
+---1---
+---1---
+---1---
+---1---
+---1---
+---1---
+以上程序创建了8个进程，可以根据画图来确定，根据公式就是1x2x2x2=8
+             ↓
+          ↙    ↘
+       ↙  ↘   ↙  ↘
+     ↙ ↘ ↙ ↘ ↙ ↘ ↙ ↘ ----->=8个进程
+*****************************************************************************************
+target：表示这个进程实例所调用对象
+Process创建子进程(以后都用Process创建子进程，扔掉fork，因为fork不能跨平台)
+  1 from multiprocessing import Process
+  2 import time
+  3 
+  4 def test():
+  5     while True:
+  6         print("---test---")
+  7         time.sleep(1)
+  8 
+  9 p = Process(target=test)
+ 10 p.start()#让这个进程开始执行test函数里的代码
+ 11 
+ 12 while True:
+ 13     print("---main---")
+ 14     time.sleep(1)
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/04-系统编程-1$ python3 9-process创建进程.py 
+---main---
+---test---
+---main---
+---test---
+---main---
+省略....
+主进程结束前提是要等子进程结束后，主进程才会结束
+*****************************************************************************************
+给target函数传递参数
+Process(target=test,args,kwargs)
+args：表示调用对象的位置参数元组；
+kwargs：表示调用对象的关键字参数字典；
+  1 from multiprocessing import Process
+  2 import os
+  3 
+  4 def test(num):
+  5     print("---pid=%d-ppid=%d-num=%d"%(os.getpid(),os.getppid(),num))
+  6 
+  7 p = Process(target=test,args=(100,))
+  8 p.start()
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/04-系统编程-1$ python3 11-给target函数传递参数.py 
+---pid=3309-ppid=3308-num=100
+*****************************************************************************************
+join([timeout])：是否等待进程实例执行结束，或等待多少秒；(只要见到函数说明里面带中括号的，代表可写可不写，写上代表超时时间)
+比如join(1)的意思是我等你1秒钟，1秒钟以内要是没有结束 我该干嘛干嘛
+join()等待我的子进程结束后才会往下走
+  1 from multiprocessing import Process
+  2 import time,random
+  3 
+  4 def test():
+  5     for i in range(random.randint(1,5)):
+  6         print("---%d---"%i)
+  7         time.sleep(1)
+  8 
+  9 p = Process(target=test)
+ 10 p.start()
+ 11 p.join(1)
+ 12 
+ 13 print("---main---")
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/04-系统编程-1$ python3 12-join子进程.py 
+---0---
+---1---
+---main---
+---2---
+*****************************************************************************************
+terminate()：不管任务是否完成，立即终止；
+通俗点就是不管你进程有没有结束，p.terminate()进程立马死，就相当于kill
+*************************************
+In [1]: import time
+In [2]: time.ctime()#获取当前的时间
+Out[2]: 'Tue Jul  3 15:06:35 2018'
+In [3]: time.time()#获取从1970年1月1日0时0分0秒到现在过了多少秒
+Out[3]: 1530601624.4476643
+*****************************************************************************************
+通过继承Process类来创建子进程
+  1 from multiprocessing import Process
+  2 import time
+  3 
+  4 class MyNewProcess(Process):
+        #重写了Process类的run()方法
+  5     def run(self):
+  6         while True:
+  7             print("---1---")
+  8             time.sleep(1)
+  9 
+ 10 p = MyNewProcess()
+ 11 p.start()#调用start方法时候会调用run方法，因为当调用父类Process中的start方法时候在start方法里面是会去调用run方法的，通俗点就是父类Process也有run方法，上面定义的run方法相当于重写父类的run方法
+ 12 while True:
+ 13     print("---main---")
+ 14     time.sleep(1)
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/04-系统编程-1$ python3 13-Process子类 创建进程.py 
+---main---
+---1---
+---main---
+---1---
+省略...
+*****************************************************************************************
+进程池Pool(池:就是缓存的意思)
+使用apply_async(func[, args[, kwds]]) 非阻塞方式
+使用非阻塞方式调用func（并行执行，堵塞方式必须等待上一个进程退出才能执行下一个进程），args为传递给func的参数列表，kwds为传递给func的关键字参数列表；
+  1 from multiprocessing import Pool
+  2 import os
+  3 import time
+  4 import random
+  5 
+  6 def worker(num):
+  7     for i in range(5):
+  8         print("===pid=%d==num=%d==="%(os.getpid(),num))
+  9         time.sleep(1)
+ 10 #3表示进程池中最多有3个进程一起执行
+ 11 pool = Pool(3)
+ 12 
+ 13 for i in range(10):
+ 14     print("---%d---"%i)
+ 15     #向进程池中添加任务
+ 16     #注意:如果添加的任务数量超过了进程池中进程的个数的话,那么不会导致添加不进去
+ 17     #　　　添加到进程中的任务,如果还没有被执行的话,那么此时他们会等待进程池中的
+ 18     #　　　进程完成一个任务之后,会自动的去用刚刚的那个进程,完成当前的新任务
+ 19     pool.apply_async(worker,(i,))
+ 20 
+ 21 pool.close()#关闭进程池,相当于不能够再次添加新任务了
+ 22 pool.join()#主进程　创建/添加　任务后，主进程 默认不会等待进程池中的任务执行完后才结束
+ 23 　　　　　#而是　当主进程的任务做完之后　立马结束,如果这个地方没有join,会导致
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/04-系统编程-1$ python3 14-进程池.py 
+---0---
+---1---
+---2---
+---3---
+---4---
+---5---
+---6---
+---7---
+---8---
+---9---
+===pid=4505==num=0===
+===pid=4504==num=2===
+===pid=4506==num=1===
+===pid=4504==num=2===
+===pid=4505==num=0===
+===pid=4506==num=1===
+===pid=4504==num=2===
+===pid=4505==num=0===
+===pid=4506==num=1===
+===pid=4504==num=2===
+===pid=4505==num=0===
+===pid=4506==num=1===
+===pid=4504==num=2===
+===pid=4505==num=0===
+===pid=4506==num=1===
+===pid=4506==num=3===
+===pid=4505==num=4===
+===pid=4504==num=5===
+===pid=4505==num=4===
+===pid=4506==num=3===
+===pid=4504==num=5===
+===pid=4505==num=4===
+===pid=4506==num=3===
+===pid=4504==num=5===
+===pid=4505==num=4===
+===pid=4506==num=3===
+===pid=4504==num=5===
+===pid=4505==num=4===
+===pid=4506==num=3===
+===pid=4504==num=5===
+===pid=4505==num=6===
+===pid=4506==num=7===
+===pid=4504==num=8===
+===pid=4505==num=6===
+===pid=4506==num=7===
+===pid=4504==num=8===
+===pid=4505==num=6===
+===pid=4506==num=7===
+===pid=4504==num=8===
+===pid=4505==num=6===
+===pid=4506==num=7===
+===pid=4504==num=8===
+===pid=4505==num=6===
+===pid=4506==num=7===
+===pid=4504==num=8===
+===pid=4505==num=9===
+===pid=4505==num=9===
+===pid=4505==num=9===
+===pid=4505==num=9===
+===pid=4505==num=9===
+*****************************************************************************************
+使用apply堵塞式(将上面的pool.apply_async(worker,(i,))改为pool.apply(worker,(i,))，其他代码不变)
+  1 from multiprocessing import Pool
+  2 import os
+  3 import time
+  4 import random
+  5 
+  6 def worker(num):
+  7     for i in range(5):
+  8         print("===pid=%d==num=%d==="%(os.getpid(),num))
+  9         time.sleep(1)
+ 10 pool = Pool(3)
+ 11 for i in range(10):
+ 12     print("---%d---"%i)
+ 13     pool.apply(worker,(i,))#第一次主进程运行到这里会卡住，要等上面worker运行完后再执行任务
+ 14 
+ 15 pool.close()
+ 16 pool.join()
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/04-系统编程-1$ python3 15-进程池-apply.py 
+---0---
+===pid=4974==num=0===
+===pid=4974==num=0===
+===pid=4974==num=0===
+===pid=4974==num=0===
+===pid=4974==num=0===
+---1---
+===pid=4975==num=1===
+===pid=4975==num=1===
+===pid=4975==num=1===
+===pid=4975==num=1===
+===pid=4975==num=1===
+---2---
+===pid=4976==num=2===
+===pid=4976==num=2===
+===pid=4976==num=2===
+===pid=4976==num=2===
+===pid=4976==num=2===
+---3---
+===pid=4974==num=3===
+===pid=4974==num=3===
+===pid=4974==num=3===
+===pid=4974==num=3===
+===pid=4974==num=3===
+---4---
+===pid=4975==num=4===
+===pid=4975==num=4===
+===pid=4975==num=4===
+===pid=4975==num=4===
+===pid=4975==num=4===
+---5---
+===pid=4976==num=5===
+===pid=4976==num=5===
+===pid=4976==num=5===
+===pid=4976==num=5===
+===pid=4976==num=5===
+---6---
+===pid=4974==num=6===
+===pid=4974==num=6===
+===pid=4974==num=6===
+===pid=4974==num=6===
+===pid=4974==num=6===
+---7---
+===pid=4975==num=7===
+===pid=4975==num=7===
+===pid=4975==num=7===
+===pid=4975==num=7===
+===pid=4975==num=7===
+---8---
+===pid=4976==num=8===
+===pid=4976==num=8===
+===pid=4976==num=8===
+===pid=4976==num=8===
+===pid=4976==num=8===
+---9---
+===pid=4974==num=9===
+===pid=4974==num=9===
+===pid=4974==num=9===
+===pid=4974==num=9===
+===pid=4974==num=9===
+
+*****************************************************************************************
+多种创建进程的方式比较
+#第一种
+ret = os.fork()
+if ret == 0:
+    #子进程
+else:
+    #父进程
+#第二种
+p = Process(target=xxx)
+p.start()
+#第三种
+pool = Pool(3)
+pool.apply_async(xxx)--->非堵塞方式
+#主进程一般用来等待，，，真正的任务都在子进程中执行
+*****************************************************************************************
+进程间通信-Queue--->消息队列
+Queue.qsize()：返回当前队列包含的消息数量；
+Queue.empty()：如果队列为空，返回True，反之False ；
+Queue.full()：如果队列满了，返回True,反之False；
+Queue.get([block[, timeout]])：获取队列中的一条消息，然后将其从列队中移除，block默认值为True；
+In [1]: from multiprocessing import Queue
+In [2]: q = Queue()
+In [3]: q.qsize()
+Out[3]: 0
+In [4]: q.put(100)
+In [5]: q.put("helloworld")
+In [6]: q.put([])
+In [7]: q.put({})
+In [8]: q.qsize()
+Out[8]: 4
+In [9]: q.get()
+Out[9]: 100
+In [10]: q.get()
+Out[10]: 'helloworld'
+In [11]: q.get()
+Out[11]: []
+In [12]: q.get()
+Out[12]: {}
+In [13]: q.qsize()
+Out[13]: 0
+In [15]: q.empty()
+Out[15]: True
+In [16]: q.full()
+Out[16]: False
+***********************************************
+Queue实例
+from multiprocessing import Process, Queue
+import os, time, random
+
+# 写数据进程执行的代码:
+def write(q):
+    for value in ["A", "B", "C"]:
+        print("Put %s to queue..." %value)
+        q.put(value)
+        time.sleep(random.random())
+
+# 读数据进程执行的代码:
+def read(q):
+    while True:
+        if not q.empty():
+            value = q.get(True)
+            print("Get %s from queue." %value)
+            time.sleep(random.random())
+        else:
+            break
+
+if __name__=="__main__":
+    # 父进程创建Queue，并传给各个子进程：
+    q = Queue()
+    pw = Process(target=write, args=(q,))
+    pr = Process(target=read, args=(q,))
+    # 启动子进程pw，写入:
+    pw.start()    
+    # 等待pw结束:
+    pw.join()
+    # 启动子进程pr，读取:
+    pr.start()
+    pr.join()
+    # pr进程里是死循环，无法等待其结束，只能强行终止:
+    print("")
+    print("所有数据都写入并且读完")
+运行结果:
+Put A to queue...
+Put B to queue...
+Put C to queue...
+Get A from queue.
+Get B from queue.
+Get C from queue.
+
+所有数据都写入并且读完
+****************************************************************************************
+进程池中的Queue
+如果要使用Pool创建进程，就需要使用multiprocessing.Manager()中的Queue()，而不是multiprocessing.Queue()，否则会得到一条如下的错误信息：
+RuntimeError: Queue objects should only be shared between processes through inheritance.
+from multiprocessing import Manager,Pool
+import os,time,random
+
+def reader(q):
+    print("reader启动(%s),父进程为(%s)"%(os.getpid(),os.getppid()))
+    for i in range(q.qsize()):
+        print("reader从Queue获取到消息：%s"%q.get(True))
+
+def writer(q):
+    print("writer启动(%s),父进程为(%s)"%(os.getpid(),os.getppid()))
+    for i in "TaoGang":
+        q.put(i)
+
+if __name__=="__main__":
+    print("(%s) start"%os.getpid())
+    q=Manager().Queue() #使用Manager中的Queue来初始化
+    po=Pool()
+    #使用阻塞模式创建进程，这样就不需要在reader中使用死循环了，可以让writer完全执行完成后，再用reader去读取
+    po.apply(writer,(q,))
+    po.apply(reader,(q,))
+    po.close()
+    po.join()
+    print("(%s) End"%os.getpid())
+运行结果:
+(13792) start
+writer启动(4440),父进程为(13792)
+reader启动(4440),父进程为(13792)
+reader从Queue获取到消息：T
+reader从Queue获取到消息：a
+reader从Queue获取到消息：o
+reader从Queue获取到消息：G
+reader从Queue获取到消息：a
+reader从Queue获取到消息：n
+reader从Queue获取到消息：g
+(13792) End
+****************************************************************************************
+显示进度
+  1 import time
+  2 for i in range(1,101):
+  3     print("\r%.2f%%"%i,end="")
+  4     time.sleep(0.01)
+  5 
+  6 print("")
+ 运行结果为:
+ python@ubuntu:~/Desktop/Python02-核心编程/04-系统编程-1$ python3 16-显示进度.py 
+100.00%  
+说明:上面的结果是从1.00%动态加载到100.00% 
+解释:%.2f表示输出浮点数并保留两位小数。%%表示直接输出一个%。
+****************************************************************************************
+ 多进程完成copy文件
+  1 from multiprocessing import Pool,Manager
+  2 import os
+  3 
+  4 def copyFileTask(name,oldFolderName,newFolderName,queue):
+  5     fr = open(oldFolderName+"/"+name)
+  6     fw = open(newFolderName+"/"+name,"w")
+  7 
+  8     content = fr.read()
+  9     fw.write(content)
+ 10 
+ 11     fr.close()
+ 12     fw.close()
+ 13 
+ 14     queue.put(name)
+ 15 def main():
+ 16     #1.获取要copy的文件夹名
+ 17     oldFolderName = input("请输入要复制的文件名:")
+ 18     #2.创建文件夹
+ 19     newFolderName = oldFolderName+"-复件"
+ 20     #print(newFolderName)
+ 21     os.mkdir(newFolderName)
+ 22     #3.获取old文件夹中所有文件名字
+ 23     fileNames = os.listdir(oldFolderName)
+ 24     #print(fileNames)
+ 25     #4.使用多进程的方式copy原文件中的所有文件到新文件中
+ 26     pool = Pool(5)
+ 27     queue = Manager().Queue()
+ 28     for name in fileNames:
+ 29         pool.apply_async(copyFileTask,(name,oldFolderName,newFolderName,queu    e))
+ 30     #pool.close()
+ 31     #pool.join()
+ 32     num = 0
+ 33     allNum = len(fileNames)
+ 34     while True:
+ 35         queue.get()
+ 36         num+=1
+ 37         copyRate = num/allNum
+ 38         print("\rcopy的进度为:%.2f%%"%(copyRate*100),end="")
+ 39         if num == allNum:
+ 40             break
+ 41     print("")
+ 42 if __name__ == "__main__":
+ 43     main()
+
+****************************************************************************************
+线程
+多线程-threading:python的thread模块是比较底层的模块，python的threading模块是对thread做了一些包装的，可以更加方便的被使用
+未用线程的代码:
+1 from threading import Thread
+  2 import time
+  3 
+  4 def test():
+  5     print("---for test---")
+  6     time.sleep(1)
+  7 
+  8 for i in range(5):
+  9     test()
+使用线程完成多任务
+  1 from threading import Thread
+  2 import time
+  3 
+  4 def test():
+  5     print("---for test---")
+  6     time.sleep(1)
+  7 
+  8 for i in range(5):
+  9     t = Thread(target=test)
+ 10     t.start()
+未用线程完成多任务，需要五秒多，而用线程来完成多任务只需要1秒多时间就完成多次打印
+****************************************************************************************
+线程执行代码的封装
+通过使用threading模块能完成多任务的程序开发，为了让每个线程的封装性更完美，所以使用threading模块时，往往会定义一个新的子类class，只要继承threading.Thread就可以了，然后重写run方法
+from threading import Thread
+import time
+
+class MyThread(Thread):
+    def run(self):
+        for i in range(3):
+            time.sleep(1)
+            msg = "I'm "+self.name+"@: "+str(i) #name属性中保存的是当前线程的名字
+            print(msg)
+
+
+if __name__ == "__main__":
+    t = MyThread()
+    t.start()
+运行结果:
+I'm Thread-1@: 0
+I'm Thread-1@: 1
+I'm Thread-1@: 2
+[Finished in 3.1s]
+以上代码的解释跟Process类一样(注释在423行)
+****************************************************************************************拓展:什么是孤儿进程，什么是僵尸进程？
+孤儿进程：就是父进程死了，子进程还在运行
+僵尸进程:子进程挂了死了，父进程没有给他收尸，在收尸之前的整个期间，子进程就称为僵尸进程
+子进程的pid都会比父进程pid大，所以在进程里面pid为1的进程系统启动或者说开机时产生的进程，它要是死掉系统直接挂掉，同时pid为1的进程也称之为孤儿收容所，即孤儿进程就是被其来收尸的
+****************************************************************************************
+线程的执行顺序 
+  1 from threading import Thread
+  2 import time
+  3 
+  4 class MyThread(Thread):
+  5     def run(self):
+  6         for i in range(3):
+  7             time.sleep(1)
+  8             msg = "I'm "+self.name+" @ "+str(i)
+  9             print(msg)
+ 10 def test():
+ 11     for i in range(5):
+ 12         t = MyThread()
+ 13         t.start()
+ 14 if __name__ == "__main__":
+ 15     test()
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/05-系统编程-2$ python3 3-线程的执行顺 序.py 
+I'm Thread-1 @ 0
+I'm Thread-2 @ 0
+I'm Thread-3 @ 0
+I'm Thread-4 @ 0
+I'm Thread-5 @ 0
+I'm Thread-3 @ 1
+I'm Thread-2 @ 1
+I'm Thread-1 @ 1
+I'm Thread-4 @ 1
+I'm Thread-5 @ 1
+I'm Thread-2 @ 2
+I'm Thread-3 @ 2
+I'm Thread-1 @ 2
+I'm Thread-4 @ 2
+I'm Thread-5 @ 2
+****************************************************************************************
+多线程使用全局变量
+ 1 from threading import Thread
+  2 import time
+  3 #线程之间共享全局变量
+  4 g_num = 100
+  5 
+  6 def work1():
+  7     global g_num
+  8     for i in range(3):
+  9         g_num += 1
+ 10 
+ 11     print("----in work1, g_num is %d---"%g_num)
+ 12 
+ 13 
+ 14 def work2():
+ 15     global g_num
+ 16     print("----in work2, g_num is %d---"%g_num)
+ 17 
+ 18 
+ 19 print("---线程创建之前g_num is %d---"%g_num)
+ 20 
+ 21 t1 = Thread(target=work1)
+ 22 t1.start()
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/05-系统编程-2$ python3 4-多线程使用全 局变量.py 
+---线程创建之前g_num is 100---
+----in work1, g_num is 103---
+----in work2, g_num is 103---
+以上代码运行结果说明了:对于多线程而言，对全局变量是共享的，而对于多进程来说全局变量是不共享的，个人是个人的
+****************************************************************************************
+进程和线程的区别:
+进程:就好比软件多开(例如:同时在手机上运行几个QQ,多开理解成有多个进程，)
+线程:就好比聊天窗口多开(例如:打开一个QQ，创建多个对话框，同时聊天或者聊天加传文件或开视频)
+在没有多进程的前提下，使用多线程来完成多个任务的执行，也就是说多线程也是实现多任务的一种方式
+进程是系统分配的单位
+线程是cpu调度的单位
+理解:最开始学习进程的时候是没创建一个进程就分配一个单位，每个单位都会有一个箭头(主线程)指向它，线程就相当于是这个箭头，主线程会从上往下的执行代码，现在通过Tread创建出来的线程代表子线程，子线程只会执行target指向的函数里面的代码，多个线程就代表一个进程(单位)有多个箭头来指向它，每个箭头都会执行一遍tartget指向的函数里面的代码
+主线程都会等子线程执行完了后才会停止，当子线程还在执行任务时，主线程继续往下走该干嘛干嘛，主线程没有事做的时候就会等到子线程昨晚后整个程序才会停止
+总结:
+一个程序至少有一个进程,一个进程至少有一个线程.
+线程的划分尺度小于进程(资源比进程少)，使得多线程程序的并发性高。
+进程在执行过程中拥有独立的内存单元，而多个线程共享内存，从而极大地提高了程序的运行效率
+线线程不能够独立执行，必须依存在进程中
+优缺点:
+线程和进程在使用上各有优缺点：线程执行开销小，但不利于资源的管理和保护；而进程正相反。
+****************************************************************************************
+  1 from threading import Thread
+  2 import time
+  3 
+  4 g_num = 0
+  5 
+  6 def test1():
+  7     global g_num
+  8     for i in range(1000000):
+  9         g_num += 1
+ 10 
+ 11     print("---test1---g_num=%d"%g_num)
+ 12 
+ 13 def test2():
+ 14     global g_num
+ 15     for i in range(1000000):
+ 16         g_num += 1
+ 17 
+ 18     print("---test2---g_num=%d"%g_num)
+ 19 
+ 20 
+ 21 p1 = Thread(target=test1)
+ 22 p1.start()
+ 23 
+ 24 #time.sleep(3) #取消屏蔽之后 再次运行程序，结果会不一样，，，为啥呢？
+ 25 
+ 26 p2 = Thread(target=test2)
+ 27 p2.start()
+ 28 
+ 29 print("---g_num=%d---"%g_num)
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/05-系统编程-2$ python3 5-线程共享全局 变量的问题.py 
+---g_num=278880---
+---test1---g_num=1257451
+---test2---g_num=1292098
+以上代码time.sleep(3)取消屏蔽好的结果:
+python@ubuntu:~/Desktop/Python02-核心编程/05-系统编程-2$ python3 5-线程共享全局 变量的问题.py 
+---test1---g_num=1000000
+---g_num=1040916---
+---test2---g_num=2000000
+总结:线程能共享全局变量，有利也有弊，全局变量运用不好就会出问题
+****************************************************************************************列表当做实参传递到线程中
+  1 from threading import Thread
+  2 import time
+  3 
+  4 def work1(nums):
+  5         nums.append(44)
+  6         print("----in work1----",nums)
+  7 
+  8 def work2(nums):
+  9         #延时一会，保证t1线程中的事情做完
+ 10         time.sleep(1)
+ 11         print("----in work2----",nums)
+ 12 
+ 13 g_nums = [11,22,33]
+ 14 
+ 15 t1 = Thread(target=work1,args=(g_nums,))
+ 16 t1.start()
+ 17 
+ 18 t2 = Thread(target=work2,args=(g_nums,))
+ 19 t2.start()
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/05-系统编程-2$ python3 6-列表当作实参 传递到线程中.py 
+----in work1---- [11, 22, 33, 44]
+----in work2---- [11, 22, 33, 44]
+****************************************************************************************
+之前遇到的问题是#取消屏蔽之后 再次运行程序，结果会不一样，，，为啥呢？
+1.系统调用t1，然后获取到num的值为0，此时上一把锁，即不允许其他现在操作num
+2.对num的值进行+1
+3.解锁，此时num的值为1，其他的线程就可以使用num了，而且是num的值不是0而是1
+4.同理其他线程在对num进行修改时，都要先上锁，处理完后再解锁，在上锁的整个过程中不允许其他线程访问，就保证了数据的正确性
+避免多线程对共享数据出错的方式:
+  1 from threading import Thread
+  2 import time
+  3 
+  4 g_num = 0
+  5 g_flag = 1
+  6 def test1():
+  7     global g_num
+  8     global g_flag
+  9     if g_flag==1:
+ 10         for i in range(1000000):
+ 11             g_num += 1
+ 12         g_flag = 0
+ 13     print("---test1---g_num=%d"%g_num)
+ 14 
+ 15 def test2():
+ 16     global g_num
+ 17     #轮询
+ 18     while True:
+ 19         if g_flag !=1:
+ 20             for i in range(1000000):
+ 21                 g_num += 1
+ 22             break
+ 23     print("---test2---g_num=%d"%g_num)
+ 24 
+ 25 
+ 26 p1 = Thread(target=test1)
+ 27 p1.start()
+ 28 
+ 29 #time.sleep(3) #取消屏蔽之后 再次运行程序，结果会不一样，，，为啥呢？
+ 30 
+ 31 p2 = Thread(target=test2)
+ 32 p2.start()
+ 33 
+ 34 print("---g_num=%d---"%g_num)
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/05-系统编程-2$ python3 7-避免多线程对 共享数据出错的方式.py 
+---g_num=310188---
+---test1---g_num=1000000
+---test2---g_num=2000000
+以上代码解决了共享数据出错的问题，但是效率不高，当线程1在执行时，线程2一直在循环判断，一直占用内存
+****************************************************************************************
+互斥锁
+当多个线程几乎同时修改某一个共享数据的时候，需要进行同步控制
+互斥锁为资源引入一个状态：锁定/非锁定。
+某个线程要更改共享数据时，先将其锁定，此时资源的状态为“锁定”，其他线程不能更改；直到该线程释放资源，将资源的状态变成“非锁定”，其他的线程才能再次锁定该资源。互斥锁保证了每次只有一个线程进行写入操作，从而保证了多线程情况下数据的正确性。
+  1 from threading import Thread,Lock
+  2 import time
+  3 
+  4 g_num = 0
+  5 def test1():
+  6     global g_num
+  7     #这个线程和test2线程都在抢着对这个锁进行上锁,如果有一方成功上锁,那么导致
+    另外一方堵塞(一直等待)到这个锁被解开为止
+  8     mutex.acquire()
+  9     for i in range(1000000):
+ 10         g_num += 1
+ 11     mutex.release()#用来对mutex指向的这个锁进行解锁,只要开了锁,那么接下来会>    让所有因为这个锁被上了锁而堵塞的线程,进行抢着上锁
+ 12     print("---test1---g_num=%d"%g_num)
+ 13 
+ 14 def test2():
+ 15     global g_num
+ 16     mutex.acquire()
+ 17     for i in range(1000000):
+ 18         g_num += 1
+ 19     mutex.release()
+ 20     print("---test2---g_num=%d"%g_num)
+ 21 #创建一把互斥锁，这把锁默认是没有上锁的
+ 22 mutex = Lock()
+ 23 p1 = Thread(target=test1)
+ 24 p1.start()
+ 25 
+ 26 #time.sleep(3) #取消屏蔽之后 再次运行程序，结果会不一样，，，为啥呢？
+ 27 
+ 28 p2 = Thread(target=test2)
+ 29 p2.start()
+ 30 
+ 31 print("---g_num=%d---"%g_num)
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/05-系统编程-2$ python3 8-使用互斥锁.py 
+---g_num=177682---
+---test1---g_num=1000000
+---test2---g_num=2000000
+****************************************************************************************
+把锁上到for里面
+  1 from threading import Thread,Lock
+  2 import time
+  3 
+  4 g_num = 0
+  5 def test1():
+  6     global g_num
+  7     for i in range(1000000):
+  8         mutex.acquire()
+  9         g_num += 1
+ 10         mutex.release()
+ 11     print("---test1---g_num=%d"%g_num)
+ 12 
+ 13 def test2():
+ 14     global g_num
+ 15     for i in range(1000000):
+ 16         mutex.acquire()
+ 17         g_num += 1
+ 18         mutex.release()
+ 19     print("---test2---g_num=%d"%g_num)
+ 20 mutex = Lock()
+ 21 p1 = Thread(target=test1)
+ 22 p1.start()
+ 23 
+ 24 p2 = Thread(target=test2)
+ 25 p2.start()
+ 26 print("---g_num=%d---"%g_num)
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/05-系统编程-2$ python3 9-上锁到for里面.py 
+---g_num=48211---
+---test1---g_num=1947903
+---test2---g_num=2000000
+以上代码说明是可以把锁放到for循环里面的
+解释:为什么test1打印的g_num并不是1000000
+因为:比如当test1中for循环执行50万次的时候，test2中for循环也可能执行了很多万次，(因为线程的执行顺序说不准的，test1中每当上锁解锁后都会与test2来抢谁执行，所以才导致了第一个并不是1000000)那么就会导致打印test1中的g_num时候值不是1000000，而是1947903
+****************************************************************************************
+想想下面的问题:
+1.第一个不是1000000
+2.执行顺序--->不确定 根据系统的调度算法
+3.放到for循环里面 ---->可以放到for循环里面
+4.等待解锁的方式(通知？轮询？)----->通知
+5.一个释放，剩下的都在抢-----True
+****************************************************************************************
+多个线程使用非全局变量
+  1 from threading import Thread
+  2 import time,threading
+  3 def test1():
+  4     name = threading.current_thread().name
+  5     print("this thread name is %s"%name)
+  6     g_num = 100
+  7     if name == "Thread-1":
+  8         g_num += 1
+  9     else:
+ 10         time.sleep(2)
+ 11     print("---thread name is %s---g_num=%d"%(name,g_num))
+ 12 
+ 13 #def test2():
+ 14 #    time.sleep(1)
+ 15 #    g_num = 100
+ 16 #    print("---test2---g_num=%d"%g_num)
+ 17 p1 = Thread(target=test1)
+ 18 p1.start()
+ 19 
+ 20 p2 = Thread(target=test1)
+ 21 p2.start()
+ 22 
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/05-系统编程-2$ python3 10-多个线程使用非全局变量.py 
+this thread name is Thread-1
+---thread name is Thread-1---g_num=101
+this thread name is Thread-2
+---thread name is Thread-2---g_num=100
+总结:
+线程很独特的一个特点，全局变量可以一起来共用一份，但是在函数里面的变量(非全局变量)个人是个人的
+进程全局变量也是个人是个人的，函数里的变量还是个人是个人的
+****************************************************************************************
+死锁
+在线程间共享多个资源的时候，如果两个线程分别占有一部分资源并且同时等待对方的资源，就会造成死锁。
+#coding=utf-8
+from threading import Thread,Lock
+import time
+class MyThread1(Thread):
+    def run(self):
+        if mutexA.acquire():
+            print(self.name+"----do1---up----")
+            time.sleep(1)
+
+            if mutexB.acquire():
+                print(self.name+"----do1---down----")
+                mutexB.release()
+            mutexA.release()
+
+class MyThread2(Thread):
+    def run(self):
+        if mutexB.acquire():
+            print(self.name+"----do2---up----")
+            time.sleep(1)
+            if mutexA.acquire():
+                print(self.name+"----do2---down----")
+                mutexA.release()
+            mutexB.release()
+
+mutexA = Lock()
+mutexB = Lock()
+
+if __name__ == "__main__":
+    t1 = MyThread1()
+    t2 = MyThread2()
+    t1.start()
+    t2.start()
+运行结果:
+Thread-1----do1---up----
+Thread-2----do2---up----
+一直卡在这里
+避免死锁：
+程序设计时要尽量避免（银行家算法）
+添加超时时间等
+****************************************************************************************
+同步:同步就是协同步调，按预定的先后次序进行运行。如:你说完，我再说。(确定有一个先后顺序)
+"同"字从字面上容易理解为一起动作
+其实不是，"同"字应是指协同、协助、互相配合。
+异步:不确定谁先走
+堵塞和非堵塞指的就是你等或者不等的意思，程序等一会儿走还是直接走
+******************************************
+同步的应用
+from threading import Thread,Lock
+from time import sleep
+
+class Task1(Thread):
+    def run(self):
+        while True:
+            if lock1.acquire():
+                print("------Task 1 -----")
+                sleep(0.5)
+                lock2.release()
+
+class Task2(Thread):
+    def run(self):
+        while True:
+            if lock2.acquire():
+                print("------Task 2 -----")
+                sleep(0.5)
+                lock3.release()
+
+class Task3(Thread):
+    def run(self):
+        while True:
+            if lock3.acquire():
+                print("------Task 3 -----")
+                sleep(0.5)
+                lock1.release()
+
+#使用Lock创建出的锁默认没有“锁上”
+lock1 = Lock()
+#创建另外一把锁，并且“锁上”
+lock2 = Lock()
+lock2.acquire()
+#创建另外一把锁，并且“锁上”
+lock3 = Lock()
+lock3.acquire()
+
+t1 = Task1()
+t2 = Task2()
+t3 = Task3()
+
+t1.start()
+t2.start()
+t3.start()
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/05-系统编程-2$ python3 11-同步的应用.py 
+------Task 1 -----
+------Task 2 -----
+------Task 3 -----
+------Task 1 -----
+------Task 2 -----
+------Task 3 -----
+------Task 1 -----
+------Task 2 -----
+------Task 3 -----
+------Task 1 -----
+一直循环(省略)
+解释:以上代码程序从上往下走，定义了(Task1,Task2,Task3)三个类,并都继承了Thread线程类,紧接着创建了三把锁,lock1 = Lock(),lock2 = Lock(),lock3 = Lock(),除了第一把锁没有上锁，第二三把锁都上锁了，lock2.acquire(),lock3.acquire(),紧接着创建了三个对象，t1 = Task1(),t2 = Task2(),t3 = Task3()，启动线程(t1.start(),t2.start(),t3.start())，调用start方法即调用父类的start方法，重写了父类Thread start方法中的run方法，在Task1类中的run方法，执行if lock1.acquire(),if lock2.acquire()和if lock3.acquire()，这里是重点，因刚开始时在创建锁的时候，只有第一把锁没有上锁，所以导致Task2和Task3两个类中的run方法里的if lock2.acquire()和if lock3.acquire()堵塞，等待解锁，即在task1类中的run方法的if lock1.acquire()正常执行，打印------Task 1 -----后延时0.5秒
+接着解锁lock2.acquire()，即Task2中的run方法里的if lock2.acquire()即可运行，以此类推Task3中的run方法里的if lock3.acquire()即可运行，整个程序循环判断打印，while True当lock.acquire()满足上锁条件时，程序就会一直判断并打印结果
+(if lock.acquire()说白点就是如果上锁成功就返回True)
+****************************************************************************************
+生产者与消费者模式
+#encoding=utf-8
+import threading
+import time
+
+#python2中
+from Queue import Queue
+
+#python3中
+from queue import Queue
+
+class Producer(threading.Thread):
+    def run(self):
+        global queue
+        count = 0
+        while True:
+            if queue.qsize() < 1000:
+                for i in range(100):
+                    count = count +1
+                    msg = '生成产品'+str(count)
+                    queue.put(msg)
+                    print(msg)
+            time.sleep(0.5)
+
+class Consumer(threading.Thread):
+    def run(self):
+        global queue
+        while True:
+            if queue.qsize() > 100:
+                for i in range(3):
+                    msg = self.name + '消费了 '+queue.get()
+                    print(msg)
+            time.sleep(1)
+
+
+if __name__ == '__main__':
+    queue = Queue()
+
+    for i in range(500):
+        queue.put('初始产品'+str(i))
+    for i in range(2):
+        p = Producer()
+        p.start()
+    for i in range(5):
+        c = Consumer()
+        c.start()
+总结：from queue import Queue(这是线程中的队列)
+Queue的说明
+1.对于Queue，在多线程通信之间扮演重要的角色
+2.添加数据到队列中，使用put()方法
+3.从队列中取数据，使用get()方法
+4.判断队列中是否还有数据，使用qsize()方法
+****************************************************************************************
+ThreadLocal
+在多线程环境下，每个线程都有自己的数据。一个线程使用自己的局部变量比使用全局变量好，因为局部变量只有线程自己能看见，不会影响其他线程，而全局变量的修改必须加锁。
+使用ThreadLocal的方法
+ThreadLocal应运而生，不用查找dict，ThreadLocal帮你自动做这件事：
+#import threading
+from threading import Thread
+import threading
+
+# 创建全局ThreadLocal对象:
+local_school = threading.local()
+
+def process_student():
+    # 获取当前线程关联的student:
+    std = local_school.student
+    print('Hello, %s (in %s)' % (std, threading.current_thread().name))
+
+def process_thread(name):
+    # 绑定ThreadLocal的student:
+    local_school.student = name
+    process_student()
+
+t1 = Thread(target= process_thread, args=('dongGe',), name='Thread-A')
+t2 = Thread(target= process_thread, args=('老王',), name='Thread-B')
+t1.start()
+t2.start()
+t1.join()
+t2.join()
+运行结果:
+Hello, dongGe (in Thread-A)
+Hello, 老王 (in Thread-B)
+总结:
+在多个线程之间做得事情比较复杂，一会要调用这个函数一会儿需要调用另外一个函数，函数和函数之间的调用往往就牵扯了数据的传递，数据的传递可以考虑当中实参来传，但是比较费劲，一般考虑用全局变量，如果用以前那种普通的全局变量，就会有一个问题，当这个线程对这个全局变量修改后，另一个线程也修改了这个全局变量，那么就会把你原来修改的全局变量的值给改了，但是你用threading.local()创建出来的对象对同一个属性设置值的时候，它将来取的时候，每一个线程里面怎么设的，将来你取的时候就是你这个线程里面的值，不会因为你线程不一样，导致我取的值的不一样(跟当初设的值不一样)，当我这个线程给全局变量赋值后，在取值之前不会因为另一个线程对这个全局变量赋了值而改变，我的还是我的，你的还是你的
+****************************************************************************************
+异步
+同步调用就是你 喊 你朋友吃饭 ，你朋友在忙 ，你就一直在那等，等你朋友忙完了 ，你们一起去
+异步调用就是你 喊 你朋友吃饭 ，你朋友说知道了 ，待会忙完去找你 ，你就去做别的了。
+ 1 from multiprocessing import Pool
+  2 import time
+  3 import os
+  4 
+  5 def test():
+  6     print("---进程池中的进程---pid=%d,ppid=%d--"%(os.getpid(),os.getppid()))
+  7     for i in range(3):
+  8         print("----%d---"%i)
+  9         time.sleep(1)
+ 10     return "hahah"
+ 11 
+ 12 def test2(args):
+ 13     print("---callback func--pid=%d"%os.getpid())
+ 14     print("---callback func--args=%s"%args)
+ 15 
+ 16 pool = Pool(3)
+ 17 pool.apply_async(func=test,callback=test2)
+ 18 
+ 19 time.sleep(5)
+ 20 
+ 21 print("----主进程-pid=%d----"%os.getpid())
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/05-系统编程-2$ python3 14-异步.py 
+---进程池中的进程---pid=4791,ppid=4788--
+----0---
+----1---
+----2---
+---callback func--pid=4788
+---callback func--args=hahah
+----主进程-pid=4788----
+
+解释以上代码:
+说明:pool.apply_async(func=test,callback=test2)之前写的pool.apply_async(test)其中的test就等价于func = test，callback的意思就是回调
+子进程执行完test函数临死前return了hahah 当子进程死掉了 操作系统叫主进程放下手里的活(此时主进程正在休眠五秒中)，系统将返回的hahah给你主进程，此时主进程去执行callback = test2把hahah给你父进程
+传参给args，即从运行结果是父进程执行了test2这个函数并打印了hahah
+理解是什么是异步，异步的好处是什么
+当你把书还给我的时候，我要把你还给我的这本书放在书架上，但是我不确定你什么时候把书还给我，我等着你还书，我在等的期间是不是白等，那么当你要还我书的时候就通知我，在这个期间我该干嘛就干嘛，当你通知我还书的时候，我把手上的活儿放一下，拿着这本书放在书架上，然后继续干我的活儿---->这种情况就叫做异步
+****************************************************************************************
+拓展
+GIL:全局解释器锁
+多进程在Python中的效率永远大于多线程
+多线程有一个GIL锁
+能用线程的用进程
+但进程中通讯问题没有线程中的通讯方便(全局变量)
+各有利弊
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

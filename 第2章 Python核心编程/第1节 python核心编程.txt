@@ -1,0 +1,2015 @@
+重点:==丶is  和  深拷贝丶浅拷贝
+import 导入模块的搜索路径 :sys.path
+In [1]: import sys
+In [2]: sys.path
+Out[2]: 
+['',
+ '/usr/bin',
+ '/usr/lib/python35.zip',
+ '/usr/lib/python3.5',
+ '/usr/lib/python3.5/plat-x86_64-linux-gnu',
+ '/usr/lib/python3.5/lib-dynload',
+ '/usr/local/lib/python3.5/dist-packages',
+ '/usr/lib/python3/dist-packages',
+ '/usr/lib/python3/dist-packages/IPython/extensions',
+ '/home/python/.ipython']
+*************************************************
+如果你导入的模块不在以上的路径中，可以使用sys.path.append("/home")添加路径，因为sys.path是列表
+In [3]: sys.path.append("/home")
+In [4]: sys.path
+Out[4]: 
+['',
+ '/usr/bin',
+ '/usr/lib/python35.zip',
+ '/usr/lib/python3.5',
+ '/usr/lib/python3.5/plat-x86_64-linux-gnu',
+ '/usr/lib/python3.5/lib-dynload',
+ '/usr/local/lib/python3.5/dist-packages',
+ '/usr/lib/python3/dist-packages',
+ '/usr/lib/python3/dist-packages/IPython/extensions',
+ '/home/python/.ipython',
+ '/home']
+******************************************************************************************
+模块重新导入
+当我在当前路径下创建了一个test.py的模块，在ipython3交互模式中，能成功导入该模块，并调用test()方法
+在交互模式没有退出的情况下，打开新的终端在test.py模块里添加一句print("---2---")，此test.test()
+只打印出---1---并没有打印出---2----
+In [3]: import test
+In [4]: test.
+test.py    test.test  
+In [4]: test.test()
+---1---
+In [5]: test.test()
+---1---
+使用imp模块下的reload方法可以在交互模式没有退出的情况下，对一个模块从新加载，加载最新的内容
+In [6]: from imp import *
+In [7]: reload(test)
+Out[7]: <module 'test' from '/home/python/Desktop/Python02-核心编程/01-python高级-1/test.py'>
+In [8]: test.test()
+---1---
+---2---
+******************************************************************************************
+模块循环导入问题
+python@ubuntu:~/Desktop/Python02-核心编程/01-python高级-1$ cat a.py 
+from b import b
+def a():
+    print("---a---")
+    b()
+a()
+python@ubuntu:~/Desktop/Python02-核心编程/01-python高级-1$ cat b.py 
+from a import a
+def b():
+    print("---b---")
+
+def c():
+    print("---c---")
+    a()
+c()
+运行结果如下:
+python@ubuntu:~/Desktop/Python02-核心编程/01-python高级-1$ python3 a.py 
+Traceback (most recent call last):
+  File "a.py", line 1, in <module>
+    from b import b
+  File "/home/python/Desktop/Python02-核心编程/01-python高级-1/b.py", line 1, in <module>
+    from a import a
+  File "/home/python/Desktop/Python02-核心编程/01-python高级-1/a.py", line 1, in <module>
+    from b import b
+ImportError: cannot import name 'b'
+总结:
+避免循环导入
+1.程序设计上分层，降低耦合
+2.导入语句放在后面需要导入时再导入，例如放在函数体内导入
+******************************************************************************************
+==和is的区别
+In [2]: a = [11,22,33]
+In [3]: b = [11,22,33]
+In [4]: a == b
+Out[4]: True
+In [5]: a is b
+Out[5]: False
+In [6]: id(a)
+Out[6]: 140311955904776
+In [7]: id(b)
+Out[7]: 140311955904840
+In [8]: c = a
+In [9]: id(c)
+Out[9]: 140311955904776
+In [10]: a == c
+Out[10]: True
+In [11]: a is c
+Out[11]: True
+总结:
+== :如果你们两个指向了分别两个空间，但是里面的内容是相同的
+is :如果你指向了这个地址，我也执行了这个地址，那我们就是相同的
+***********************************************
+==和is 拓展
+In [15]: a = 100
+In [16]: b = 100
+In [17]: a==b
+Out[17]: True
+In [18]: a is b
+Out[18]: True
+In [19]: a = 10000
+In [20]: b = 10000
+In [22]: a is b
+Out[22]: False
+******************************************************************************************
+浅拷贝和深拷贝
+浅拷贝: b = a指向了同一个地址 仅仅是一个地址的拷贝，并没有拷贝这个地址空间里的内容
+深拷贝: c = copy.deepcopy(a) 指向了一个新的地址 这个地址里面拷贝了a指向地址空间里的内容
+In [2]: a = [11,22,33]
+In [3]: b = a
+In [4]: id(a)
+Out[4]: 140086896942344
+In [5]: id(b)
+Out[5]: 140086896942344
+In [6]: import copy
+In [7]: c = copy.deepcopy(a)
+In [8]: id(a)
+Out[8]: 140086896942344
+In [9]: id(c)
+Out[9]: 140086896950280
+In [10]: a.append(44)
+In [11]: a
+Out[11]: [11, 22, 33, 44]
+In [12]: b
+Out[12]: [11, 22, 33, 44]
+In [13]: c
+Out[13]: [11, 22, 33]
+**********************************************
+深拷贝丶浅拷贝拓展
+In [15]: a = [11,22,33]
+In [16]: b = [44,55,66]
+In [17]: c = [a,b]
+In [18]: d = c
+In [19]: id(c)
+Out[19]: 140086896942600
+In [20]: id(d)
+Out[20]: 140086896942600
+In [21]: e = copy.deepcopy(c)
+In [22]: id(e)
+Out[22]: 140086912534984
+In [23]: a.append(44)
+In [24]: c[0]
+Out[24]: [11, 22, 33, 44]
+In [25]: d[0]
+Out[25]: [11, 22, 33, 44]
+In [26]: e[0]
+Out[26]: [11, 22, 33]
+**********************************************
+In [29]: a = [1,2,3]
+In [30]: b = [4,5,6]
+In [31]: c = (a,b)
+In [32]: e = copy.deepcopy(c)
+In [33]: id(c)
+Out[33]: 140086977378760
+In [34]: id(e)
+Out[34]: 140086912496776
+In [35]: a.append(4)
+In [36]: c[0]
+Out[36]: [1, 2, 3, 4]
+In [37]: e[0]
+Out[37]: [1, 2, 3]
+******************************************************************************************
+deepcopy 和copy的区别
+deepcopy:  c指向的地址空间里面还有引用我就接着拷贝
+In [13]: a = [1,2,3]
+In [14]: b = [4,5,6]
+In [15]: c = [a,b]
+In [16]: e = copy.deepcopy(c)
+In [17]: id(c)
+Out[17]: 140401878367048
+In [18]: id(e)
+Out[18]: 140401887206280
+In [19]: a.append(4)
+In [20]: c[0]
+Out[20]: [1, 2, 3, 4]
+In [21]: e[0]
+Out[21]: [1, 2, 3]
+copy:  仅仅是拷贝第一层
+In [23]: a = [1,2,3]
+In [24]: b = [4,5,6]
+In [25]: c = [a,b]
+In [26]: e = copy.copy(c)
+In [27]: id(c)
+Out[27]: 140401887198024
+In [28]: id(e)
+Out[28]: 140401878532488
+In [29]: a.append(4)
+In [30]: c[0]
+Out[30]: [1, 2, 3, 4]
+In [31]: e[0]
+Out[31]: [1, 2, 3, 4]
+***********************************************
+使用copy模块中copy功能的时候，它会根据当前拷贝的数据类型是可变类型还是不可变类型有不同的处理方式
+c为元组(不可变类型)
+In [33]: a = [1,2,3]
+In [34]: b = [4,5,6]
+In [35]: c = (a,b)
+In [36]: e = copy.copy(c)
+In [37]: id(c)
+Out[37]: 140401887175944
+In [38]: id(e)
+Out[38]: 140401887175944
+In [39]: a.append(4)
+In [40]: c[0]
+Out[40]: [1, 2, 3, 4]
+In [41]: e[0]
+Out[41]: [1, 2, 3, 4]
+******************************************************************************************
+进制之间的转换:
+十进制(18)----bin(18)--->>>二进制(0b10010)
+十进制(18)----oct(18)--->>>八进制(0o22)
+十进制(18)----hex(18)--->>>十六进制(0x12)
+*****************************************
+二进制(0b10010)----int("0b10010",2)--->>>十进制(18)
+八进制(0o22)----int("0o22",8)--->>>十进制(18)
+十六进制(0x12)----int("0x12",16)--->>>十进制(18)
+******************************************************************************************
+8421BCD码:二进制编码的十进制数
+十进制     BCD(8421码)
+0          0000    
+1          0001
+2          0010
+3          0011
+4          0100
+5          0101
+6          0110
+7          0111
+8          1000
+9          1001
+******************************************************************************************
+进制和位运算从课本上学习了解即可
+******************************************************************************************
+私有化:
+  1 class Test(object):
+  2     def __init__(self):
+  3         self.__num = 100
+  4     def setNum(self,new_num):
+  5         self.__num = new_num
+  6     def getNum(self):
+  7         return self.__num
+  8 
+  9 t = Test()
+ 10 #print(t.__num)
+ 11 #t.__num = 200
+ 12 
+ 13 print(t.getNum())
+ 14 t.setNum(50)
+ 15 print(t.getNum())
+**********************************************
+在模块里面的变量前面不管是_还是__ 使用from siyou import *都是禁止导入的
+In [2]: cat siyou.py
+num = 100
+_num2 = 200
+__num3 = 300
+
+In [3]: from siyou import *
+In [4]: num
+Out[4]: 100
+In [5]: _num2
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+<ipython-input-5-53de8eb9075b> in <module>()
+----> 1 _num2
+NameError: name '_num2' is not defined
+In [6]: __num3
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+<ipython-input-6-7a0a567037cd> in <module>()
+----> 1 __num3
+NameError: name '__num3' is not defined
+**********************************************
+使用 import siyou 的话相当于导入整个模块，是可以直接拿来用的
+In [8]: import siyou
+In [9]: siyou.num
+Out[9]: 100
+In [10]: siyou._num2
+Out[10]: 200
+In [11]: siyou.__num3
+Out[11]: 300
+******************************************************************************************
+property的使用:
+1 class Test(object):
+  2     def __init__(self):
+  3         self.__num = 100
+  4     def setNum(self,new_num):
+  5         print("---setter---")
+  6         self.__num = new_num
+  7     def getNum(self):
+  8         print("---getter---")
+  9         return self.__num
+ 10     num = property(getNum,setNum)
+ 11 
+ 12 t = Test()
+ 13 #print(t.__num)
+ 14 #t.__num = 200
+ 15 
+ 16 print(t.getNum())
+ 17 t.setNum(50)
+ 18 print(t.getNum())
+ 19 print("-"*50)
+ 20 t.num = 500#相当于调用了t.setNum(500)
+ 21 print(t.num)#相当于调用了t.getNum()
+ 22 #注意点:
+ 23 #t.num 到底是调用getNUm()还是setNum(),要根据实际的场景来判断
+ 24 #1.如果是给t.num赋值,那么一定是调用setNum()
+ 25 #2.如果是获取t.num的值,那么就一定调用getNum()
+ 26 #property的作用:相当于把方法进行了封装,开发者在对属性设置数据的时候更方便
+property的使用2:
+
+  1 class Test(object):
+  2     def __init__(self):
+  3         self.__num = 100
+  4     @property
+  5     def num(self):
+  6         print("---getter---")
+  7         return self.__num
+  8     @num.setter
+  9     def num(self,new_num):
+ 10         print("---setter---")
+ 11         self.__num = new_num
+ 12 
+ 13 t = Test()
+ 14 
+ 15 t.num = 500#相当于调用了t.setNum(500)
+ 16 print(t.num)#相当于调用了t.getNum()
+******************************************************************************************
+生成器
+生成器第一种创建方式1:
+将生成式的中括号改成圆括号
+In [2]: a = [x for x in range(10)]
+In [3]: a
+Out[3]: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+In [4]: b = (x for x in range(10))
+In [5]: b
+Out[5]: <generator object <genexpr> at 0x7f321d4c6780>
+生成器取值通过next(b),每次只取一个，当取值取完了在next(b)就会报错
+In [6]: next(b)
+Out[6]: 0
+In [7]: next(b)
+Out[7]: 1
+In [8]: next(b)
+Out[8]: 2
+In [9]: next(b)
+Out[9]: 3
+********************************************
+生成器第二种创建方式2:
+记:一个函数里面有yield关键字说明这是个生成器
+通过yield来实现生成器，第一次执行next(a)时，当程序执行到yield b时有两种表现:1.这个生成器或者说是函数就会停止运行了，2.会把yield后面的值b返回，当再执行next(a)时候，会从上次一次停止的地方继续往下执行
+In [12]: cat test.py
+def creatNum():
+    print("---start---")
+    a,b = 0,1
+    for i in range(10):
+        print("---1---")
+        yield b
+        print("---2---")
+        a,b = b,a+b
+        print("---3---")
+    print("---stop---")
+In [13]: from test import *
+In [14]: a = creatNum()
+In [15]: a
+Out[15]: <generator object creatNum at 0x7f026bd62200>
+In [16]: next(a)
+---start---
+---1---
+Out[16]: 1
+In [17]: next(a)
+---2---
+---3---
+---1---
+Out[17]: 1
+In [18]: next(a)
+---2---
+---3---
+---1---
+Out[18]: 2
+
+总结:
+生成器的特点:仅仅是保存了一套生成这套特殊数值的算法，并没有让这个算法现在就开始执行，反而是我什么时候去调它，它什么时候开始去计算一个新的值并且给我返回
+********************************************
+生成器拓展 .__next__()
+  1 def creatNum():
+  2     print("---start---")
+  3     a,b = 0,1
+  4     for i in range(10):
+  5         print("---1---")
+  6         yield b
+  7         print("---2---")
+  8         a,b = b,a+b
+  9         print("---3---")
+ 10     print("---stop---")
+ 11 #创建了一个生成器对象
+ 12 a  =creatNum()
+ 13 
+ 14 ret = a.__next__()
+ 15 print(ret)
+ 16 
+ 17 
+ 18 #注意
+ 19 #next(a)
+ 20 #a.__next__()
+ 21 #以上两种方式是一样的
+********************************************
+生成器拓展 send
+In [12]: def test():
+   ....:     i = 0 
+   ....:     while i<6:
+   ....:         temp = yield i
+   ....:         print(temp)
+   ....:         i+=1
+   ....:         
+In [13]: t = test()
+In [14]: t.__next__()
+Out[14]: 0
+In [15]: t.__next__()
+None
+Out[15]: 1
+In [16]: t.__next__()
+None
+Out[16]: 2
+In [17]: t.__next__()
+None
+Out[17]: 3
+In [18]: t.send("haha")
+haha
+Out[18]: 4
+总结:send()可以传值，把这个值传给yield i整个表达式的结果的
+********************************************
+send注意点:
+第一次时候直接使用send("haha")往里面传参会直接崩掉，haha这个值系统不知道给谁，因为将来执行send
+("haha")会把这个值当做yield i这个表达式的返回值，而第一次执行send("haha")就会报错
+In [19]: t = test()
+In [20]: t.send("haha")
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+<ipython-input-20-2c2113074293> in <module>()
+----> 1 t.send("haha")
+
+TypeError: can't send non-None value to a just-started generator
+In [21]: t.send(None)
+Out[21]: 0
+In [22]: t.send("haha")
+haha
+Out[22]: 1
+********************************************
+生成器-完成多任务
+  1 def test1():
+  2     while True:
+  3         print("---test1---")
+  4         yield None
+  5 
+  6 def test2():
+  7     while True:
+  8         print("---test2---")
+  9         yield None
+ 10 
+ 11 t1 = test1()
+ 12 t2 = test2()
+ 13 while True:
+ 14     t1.__next__()
+ 15     t2.__next__()
+ 16 #多任务一共有三种:协程,进程,线程
+ 17 #以上代码属于协程,协程一般最快
+*****************************************************************************************
+可迭代对象
+迭代是访问集合元素的一种方式。迭代器是一个可以记住遍历的位置的对象。迭代器对象从集合的第一个元素开始访问，直到所有的元素被访问完结束。迭代器只能往前不会后退。
+可以直接作用于 for 循环的对象统称为可迭代对象： Iterable 
+例如以下都是可迭代对象:
+In [2]: for i in "str":
+   ...:     print(i)
+   ...:     
+s
+t
+r
+In [3]: for i in [22,33,4]:
+   ...:     print(i)
+   ...:     
+22
+33
+4
+In [6]: for i in (22,33,4):
+   ...:     print(i)
+   ...:     
+22
+33
+4
+*********************************************
+注:生成器也是可迭代对象
+In [2]: b = (x for x in range(5))
+In [3]: b
+Out[3]: <generator object <genexpr> at 0x7f3e0df1b780>
+In [4]: for i in b:
+   ...:     print(i)
+   ...:     
+0
+1
+2
+3
+4
+*********************************************
+判断一个对象是否是可迭代(Iterable)对象:isinstance(xxx,Iterable)
+In [6]: from collections import Iterable
+In [7]: isinstance("abc",Iterable)
+Out[7]: True
+In [9]: isinstance(100,Iterable)
+Out[9]: False
+In [10]: isinstance([],Iterable)
+Out[10]: True
+In [11]: isinstance((),Iterable)
+Out[11]: True
+In [12]: isinstance({},Iterable)
+Out[12]: True
+*********************************************
+迭代器:可以用next()函数调用并不断返回下一个值的对象称为迭代器:Iterator-----所以生成器就是迭代器
+判断一个对象是否是迭代器(Iterator)对象:isinstance(xxx,Iterator)
+In [14]: from collections import Iterator
+In [15]: isinstance((x for x in range(5)),Iterator)
+Out[15]: True
+In [16]: isinstance([],Iterator)
+Out[16]: False
+In [17]: isinstance({},Iterator)
+Out[17]: False
+In [18]: isinstance("abc",Iterator)
+Out[18]: False
+In [19]: isinstance(100,Iterator)
+Out[19]: False
+*********************************************
+生成器都是 Iterator 对象，但 list 、 dict 、 str 虽然是 Iterable ，却不是 Iterator 
+使用iter()函数让可迭代对象(Iterable) 变成 生成器对象(Iterator) 
+In [22]: isinstance(iter([]),Iterator)
+Out[22]: True
+In [23]: isinstance(iter({}),Iterator)
+Out[23]: True
+In [24]: isinstance(iter("abc"),Iterator)
+Out[24]: True
+
+总结:
+1. 凡是可作用于 for 循环的对象都是 Iterable 类型；
+2. 凡是可作用于 next() 函数的对象都是 Iterator 类型
+3. 集合数据类型如 list 、 dict 、 str 等是 Iterable 但不是 Iterator ，不过可以通过 iter() 函数获得一个 Iterator 对象。
+
+*****************************************************************************************
+闭包:
+在函数内部再定义一个函数，并且这个函数用到了外边函数的变量，那么将这个函数以及用到的一些变量称之为闭包
+最外面的函数return的东西为里面函数的引用
+  1 def test(number):
+  2     print("---1---")
+  3     def test_in(number2):
+  4         print("---2---")
+  5         print(number+number2)
+  6     print("---3---")
+  7     return test_in
+  8 ret = test(100)
+  9 print("-"*30)
+ 10 ret(100)
+ 11 ret(200)
+ 12 ret(300)
+运行结果如下:
+python@ubuntu:~/Desktop/Python02-核心编程/02-python高级-2/1-闭包$ python3 闭包1.py 
+---1---
+---3---
+------------------------------
+---2---
+200
+---2---
+300
+---2---
+400
+*****************************************************************************************
+闭包应用:
+  1 def test(a,b):
+  2     def test_in(x):
+  3         print(a*x+b)
+  4     return test_in
+  5 
+  6 line1 = test(1,2)
+  7 line1(0)
+  8 line2 = test(3,4)
+  9 line2(0)
+ 10 
+ 11 '''
+ 12 #以前的方法是:
+ 13 def creatNum(a,b,x):
+ 14     print(a*x+b)
+ 15 
+ 16 a = 1
+ 17 b = 2
+ 18 x = 0
+ 19 creatNum(a,b,x)
+ 20 '''
+总结:
+1.如果用以前的方式来创建一条线的时候，每一次调用都要传a,b,x的值
+2.现在使用闭包的方式，每一次调用line1或者line2的时候只需要传一个值
+3.闭包似优化了变量，原来需要类对象完成的工作，闭包也可以完成
+4.由于闭包引用了外部函数的局部变量，则外部函数的局部变量没有及时释放，消耗内存
+*****************************************************************************************
+装饰器
+  1 def w1(func):
+  2     def inner():
+  3         print("---正在验证权限---")
+  4         if False:
+  5             func()
+  6         else:
+  7             print("没有权限")
+  8     return inner
+  9 @w1
+ 10 def f1():
+ 11     print("---f1---")
+ 12 @w1
+ 13 def f2():
+ 14     print("---f2---")
+ 15 
+ 16 
+ 17 #f1 = w1(f1)
+ 18 f1()
+ 19 f2()
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/02-python高级-2/2-装饰器$ python3 03-装饰器-2.py 
+---正在验证权限---
+没有权限
+---正在验证权限---
+没有权限
+*****************************************************************************************
+多个装饰器
+  1 #定义函数：完成包裹数据
+  2 def makeBold(fn):
+  3     def wrapped():
+  4         return "<b>" + fn() + "</b>"
+  5     return wrapped
+  6 
+  7 #定义函数：完成包裹数据
+  8 def makeItalic(fn):
+  9     def wrapped():
+ 10         return "<i>" + fn() + "</i>"
+ 11     return wrapped
+ 12 
+ 13 @makeBold    #test3 = makeBold(test3)
+ 14 @makeItalic  #test3 = makeItalic(test3)
+ 15 def test3():
+ 16     return "hello world-3"
+ 17 
+ 18 ret = test3()
+ 19 print(ret)
+运行结果如下:
+python@ubuntu:~/Desktop/Python02-核心编程/02-python高级-2/2-装饰器$ python3 04-多个装器.py 
+<b><i>hello world-3</i></b>
+*****************************************************************************************
+装饰器什么时候进行装饰
+  1 def w1(func):
+  2     print("---正在装饰---")
+  3     def inner():
+  4         print("---正在验证权限---")
+  5         func()
+  6     return inner
+  7 
+  8 #只要python解释器执行到这个代码,那么就会自动的进行装饰,而不是等到调用的时候才装饰的
+  9 @w1 
+ 10 def f1():
+ 11     print("---f1---")
+ 12     
+ 13 #在调用f1之前,已经进行装饰了
+ 14 f1()
+ 运行结果:
+ python@ubuntu:~/Desktop/Python02-核心编程/02-python高级-2/2-装饰器$ python3 05-装饰器什么 时候进行装饰.py 
+---正在装饰---
+---正在验证权限---
+---f1---
+*****************************************************************************************
+总结:
+多层装饰器的时候你从上往下写，真正装的时候是从下往上装，但是调用的时候还是从上往下调
+*****************************************************************************************
+下面的代码要必须掌握流程
+  1 def w1(func):
+  2     print("---正在装饰1---")
+  3     def inner():
+  4         print("---正在验证权限1---")
+  5         func()
+  6     return inner
+  7 def w2(func):
+  8     print("---正在装饰2---")
+  9     def inner():
+ 10         print("---正在验证权限2---")
+ 11         func()
+ 12     return inner
+ 13 
+ 14 #只要python解释器执行到这个代码,那么就会自动的进行装饰,而不是等到调用的时候才装饰的
+ 15 @w1 #f1 = w1(f1)
+ 16 @w2 #f2 = w2(f1)
+ 17 def f1():
+ 18     print("---f1---")
+ 19 
+ 20 #在调用f1之前,已经进行装饰了
+ 21 f1()
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/02-python高级-2/2-装饰器$ python3 05-装饰器什么 时候进行装饰.py 
+---正在装饰2---
+---正在装饰1---
+---正在验证权限1---
+---正在验证权限2---
+---f1---
+*****************************************************************************************
+使用装饰器对无参函数进行装饰
+  1 def func(functionName):
+  2     print("---func---1---")
+  3     def func_in():
+  4         print("---func_in---1---")
+  5         functionName()
+  6         print("---func_in---2---")
+  7     print("---func---2---")
+  8     return func_in
+  9 @func
+ 10 def test():
+ 11     print("---test---")
+ 12 
+ 13 #test = func(test)
+ 14 test()
+运行结果如下:
+python@ubuntu:~/Desktop/Python02-核心编程/02-python高级-2/2-装饰器$ python3 06- 使用装饰器对无参数的函数进行装饰.py 
+---func---1---
+---func---2---
+---func_in---1---
+---test---
+---func_in---2---
+以上程序运行流程如下:(必须掌握装饰器的一个特点和运行流程)
+首先程序从上往下执行，定义了两个函数，分别是def func()和 def test(),因为@func等同于test = func(test),遇到=运算符先执行右边的func(test),调用func函数把test传进去，通俗点就是functionName这个变量指向了def test()这个函数体，接下来func()函数return func_in把这个func_in这个函数返回的结果给了test变量(test = func(test)),此时左边的test这个变量指向了func_in函数，程序紧接着执行test()，调的就是func_in这个函数，在这个函数里面先执行print("---func_in---1---")，然后执行functionName(),之前functionName指向的是def test()这个函数体，此时functionName()调用的是def test()函数,执行函数里面的print("---test---")
+即程序运行结果为:
+test = func(test)
+先执行func函数里面的东西，print("---func---1---"),print("---func---2---")
+test()
+然后执行func_in函数里面的东西，print("---func_in---1---")
+再执行functionName()调用的test()函数执行test函数里的东西，print("---test---")
+最后再执行func_in函数里的print("---func_in---2---")
+*****************************************************************************************
+使用装饰器对有参数的函数进行装饰
+  1 def func(functionName):
+  2     print("---func---1---")
+  3     def func_in(a,b):#如果a,b没有定义,那么会导致13行的调用失败
+  4         print("---func_in---1---")
+  5         functionName(a,b)#如果没有a,b当作实参进行传递,那么会导致调用10行的函数失败
+  6         print("---func_in---2---")
+  7     print("---func---2---")
+  8     return func_in
+  9 @func
+ 10 def test(a,b):
+ 11     print("---test---%d---%d"%(a,b))
+ 12 
+ 13 test(11,22)
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/02-python高级-2/2-装饰器$ python3 07- 使用装饰器对有参数的函数进行装饰.py 
+---func---1---
+---func---2---
+---func_in---1---
+---test---11---22
+---func_in---2---
+以上程序传参流程:
+test(11,22)一般正常理解是传参给函数test(a,b),11给了a,22给了b，但是在以上代码中@func的意思是:
+test = func(test),返回的func_in函数的结果给了test这个变量，变量test指向的是func_in这个函数，那么在func_in这个函数就必须要有两个形参来接收，同理functionName()调用的是def test(a,b)这个函数
+那么functionName()必须要有两个实参
+*****************************************************************************************
+使用装饰器对不定长参数的函数进行装饰
+  1 def func(functionName):
+  2     print("---func---1---")
+  3     def func_in(*args,**kwargs):#如果a,b没有定义,那么会导致13行的调用失败
+  4         print("---func_in---1---")
+  5         functionName(*args,**kwargs)#如果没有a,b当作实参进行传递,那么会导致调用10行的函数失败
+  6         print("---func_in---2---")
+  7     print("---func---2---")
+  8     return func_in
+  9 @func
+ 10 def test(a,b,c):
+ 11     print("---test---%d---%d---%d"%(a,b,c))
+ 12 
+ 13 @func
+ 14 def test2(a,b,c,d):
+ 15     print("---test---%d---%d---%d---%d"%(a,b,c,d))
+ 16 
+ 17 test(11,22,33)
+ 18 test2(11,22,33,44)
+ 程序运行结果:
+ python@ubuntu:~/Desktop/Python02-核心编程/02-python高级-2/2-装饰器$ python3 08-使用装饰 器对不定长参数的函数进行装饰.py 
+---func---1---
+---func---2---
+---func---1---
+---func---2---
+---func_in---1---
+---test---11---22---33
+---func_in---2---
+---func_in---1---
+---test---11---22---33---44
+---func_in---2---
+*****************************************************************************************
+使用装饰器对有返回值的函数进行装饰
+  1 def func(functionName):
+  2     print("---func---1---")
+  3     def func_in():
+  4         print("---func_in---1---")
+  5         ret = functionName()#保存返回来的hello world
+  6         print("---func_in---2---")
+  7         return ret #把hello world返回到15行处的调用
+  8     print("---func---2---")
+  9     return func_in
+ 10 @func
+ 11 def test():
+ 12     print("---test---")
+ 13     return "hello world"
+ 14 
+ 15 ret = test()
+ 16 print("test return value is %s"%ret)
+程序运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/02-python高级-2/2-装饰器$ python3 09-使用装饰 器对有返回值的函数进行装饰.py 
+---func---1---
+---func---2---
+---func_in---1---
+---test---
+---func_in---2---
+test return value is hello world
+*****************************************************************************************
+使用通用的装饰器完成对函数进行装饰
+  1 def func(functionName):
+  2     def func_in(*args,**kwargs):
+  3         print("---日志记录---")
+  4         ret = functionName(*args,**kwargs)
+  5         return ret
+  6     return func_in
+  7 @func
+  8 def test():
+  9     return "hello world"
+ 10 
+ 11 @func
+ 12 def test2():
+ 13     print("---test2---")
+ 14 
+ 15 @func
+ 16 def test3(a):
+ 17     print("---test3---a=%d"%a)
+ 18 
+ 19 ret = test()
+ 20 print("test return value is %s"%ret)
+ 21 ret2 = test2()
+ 22 print("test2 return value is %s"%ret2)
+ 23 test3(11)
+运行结果如下:
+python@ubuntu:~/Desktop/Python02-核心编程/02-python高级-2/2-装饰器$ python3 10-使用通用 的装饰器完成对函数进行装饰.py 
+---日志记录---
+test return value is hello world
+---日志记录---
+---test2---
+test2 return value is None
+---日志记录---
+---test3---a=11
+*****************************************************************************************
+带有参数的装饰器
+  1 def func_arg(arg):
+  2     def func(functionName):
+  3         def func_in():
+  4             print("---记录日志---%s"%arg)
+  5             if arg == "hello world":
+  6                 functionName()
+  7                 functionName()
+  8             else:
+  9                 functionName()
+ 10         return func_in
+ 11     return func
+ 12 #1.先执行func_arg("hello world")函数,这个函数return的结果就是func这个函数的引用
+ 13 #2.@func
+ 14 #3.使用@func对test函数进行装饰
+ 15 @func_arg("hello world")
+ 16 def test():
+ 17     print("---test---")
+ 18 @func_arg("hello python")
+ 19 def test2():
+ 20     print("---test2---")
+ 21 test()
+ 22 test2()
+*****************************************************************************************
+作用域
+查看方式
+globals()函数:返回的是全局变量
+locals()函数：返回的是局部变量
+*****************************************************************************************
+LEGB 规则
+locals -> enclosing function -> globals -> builtins
+局部变量->闭包中外函数的变量-----> 全局变量--->内建(python解释器，系统自带的一些变量)
+在ipython3交互模式下通过dir(__builtin__)来查看内建
+In [1]: dir(__builtin__)
+Out[1]: 
+ 'staticmethod',
+ 'str',
+ 'sum',
+ 'super',
+ 'tuple',
+ 'type',
+ 'vars',
+ 'zip']
+总结: LEGB规则
+先找局部变量，没有的话再看看闭包外函数有没有，接着看全局变量，最后看内建
+*****************************************************************************************
+Python语音的动态性
+动态语言：可以在运行的过程中，修改代码
+静态语言：编译时已经确定好代码，运行过程中不能修改
+
+给对象添加属性
+  1 class Person(object):
+  2     def __init__(self,name,age):
+  3         self.name = name
+  4         self.age = age
+  5 
+  6 laowang = Person("老王",10000)
+  7 print(laowang.name)
+  8 print(laowang.age)
+  9 laowang.addr = "北京..."
+ 10 print(laowang.addr)
+ 11 
+ 12 
+ 13 laozhao = Person("老赵",18)
+ 14 #print(laozhao.addr)
+ 15 Person.addr = "北京...."
+ 16 
+ 17 print(laozhao.addr)
+运行结果如下:
+python@ubuntu:~/Desktop/Python02-核心编程/02-python高级-2/4-python语言的动态性$ python3 01-给对象添加属性.py 
+老王
+10000
+北京...
+北京....
+*****************************************************************************************
+给对象添加实例方法:导入types模块，使用types中的MethodType(函数名,对象名)方法
+types.MethodType(run,p1)解释就是把run这个函数(方法)添加到p1对象里去
+  1 import types
+  2 class Person(object):
+  3     def __init__(self,name,age):
+  4         self.name = name
+  5         self.age = age
+  6     def eat(self):
+  7         print("%s正在吃..."%self.name)
+  8 
+  9 def run(self):
+ 10     print("%s正在跑..."%self.name)
+ 11 p1 = Person("p1",18)
+ 12 p1.eat()
+ 13 #p1.run = run
+ 14 #p1.run()#虽然p1对象中 run属性已经指向了9行的函数,但是这句代码还不正确
+ 15         #因为run属性指向的函数,是后来添加的,即p1.run()的时候,并没有把p1当作第
+ 16         #1个参数,导致了第9行的函数调用的时候,出现缺少参数的问题
+ 17 p1.run = types.MethodType(run,p1)
+ 18 p1.run()
+*****************************************************************************************
+types.MethodType的作用
+最重要的括号里的东西，例如types.MethodType(run,p1)，把run函数(方法)添加到p1对象里去，在def run(self)这个函数(方法)中self是谁 取决于types.MethodType(run,p1)括号里的对象是谁
+*****************************************************************************************
+给类添加静态方法
+In [6]: @staticmethod
+   ...: def test():
+   ...:     print("---stcticmethod---test---")
+   ...:     
+In [7]: P.x = test
+In [8]: P.x()
+---stcticmethod---test---
+因为静态方法可以不传参数所以可以直接用即可
+*****************************************************************************************
+给类添加类方法
+In [12]: @classmethod
+   ....: def printNum(cls):
+   ....:     print("---classmethod---")
+   ....:     
+In [13]: P.xx = print
+print     printNum  
+In [14]: P.xx()
+---classmethod---
+*****************************************************************************************
+__slots__(变量1,变量2):限制class中添加的属性
+In [22]: class Person(object):
+   ....:     __slots__ = ("name","age")
+   ....:     
+In [23]: p = Person()
+In [24]: p.name = "老王"
+In [25]: p.name
+Out[25]: '老王'
+In [26]: p.age = 10
+In [27]: p.age
+Out[27]: 10
+In [28]: p.addr = "beijing"
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+<ipython-input-28-ebb8332301db> in <module>()
+----> 1 p.addr = "beijing"
+
+AttributeError: 'Person' object has no attribute 'addr'
+*****************************************************************************************
+__call__():对象可以直接调用
+In [2]: class Test(object):
+   ...:     def __call__(self):
+   ...:         print("---for test---")
+   ...:         
+
+In [3]: t = Test()
+In [4]: t()
+---for test---
+如果没有__call__方法上面的对象t()就会报错
+In [7]: class Test2(object):
+   ...:     def printTest():
+   ...:         print("---ceshi---")
+   ...:         
+In [8]: t2 = Test2()
+In [9]: t2()
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+<ipython-input-9-7bd4c8a85eb4> in <module>()
+----> 1 t2()
+
+TypeError: 'Test2' object is not callable
+总结:只要这样用t()程序就会去调用__call__方法
+*****************************************************************************************
+类当作装饰器
+In [2]: class Test(object):
+   ...:     def __init__(self,func):
+   ...:         print("---初始化---")
+   ...:         print("func name is %s"%func.__name__)#获取func这个变量当前指向的对象的名字
+   ...:         self.__func = func
+   ...:     def __call__(self):
+   ...:         print("---装饰器中的功能---")
+   ...:         self.__func()
+   ...:         
+
+In [3]: @Test
+   ...: def test():
+   ...:     print("---test---")
+   ...:     
+---初始化---
+func name is test
+In [4]: test()
+---装饰器中的功能---
+---test---
+解释:以上代码@Test--->test= Test(test)调用创建一个对象把test这个函数的引用传给func 此时func这个变量指向了test这个函数，那么self.__func = func就是self.__func指向了func这个变量所指向的函数
+那么在__call__方法里面的self.__func()就相当于调用test这个函数
+*****************************************************************************************
+元类:最原始创建类的哥们
+在python当中一切皆为对象，在linux中一切皆为文件
+元类也是对象
+  1 class Person(object):
+  2     num = 0
+  3     print("---person---test---")
+  4     def __init__(self):
+  5         self.name = "abc"
+  6 print(100)
+  7 print("hello world")
+  8 print(Person)
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/03-python高级-3$ python3 01-类也是对象.py 
+---person---test---
+100
+hello world
+<class '__main__.Person'>
+*****************************************************************************************
+在python中type函数有两种功能，一般一个函数只应该有一个功能，python这么做是为了与其他版本兼容
+第一种是查看类型:
+In [4]: type(100)
+Out[4]: int
+In [5]: type("abc")
+Out[5]: str
+In [6]: type([1,2,3])
+Out[6]: list
+第二种是使用type创建类:
+type(类名, 由父类名称组成的元组（针对继承的情况，可以为空），包含属性的字典（名称和值）)
+In [2]: class Test:
+   ...:     pass
+   ...: 
+In [3]: t1 = Test()
+In [4]: Test2 = type("Test2",(),{})
+In [5]: t2 = Test2()
+In [6]: type(t1)
+Out[6]: __main__.Test
+In [7]: type(t2)
+Out[7]: __main__.Test2
+*******************************************
+用type创建带有属性的类
+In [9]: class Person:
+   ...:     num = 0
+   ...:     
+In [10]: p1 = Person()
+In [11]: p1.num
+Out[11]: 0
+In [12]: Person2 = type("Person2",(),{"nums":0})
+In [13]: p2 = Person2()
+In [14]: p2.nums
+Out[14]: 0
+*******************************************
+用type创建带有方法的类
+In [4]: def printNum(self):
+   ...:     print("---printNum=%d"%self.num)
+   ...:     
+
+In [5]: Test1 = type("Test1",(),{"printNum":printNum})
+
+In [6]: t1 = Test1()
+
+In [7]: t1.num = 100
+
+In [8]: t1.printNum()
+---printNum=100
+*******************************************
+相当于下面这种创建类的方式:
+In [9]: class Test2:
+   ....:     def printNum(self):
+   ....:         print("---printNum=%d"%self.num)
+   ....:         
+
+In [10]: t2 = Test2()
+
+In [11]: t2.num = 1000
+
+In [12]: t2.printNum()
+---printNum=1000
+*******************************************
+用type创建继承关系的类
+In [22]: class Animal:
+   ....:     def eat(self):
+   ....:         print("---吃---")
+   ....:         
+In [23]: class Dog(Animal):
+   ....:     pass
+   ....: 
+In [24]: wangcai = Dog()
+In [25]: wangcai.eat()
+---吃---
+In [26]: Cat = type("Cat",(Animal,),{})
+In [27]: lanmao = Cat()
+In [28]: lanmao.eat()
+---吃---
+
+总结:实例对象是class创建出来的，class是type创建出来的
+*****************************************************************************************
+type就是创建类对象的类。你可以通过检查__class__属性来看
+In [30]: wangcai.__class__
+Out[30]: __main__.Dog
+In [31]: lanmao.__class__
+Out[31]: __main__.Cat
+In [33]: Cat.__class__
+Out[33]: type
+In [34]: Dog.__class__
+Out[34]: type
+In [35]: Animal.__class__
+Out[35]: type
+*****************************************************************************************
+自定义元类
+在python2中
+ 1 #-*- coding:utf-8 -*-
+  2 def upper_attr(future_class_name, future_class_parents, future_class_attr):
+  3 
+  4     #遍历属性字典，把不是__开头的属性名字变为大写
+  5     newAttr = {}
+  6     for name,value in future_class_attr.items():
+  7         if not name.startswith("__"):
+  8             newAttr[name.upper()] = value
+  9 
+ 10     #调用type来创建一个类
+ 11     return type(future_class_name, future_class_parents, newAttr)
+ 12 
+ 13 class Foo(object):
+ 14     __metaclass__ = upper_attr #设置Foo类的元类为upper_attr
+ 15     bar = 'bip'
+ 16 
+ 17 print(hasattr(Foo, 'bar'))
+ 18 print(hasattr(Foo, 'BAR'))
+ 19 f = Foo()
+ 20 print(f.BAR)
+ 21 print(f.bar)
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/03-python高级-3$ python test.py 
+False
+True
+bip
+Traceback (most recent call last):
+  File "test.py", line 21, in <module>
+    print(f.bar)
+AttributeError: 'Foo' object has no attribute 'bar'
+****************************************************************************************
+gc小整数对象池
+[-5,257)是Python解释器提前就建立好的了
+
+In [2]: a = 100
+In [3]: b = 100
+In [4]: c = 100
+In [5]: id(a)
+Out[5]: 10922592
+In [6]: id(b)
+Out[6]: 10922592
+In [7]: id(c)
+Out[7]: 10922592
+In [8]: A = 1000
+In [9]: B = 1000
+In [10]: id(A)
+Out[10]: 139715908671920
+In [11]: id(B)
+Out[11]: 139715908671696
+
+总结:
+引用计数是python垃圾回收当中主要的方式，但是它也有缺点，解决不了循环引用的问题
+Python已引用计数为主，隔代回收为辅来完成所有对象的垃圾的清理
+详情请看gc视频
+******************************************
+sys模块
+查看一个对象的引用计数
+In [1]: import sys
+In [2]: a = "hello world"
+In [3]: sys.getrefcount(a)
+Out[3]: 2
+解释:为什么引用计数是2，那是因为把a这个对象放在函数里面了
+******************************************
+1、导致引用计数+1的情况
+对象被创建，例如a=23
+对象被引用，例如b=a
+对象被作为参数，传入到一个函数中，例如func(a)
+对象作为一个元素，存储在容器中，例如list1=[a,a]
+2、导致引用计数-1的情况
+对象的别名被显式销毁，例如del a
+对象的别名被赋予新的对象，例如a=24
+一个对象离开它的作用域，例如f函数执行完毕时，func函数中的局部变量（全局变量不会）
+对象所在的容器被销毁，或从容器中删除对象
+******************************************
+循环引用
+import gc
+
+class ClassA():
+    def __init__(self):
+        print('object born,id:%s'%str(hex(id(self))))
+def f2():
+    while True:
+        c1 = ClassA()
+        c2 = ClassA()
+        c1.t = c2
+        c2.t = c1
+        del c1
+        del c2
+#把python的gc关闭
+gc.disable()
+f2()
+******************************************
+垃圾回收
+#coding=utf-8
+import gc
+class ClassA():
+    def __init__(self):
+        print('object born,id:%s'%str(hex(id(self))))
+    # def __del__(self):
+    #     print('object del,id:%s'%str(hex(id(self))))
+def f3():
+    print("-----0------")
+    # print(gc.collect())
+    c1 = ClassA()
+    c2 = ClassA()
+    c1.t = c2
+    c2.t = c1
+    print("-----1------")
+    del c1
+    del c2
+    print("-----2------")
+    print(gc.garbage)
+    print("-----3------")
+    print(gc.collect()) #显式执行垃圾回收
+    print("-----4------")
+    print(gc.garbage)
+    print("-----5------")
+if __name__ == '__main__':
+    gc.set_debug(gc.DEBUG_LEAK) #设置gc模块的日志
+    f3()
+以上代码:
+垃圾回收后的对象会放在gc.garbage列表里面
+gc.collect()会返回不可达的对象数目，4等于两个对象以及它们对应的dict
+******************************************
+有三种情况会触发垃圾回收：
+1.调用gc.collect(),
+2.当gc模块的计数器达到阀值的时候。
+3.程序退出的时候
+******************************************
+常用函数：
+1、gc.set_debug(flags) 设置gc的debug日志，一般设置为gc.DEBUG_LEAK
+2、gc.collect([generation]) 显式进行垃圾回收，可以输入参数，0代表只检查第一代的对象，1代表检查一，二代的对象，2代表检查一，二，三代的对象，如果不传参数，执行一个full collection，也就是等于传2。 返回不可达（unreachable objects）对象的数目
+3、gc.get_threshold() 获取的gc模块中自动执行垃圾回收的频率。
+4、gc.set_threshold(threshold0[, threshold1[, threshold2]) 设置自动执行垃圾回收的频率。
+5、gc.get_count() 获取当前自动执行垃圾回收的计数器，返回一个长度为3的列表
+******************************************
+注意点
+gc模块唯一处理不了的是循环引用的类都有__del__方法，所以项目中要避免定义__del__方法
+****************************************************************************************
+内建属性:(当我们写一个程序创建一个对象后，它里面可以拥有哪些属性(默认))
+内建属性和方法(dir())
+In [12]: class Dog(object):
+   ....:     pass
+   ....: 
+In [13]: dir(Dog)
+Out[13]: 
+['__class__',
+ '__delattr__',
+ '__dict__',
+ '__dir__',
+ '__doc__',
+ '__eq__',
+ '__format__',
+ '__ge__',
+ '__getattribute__',
+ '__gt__',
+ '__hash__',
+ '__init__',
+ '__le__',
+ '__lt__',
+ '__module__',
+ '__ne__',
+ '__new__',
+ '__reduce__',
+ '__reduce_ex__',
+ '__repr__',
+ '__setattr__',
+ '__sizeof__',
+ '__str__',
+ '__subclasshook__',
+ '__weakref__']
+****************************************************************************************
+__getattribute__属性访问拦截器
+  1 class Test(object):
+  2     def __init__(self,x):
+  3         self.x = x
+  4         self.y = "哈哈"
+  5     def __getattribute__(self,z):
+  6         if z == "x":
+  7             return "呵呵"
+  8         else:
+  9             return object.__getattribute__(self,z)
+ 10 
+ 11 
+ 12 t = Test("python")
+ 13 print(t.x)
+ 14 print(t.y)
+运行结果:
+python@ubuntu:~/Desktop/Python02-核心编程/03-python高级-3$ python3 test1.py 
+呵呵
+哈哈
+**********************************************
+以上代码升级版
+class Itcast(object):
+    def __init__(self,subject1):
+        self.subject1 = subject1
+        self.subject2 = 'cpp'
+    #属性访问时拦截器，打log
+    def __getattribute__(self,obj):
+        print("====1>%s"%obj)
+        if obj == 'subject1':
+            print('log subject1')
+            return 'redirect python'
+        else:   #测试时注释掉这2行，将找不到subject2
+            temp = object.__getattribute__(self,obj)
+            print("====2>%s"%str(temp))
+            # return temp
+    def show(self):
+        print('this is Itcast')
+s = Itcast("python")
+print(s.subject1)
+print(s.subject2)
+s.show()
+#1. 先获取show属性对应的结果，，，，应该是一个方法
+#2. 方法()
+
+# import types
+# p1.eat = types.MethodType(eat, p1)
+以上代码运行结果:
+====1>subject1
+log subject1
+redirect python
+====1>subject2
+====2>cpp
+None
+====1>show
+====2><bound method Itcast.show of <__main__.Itcast object at 0x00000000029C7F28>>
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Desktop\1.py", line 20, in <module>
+    s.show()
+TypeError: 'NoneType' object is not callable
+[Finished in 0.1s with exit code 1]
+[shell_cmd: python -u "C:\Users\Administrator\Desktop\1.py"]
+[dir: C:\Users\Administrator\Desktop]
+[path: D:\ProgramData\Anaconda3;D:\ProgramData\Anaconda3\Library\mingw-w64\bin;D:\ProgramData\Anaconda3\Library\usr\bin;D:\ProgramData\Anaconda3\Library\bin;D:\ProgramData\Anaconda3\Scripts;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Condusiv Technologies\ExpressCache\;C:\Program Files\ThinkPad\Bluetooth Software\;C:\Program Files\ThinkPad\Bluetooth Software\syswow64;D:\Python\Python36\Scripts\;D:\Python\Python36\]
+**********************************************
+__getattribute__的坑(无限循环self.test)
+class Person(object):
+    def __getattribute__(self,obj):
+        if obj.startswith("a"):
+            return "哈哈"
+        else:
+            return self.test
+    def test(self):
+        print("呵呵")
+p =Person()
+print(p.a)
+print(p.b)
+****************************************************************************************
+map函数(map能够根据你传的可迭代对象生成一个新的可迭代对象)
+map函数会根据提供的函数对指定序列做映射
+#函数需要一个参数
+In [8]: ret = map(lambda x:x*x,[1,2,3])
+In [9]: for i in ret:
+    print(i)
+   ...:     
+1
+4
+9
+#函数需要两个参数
+In [12]: ret = map(lambda x,y:x+y,[1,2,3],[4,5,6])
+In [13]: for i in ret:
+    print(i)
+   ....:     
+5
+7
+9
+#将普通函数的引用放在map函数中(混合数据)
+def f1(x,y):
+	return (x,y)
+l1 = [1,2,3,4,5,6,7]
+l2 = ["M","T","W","T","F","S","Sun"]
+l3 = map(f1,l1,l2)
+print(list(l3))
+运行结果：
+[(1, 'M'), (2, 'T'), (3, 'W'), (4, 'T'), (5, 'F'), (6, 'S'), (7, 'Sun')]
+**************************************************************************************** 
+filter函数
+filter函数会对指定序列执行过滤操作
+function:接受一个参数，返回布尔值True或False
+sequence:序列可以是str，tuple，list
+filter函数会对序列参数sequence中的每个元素调用function函数，最后返回的结果包含调用结果为True的元素。
+for i in filter(lambda x:x%2,[1,2,3,4,5]):
+	print(i)
+运行结果:
+1
+3
+5
+**************************************************************************************** 
+reduce函数
+reduce函数，reduce函数会对参数序列中元素进行累积
+在 Python3 中，reduce() 函数已经被从全局名字空间里移除了，它现在被放置在 fucntools 模块里，如果想要使用它，则需要通过引入 functools 模块来调用 reduce() 函数：
+from functools import reduce
+ret = reduce(lambda x, y: x+y, [1,2,3,4])
+print(ret)
+先计算头两个元素：f(1, 2)，结果为3；
+再把结果和第3个元素计算：f(3, 3)，结果为6；
+再把结果和第4个元素计算：f(6, 4)，结果为10；
+由于没有更多的元素了，计算结束，返回结果10。
+******************************************
+from functools import reduce
+ret = reduce(lambda x, y: x+y, [1,2,3,4],5)
+print(ret)
+先计算头两个元素：f(5, 1)，结果为6；
+再把结果和第3个元素计算：f(6, 2)，结果为8；
+再把结果和第4个元素计算：f(8, 3)，结果为11；
+再把结果和第4个元素计算：f(11, 4)，结果为15；
+由于没有更多的元素了，计算结束，返回结果10。
+******************************************
+def f1(x,y):
+	return x+y
+print(reduce(f1,range(1,101)))
+运行结果为:5050
+**************************************************************************************** 
+sorted函数
+print(sorted([1,43,562,4,32,6,22]))
+print(sorted(["aa","dd","bb","cc"]))
+[1, 4, 6, 22, 32, 43, 562]
+['aa', 'bb', 'cc', 'dd']
+****************************************************************************************
+set集合
+In [18]: a = set(["a","b","c","d"])
+In [19]: a
+Out[19]: {'a', 'b', 'c', 'd'}
+In [20]: b = set("abcdefhuy")
+In [21]: b
+Out[21]: {'a', 'b', 'c', 'd', 'e', 'f', 'h', 'u', 'y'}
+交集
+In [22]: a&b  
+Out[22]: {'a', 'b', 'c', 'd'}
+并集
+In [23]: a|b
+Out[23]: {'a', 'b', 'c', 'd', 'e', 'f', 'h', 'u', 'y'}
+In [25]: a = set("abcd")
+In [26]: a
+Out[26]: {'a', 'b', 'c', 'd'}
+In [28]: b = set("cdefg")
+In [29]: b
+Out[29]: {'c', 'd', 'e', 'f', 'g'}
+差集
+In [30]: a-b
+Out[30]: {'a', 'b'}
+对称差集
+In [32]: a
+Out[32]: {'a', 'b', 'c', 'd'}
+In [33]: b
+Out[33]: {'c', 'd', 'e', 'f', 'g'}
+In [34]: a^b
+Out[34]: {'a', 'b', 'e', 'f', 'g'}
+****************************************************************************************
+functools模块
+import functools
+dir(functools)
+查看这个模块里面的方法
+****************************************************************************************
+partial函数(偏函数)
+import functools
+def showarg(*args, **kw):
+    print(args)
+    print(kw)
+p1=functools.partial(showarg, 1,2,3)
+p1()
+p1(4,5,6)
+p1(a='python', b='itcast')
+
+p2=functools.partial(showarg, a=3,b='linux')
+p2()
+p2(1,2)
+p2(a='python', b='itcast')
+运行结果:
+(1, 2, 3)
+{}
+(1, 2, 3, 4, 5, 6)
+{}
+(1, 2, 3)
+{'a': 'python', 'b': 'itcast'}
+()
+{'a': 3, 'b': 'linux'}
+(1, 2)
+{'a': 3, 'b': 'linux'}
+()
+{'a': 'python', 'b': 'itcast'}
+****************************************************************************************
+wraps函数
+def note(func):
+    "note function" #说明文档
+    def wrapper():
+        "wrapper function"
+        print('note something')
+        return func()
+    return wrapper
+@note
+def test():
+    "test function" #说明文档
+    print('I am test')
+test()
+print(test.__doc__)
+运行结果:
+note something
+I am test
+wrapper function
+**********************************************
+以上代码运行出来的是装饰器装饰过后中的说明文档，而不是装饰器装饰之前的样子的说明文档，所以，Python的functools包中提供了一个叫wraps的装饰器来消除这样的副作用
+import functools
+def note(func):
+    "note function"
+    @functools.wraps(func)
+    def wrapper():
+        "wrapper function"
+        print('note something')
+        return func()
+    return wrapper
+@note
+def test():
+    "test function"
+    print('I am test')
+test()
+print(test.__doc__)
+运行结果:
+note something
+I am test
+test function
+****************************************************************************************
+模块进阶
+hashlib模块进行加密
+In [36]: import hashlib
+In [37]: t = hashlib.md5()
+In [39]: t.update(b"taogang")
+In [40]: t.hexdigest()
+Out[40]: 'ebca959e75186dbb4ddd9e80d313de7e'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

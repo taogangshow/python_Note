@@ -1,0 +1,3378 @@
+打印一段信息
+print("Hello world")
+#注释
+多行注释
+'''
+print("Hello world")
+'''
+使用python 运行代码时，程序里面含有中文时需在代码第一行加入
+#coding=utf-8或者# -*- coding:utf-8 -*-
+使用python3 运行代码时则不需要
+********************************************************************************************
+ipython和ipython3 区别
+ipython(ipython2)
+python@ubuntu:~/Desktop/Python基础$ ipython
+In [1]: a=input("请输入你的名字")
+请输入你的名字taogang
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+<ipython-input-1-57f6b5e8c847> in <module>()
+----> 1 a=input("请输入你的名字")
+
+<string> in <module>()
+
+NameError: name 'taogang' is not defined
+ipython2会将你输入的东西当做程序去运行，而ipython3却不会
+
+In [2]: a=input("请输入你的名字:")
+请输入你的名字:1+4
+
+In [3]: a
+Out[3]: 5
+在 python2中想要将输入结果和Python3一样将内容当成字符串就需要
+In [4]: a=raw_input("请输入你的名字:")
+请输入你的名字:1+4
+
+In [5]: a
+Out[5]: '1+4'
+
+*********************************************
+ipython3
+python@ubuntu:~/Desktop/Python基础$ ipython3
+In [1]: a=input("请输入你的名字:")
+请输入你的名字:taogang
+In [2]: a
+Out[2]: 'taogang'
+*********************************************
+input 获取的所有数据默认为字符串类型 20>>>"20"
+  1 #coding=utf-8
+  2 age=input("请输入您的年龄:")
+  3 if int(age)>=18:
+  4     print("恭喜您可以去网吧上网啦")
+  5 else:
+  6     print("未成年不允许上网")
+age_num = int(age).....>>>去除了双引号之后的值 20
+*********************************************
+if条件满足和不满足时：
+ 不满足时：
+ a=20
+  2 if a>30:
+  3     print("000")
+  4     print("111")
+  5     print("111")
+  6     print("111")
+  7     print("111")
+  8     print("111")
+  9     print("111")
+ 10     print("111")
+ 11 print("999")
+python@ubuntu:~/Desktop/Python基础$ python3 1-if.py 
+999
+满足时：
+ a=20
+  2 if a>30:
+  3     print("000")
+  4     print("111")
+  5     print("111")
+  6     print("111")
+  7     print("111")
+  8     print("111")
+  9     print("111")
+ 10     print("111")
+ 11 print("999")
+python@ubuntu:~/Desktop/Python基础$ python3 1-if.py 
+000
+111
+111
+111
+111
+111
+111
+111
+999
+*********************************************
+查询关键字
+In [6]: import keyword
+
+In [7]: keyword.kwlist
+Out[7]: 
+['False',
+ 'None',
+ 'True',
+ 'and',
+ 'as',
+ 'assert',
+ 'break',
+ 'class',
+ 'continue',
+ 'def',
+ 'del',
+ 'elif',
+ 'else',
+ 'except',
+ 'finally',
+ 'for',
+ 'from',
+ 'global',
+ 'if',
+ 'import',
+ 'in',
+ 'is',
+ 'lambda',
+ 'nonlocal',
+ 'not',
+ 'or',
+ 'pass',
+ 'raise',
+ 'return',
+ 'try',
+ 'while',
+ 'with',
+ 'yield']
+*********************************************
+一次性打印多个数据
+  1 name="taogang"
+  2 age=18
+  3 addr="成都"
+  4 print("姓名是：%s，年龄是：%d，地址是：%s"%(name,age,addr))
+*********************************************                                               
+ pythpn语法需要注意的点
+ you = input("你去不去？")
+  2 youwife = input("你老婆去不去?")
+  3 if you=="去" and youwife=="去":
+  4     print("可以办理业务了")
+  5 else:
+  6     print("那就算了撒")
+  7 #不管if条件满足不满足都会执行下面三行代码
+  8 print("呵呵")
+  9 print("呵呵")
+ 10 print("呵呵")
+*********************************************                
+if -not
+  1 a =int(input("请输入一个正整数a："))
+  2 if a>=0 and a<=50:
+  3     print("0到50之间的数")
+  4 else:
+  5     print("大于50的数")
+  6 
+  7 b =int(input("请输入一个正整数b："))
+  8 if not(b>=0 and b<=50):
+  9     print("大于50的数")
+ 10 else:
+ 11     print("0到50之间的数")
+********************************************* 
+if--if else---if elif-------
+  1 sex = input ("请输入您的性别:(男，女，妖)")
+  2 if sex=="男":
+  3     print("您可以抗水泥了")
+  4 elif sex=="女":
+  5     print("您可以绣花了")
+  6 else:
+  7     print("您可以去泰国了")
+  8 
+练习
+  1 num = int(input("请输入一个数字(1~7之间):"))
+  2 if num==1:
+  3     print("星期一")
+  4 elif num==2:
+  5     print("星期二")
+  6 elif num==3:
+  7     print("星期三")
+  8 elif num==4:
+  9     print("星期四")
+ 10 elif num==5:
+ 11     print("星期五")
+ 12 elif num==6:
+ 13     print("星期六")
+ 14 elif num==7:
+ 15     print("星期七")
+ 16 else:
+ 17     print("请输入(0~7)之间的数字,谢谢")
+********************************************************************************************
+程序的三大执行流程
+1.顺序执行
+2.选择执行
+3.循环执行
+while循环
+ 1 i=1
+  2 while i<=10:
+  3     print(i)
+  4     i=i+1
+  ***************************************
+  1 num=1
+  2 print(num)
+  3 while num<10:
+  4     num+=1
+  5     print(num)
+  6 
+  7 print('*******************')
+  8 print('*******************')
+  9 print('*******************')
+ 10 i = 1
+ 11 while i<=10:
+ 12     print(i)
+ 13     i+=1
+~            
+********************************************************************************************
+打印矩形
+python@ubuntu:~/Desktop/Python基础$ python3 14-打印矩形.py 
+*****
+*****
+*****
+*****
+*****
+
+ 1 i = 1
+  2 while i<=5:
+  3     j = 1
+  4     while j<=5:
+  5         print("*",end="")
+  6         j=j+1
+  7     print("")
+  8     i=i+1
+*******************************************
+打印三角形
+python@ubuntu:~/Desktop/Python基础$ python3 15-打印三角形.py 
+*
+**
+***
+****
+*****
+i = 1
+  2 while i<=5:
+  3     j = 1
+  4     while j<=i:
+  5         print("*",end="")
+  6         j=j+1
+  7     print("")
+  8     i=i+1
+***************
+python@ubuntu:~/Desktop/Python基础$ python3 15-打印三角形.py 
+请输入你要打印*的个数:1
+*
+请输入你要打印*的个数:2
+**
+请输入你要打印*的个数:3
+***
+请输入你要打印*的个数:4
+****
+请输入你要打印*的个数:5
+*****
+ 1 i = 1
+  2 while i<=5:
+  3     num = int(input("请输入你要打印*的个数:"))
+  4     j = 1
+  5     while j<=num:
+  6         print("*",end="")
+  7         j=j+1
+  8     print("")
+  9     i=i+1
+*******************************************
+九九乘法表
+  1 i = 1
+  2 while i<=9:
+  3     j = 1
+  4     while j<=i:
+  5         #print("x*y=z" ,end="")
+            print("%d*%d=%d\t"%(j,i,j*i),end="")
+  6         j=j+1
+  7     print("")
+  8     i=i+1
+上面应用了\t 
+In [3]: print("haha")
+haha
+
+In [4]: print("ha\tha")
+ha	ha
+********************************************************************************************
+练习
+1 print("--------------------------矩形-------------------------------")
+  2 i = 1
+  3 while i<=5:
+  4     j=1
+  5     while j<=5:
+  6          print("*",end="")
+  7          j+=1
+  8     print("")
+  9     i+=1
+ 10 print("-------------------------三角形-----------------------------")
+ 11 i = 1
+ 12 while i<=5:
+ 13     j=1
+ 14     while j<=i:
+ 15         print("*",end="")
+ 16         j=j+1
+ 17     print("")
+ 18     i=i+1
+ 19 print("------------------------九九乘法表-------------------------------")
+ 20 i = 1
+ 21 while i<=9:
+ 22     j=1
+ 23     while j<=i:
+ 24         print("x*y=z ",end="")
+ 25         j+=1
+ 26     print("")
+ 27     i+=1
+ 28 print("-----------------------------------------------------------")
+ 29 i = 1
+ 30 while i<=9:
+ 31     j=1
+ 32     while j<=i:
+ 33         print("x*%d=z "%(i),end="")
+ 34         j+=1
+ 35     print("")
+ 36     i+=1
+********************************************************************************************
+for循环
+In [1]: name ="taogang"
+
+In [2]: for Temp in name:
+   ...:     print("------")
+   ...:     print(Temp)
+   ...:     
+------
+t
+------
+a
+------
+o
+------
+g
+------
+a
+------
+n
+------
+g
+********************************************************************************************
+打印1-100之间的偶数
+i = 1
+while i<=100:
+    if i%2==0:
+    print(i)
+    i+=1
+
+
+
+
+********************************************************************************************
+break
+1 i = 1
+2 while i<=5:
+3     print("－－－－")
+4    #if i==3:
+5    #break
+6     print(i)
+7     i+=1
+python@ubuntu:~/Desktop/Python基础$ python3 20-break.py 
+－－－－
+1
+－－－－
+2
+－－－－
+3
+－－－－
+4
+－－－－
+5
+
+1 i = 1
+2 while i<=5:
+3     print("－－－－")
+4     if i==3:
+5         break
+6     print(i)
+  7     i+=1
+python@ubuntu:~/Desktop/Python基础$ python3 20-break.py 
+－－－－
+1
+－－－－
+2
+－－－－
+i = 1
+num = 1
+while i<=100:
+    if i%2==0:
+          print(i)
+          num+=1
+	  if num==20:
+             break
+    i+=1
+python@ubuntu:~/Desktop/Python基础$ python3 21-打印1~100之间的20个偶数.py 
+2
+4
+6
+8
+10
+12
+14
+16
+18
+20
+22
+24
+26
+28
+30
+32
+34
+36
+38
+********************************************************************************************
+break和continue的区别
+1 print ("----break----")
+  2 i = 1
+  3 while i<=10:
+  4     i+=1
+  5     print("---------")
+  6     if i==3:
+  7         break
+  8     print(i)
+  9 
+ 10 print("========")
+ 11 
+ 12 print ("----continue----")
+ 13 i = 1
+ 14 while i<=10:
+ 15     i+=1
+ 16     print("---------")
+ 17     if i==3:
+ 18         continue
+ 19     print(i)
+ 20 
+ 21 print("========")
+python@ubuntu:~/Desktop/Python基础02$ python3 2-break和continue的区别.py 
+----break----
+---------
+2
+---------
+========
+----continue----
+---------
+2
+---------
+---------
+4
+---------
+5
+---------
+6
+---------
+7
+---------
+8
+---------
+9
+---------
+10
+---------
+11
+========
+********************************************************************************************
+while嵌套中的break
+在打印三角形代码里加入break
+i = 1
+while i<=5:
+      j=1
+     while j<=i:
+         print("*",end="")
+         j+=1
+         break
+     print("")
+     i+=1
+python@ubuntu:~/Desktop/Python基础02$ python3 3-while嵌套中的break.py 
+*
+*
+*
+*
+*
+********************************************************************************************
+组成字符串的两种方式:
+In [2]: a = "lao"
+In [3]: b = "wang"
+In [4]: c ="==="+a+b+"==="
+In [5]: c
+Out[5]: '===laowang==='
+In [6]: d = "===%s==="%(a+b)
+In [7]: d
+Out[7]: '===laowang==='
+********************************************************************************************
+下标:
+In [10]: name = "abcdef"
+In [11]: name[0]
+Out[11]: 'a'
+In [12]: name[2]
+Out[12]: 'c'
+In [13]: name[1]
+Out[13]: 'b'
+In [14]: name[5]
+Out[14]: 'f'
+In [16]: len(name)
+Out[16]: 6
+In [17]: name[len(name)-1]
+Out[17]: 'f'
+In [18]: name[-1]
+Out[18]: 'f'
+In [19]: name[-2]
+Out[19]: 'e'
+********************************************************************************************
+切片:
+
+In [21]: name = "abcdefABCDEF"
+In [22]: name
+Out[22]: 'abcdefABCDEF'
+In [23]: name[2:5]
+Out[23]: 'cde'
+In [24]: name[2:6]
+Out[24]: 'cdef'
+In [25]: name[2:-2]
+Out[25]: 'cdefABCD'
+In [26]: name[2:]
+Out[26]: 'cdefABCDEF'
+In [25]: name[2:-2]
+Out[25]: 'cdefABCD'
+In [26]: name[2:]
+Out[26]: 'cdefABCDEF'
+In [27]: name[2:-1]
+Out[27]: 'cdefABCDE'
+*************************************
+起始位置:终止位置:步长
+In [28]: name[2:-1:2]
+Out[28]: 'ceACE'
+In [29]: name[2:-1:1]
+Out[29]: 'cdefABCDE'
+In [30]: name[2:-1]
+Out[30]: 'cdefABCDE'
+倒过来切片取数(逆序)
+In [32]: name[0:]
+Out[32]: 'abcdefABCDEF'
+In [33]: name[-1:]
+Out[33]: 'F'
+In [34]: name[-1:0]
+Out[34]: ''
+In [35]: name[-1:0:-1]
+Out[35]: 'FEDCBAfedcb'
+In [36]: name[-1::-1]
+Out[36]: 'FEDCBAfedcba'
+In [37]: name[::-1]
+Out[37]: 'FEDCBAfedcba'
+********************************************************************************************
+find("xxx"):查找字符串中你所查找的内容的下标
+In [43]: MyStr
+Out[43]: 'hello world itcast and itcastxxxxcpp'
+In [44]: MyStr.find("world")
+Out[44]: 6
+In [45]: MyStr.find("taogang")
+Out[45]: -1
+*************************************
+rfind("xxx"):倒着查找
+In [47]: MyStr.find("itcast")
+Out[47]: 12
+In [48]: MyStr.rfind("itcast")
+Out[48]: 23
+********************************************************************************************
+find和index的区别:(所查找内容存在时结果都一样，不存在时find显示-1，而index显示异常)
+
+In [53]: MyStr.find("taogang")
+Out[53]: -1
+
+In [54]: MyStr.index("taogang")
+---------------------------------------------------------------------------
+ValueError                                Traceback (most recent call last)
+<ipython-input-54-b53d5df5fb0d> in <module>()
+----> 1 MyStr.index("taogang")
+
+ValueError: substring not found
+**************************************
+In [55]: MyStr.find("world")
+Out[55]: 6
+In [56]: MyStr.index("world")
+Out[56]: 6
+In [58]: MyStr.rfind("itcast")
+Out[58]: 23
+In [59]: MyStr.rindex("itcast")
+Out[59]: 23
+********************************************************************************************
+count("xxx")(统计出现次数)
+In [61]: MyStr.count("world")
+Out[61]: 1
+In [62]: MyStr.count("itcast")
+Out[62]: 2
+In [63]: MyStr.count("taogang")
+Out[63]: 0
+********************************************************************************************
+replace(替换)(原字符串内容不变)
+In [65]: MyStr
+Out[65]: 'hello world itcast and itcastxxxxcpp'
+In [66]: MyStr.replace("world","WORLD")
+Out[66]: 'hello WORLD itcast and itcastxxxxcpp'
+In [67]: MyStr
+Out[67]: 'hello world itcast and itcastxxxxcpp'
+**************************************************
+replace("","",1)里面的1代表值替换第一个，后面的不替换
+In [68]: MyStr.replace("itcast","xxx")
+Out[68]: 'hello world xxx and xxxxxxxcpp'
+In [70]: MyStr.replace("itcast","xxx",1)
+Out[70]: 'hello world xxx and itcastxxxxcpp'
+********************************************************************************************
+split():切割
+In [75]: MyStr.split(" ")#按空格切割
+Out[75]: ['hello', 'world', 'itcast', 'and', 'itcastxxxxcpp']
+********************************************************************************************
+capitalize():将第一单词第一个字母大写，title:将所有单词的第一个字母大写
+In [79]: MyStr.capitalize()
+Out[79]: 'Hello world itcast and itcastxxxxcpp'
+In [80]: MyStr.title()
+Out[80]: 'Hello World Itcast And Itcastxxxxcpp'
+********************************************************************************************
+endswith():判断内容结尾是否是.txt的
+In [82]: file_name = "xxx.txt"
+In [83]: file_name.endswith(".txt")
+Out[83]: True
+startswich():判断内容开头是否是wang
+In [84]: name = "wang xxx"
+In [85]: name.startswith("wang")
+Out[85]: True
+********************************************************************************************
+lower():将内容中所有大写字母转换成小写  upper():将内容中所有小写字母转换成大写
+In [87]: exit_flag = "Yes"
+In [88]: exit_flag.lower()
+Out[88]: 'yes'
+In [89]: exit_flag.upper()
+Out[89]: 'YES'
+********************************************************************************************
+center():显示中间   ljust():显示左边   rjust():显示右边
+In [96]: lyric
+Out[96]: '我想要带你去浪漫的土耳其'
+In [97]: lyric.center(50)
+Out[97]: '                   我想要带你去浪漫的土耳其                   '
+In [98]: lyric.ljust(50)
+Out[98]: '我想要带你去浪漫的土耳其                                      '
+In [99]: lyric.rjust(50)
+Out[99]: '                                      我想要带你去浪漫的土耳其'
+********************************************************************************************
+lstrip():删除左边的空白字符      rstrip():删除最右边的空白字符      strip()：删除两边的空白字符
+
+In [105]: test
+Out[105]: '                   我想要带你去浪漫的土耳其                   '
+In [106]: test.lstrip()
+Out[106]: '我想要带你去浪漫的土耳其                   '
+In [107]: test.rstrip()
+Out[107]: '                   我想要带你去浪漫的土耳其'
+In [108]: test.strip()
+Out[108]: '我想要带你去浪漫的土耳其'
+********************************************************************************************
+partition("xxx"):从左边开始分割，一共分割三部分，找到第一个过后就不分了
+rpartition("xxx"):从右边开始分割，一共分割三部分，找到第一个过后就不分了）
+In [111]: MyStr
+Out[111]: 'hello world itcast and itcastxxxxcpp'
+In [112]: MyStr.partition("itcast")
+Out[112]: ('hello world ', 'itcast', ' and itcastxxxxcpp')
+In [113]: MyStr.rpartition("itcast")
+Out[113]: ('hello world itcast and ', 'itcast', 'xxxxcpp')
+********************************************************************************************
+\n (就相当于换行的)
+In [114]: test = "hello world xxx yyy zz"
+In [115]: test
+Out[115]: 'hello world xxx yyy zz'
+In [121]: print (test)
+hello world xxx yyy zz
+In [116]: test = "hello\nworld\nxxx\nyyy\nzz"
+In [119]: print (test)
+hello
+world
+xxx
+yyy
+zz
+********************************************************************************************
+splitlines():将带空格的字符串内容分割成一个个单词并用逗号隔开
+In [125]: test
+Out[125]: 'hello\nworld\nxxx\nyyy\nzz'
+In [126]: test.splitlines()
+Out[126]: ['hello', 'world', 'xxx', 'yyy', 'zz']
+********************************************************************************************
+isalpha():判断用户输入的选项是否是字母   isdigit():判断是否是数字   isalnum():判断是否有数字和字母
+In [129]: num = input("请输入一个选项(1-6):")
+请输入一个选项(1-6):q
+In [130]: if num.isalpha():
+   .....:     print("这是字母")
+   .....:     
+这是字母
+**********************************************
+In [2]: num = input("请输入一个选项(1-6):")
+请输入一个选项(1-6):1
+In [3]: if num.isal
+num.isalnum  num.isalpha  
+In [3]: if num.isdigit():
+   ...:     print("这是数字")
+   ...:     
+这是数字
+**********************************************
+In [4]: num = input("请输入一个选项(1-6):")
+请输入一个选项(1-6):1q
+In [5]: num.isalpha()
+Out[5]: False
+In [6]: num.isdigit()
+Out[6]: False
+In [8]: num.isalnum()
+Out[8]: True
+********************************************************************************************
+join:a中每个字符后面都插入b，构造出新的字符串
+In [2]: a = ["aaa","bbb","ccc"]
+In [3]: b = "="
+In [4]: b.join(a)
+Out[4]: 'aaa=bbb=ccc'
+In [5]: b = " "
+In [6]: b.join(a)
+Out[6]: 'aaa bbb ccc'
+********************************************************************************************
+面试题
+In [8]: test = "iud  adaj  cs \takj \t cs  \tacuevceqvljbjovco"
+In [9]: test.split()
+Out[9]: ['iud', 'adaj', 'cs', 'akj', 'cs', 'acuevceqvljbjovco']
+In [10]: result = test.split()
+In [11]: result
+Out[11]: ['iud', 'adaj', 'cs', 'akj', 'cs', 'acuevceqvljbjovco']
+In [12]: "".join(result)
+Out[12]: 'iudadajcsakjcsacuevceqvljbjovco'
+********************************************************************************************
+增加的三种方式:(append(),insert(),extend())
+append:把需添加的内容 添加到原有列表的最后
+In [14]: name = ["老王","老李","老刘"]
+In [15]: name.append("老赵")
+In [16]: name
+Out[16]: ['老王', '老李', '老刘', '老赵']
+*************************************************
+insert(位置,内容)
+In [17]: name.insert(0,"老朱")
+In [18]: name
+Out[18]: ['老朱', '老王', '老李', '老刘', '老赵']
+*************************************************
+extend(把name2的内容添加到name里面去)
+In [20]: name2 = ["悟空,唐僧,八戒"]
+In [21]: name.extend(name2)
+In [22]: name
+Out[22]: ['老朱', '老王', '老李', '老刘', '老赵', '悟空,唐僧,八戒']
+********************************************************************************************
+删除的三种方式:(pop(),remove().del xxx[下标])
+pop:删除列表最后一个元素
+In [27]: name
+Out[27]: ['老朱', '老王', '老李', '老刘', '老赵', '悟空,唐僧,八戒']
+In [28]: name.pop()
+Out[28]: '悟空,唐僧,八戒'
+In [30]: name
+Out[30]: ['老朱', '老王', '老李', '老刘', '老赵']
+*************************************************
+remove:删除你想删除的内容
+In [43]: name
+Out[43]: ['老朱', '老王', '老李', '老刘', '老赵', '老朱', '老王', '老李', '老刘', '老赵']
+In [44]: name.remove("老王")
+In [45]: name
+Out[45]: ['老朱', '老李', '老刘', '老赵', '老朱', '老王', '老李', '老刘', '老赵']
+*************************************************
+切记:在字符串时切片显示字符串，在列表时切片显示列表!!!
+In [55]: a = "laowang"
+In [56]: a[0]
+Out[56]: 'l'
+In [57]: a[2]
+Out[57]: 'o'
+In [58]: a[2:5]
+Out[58]: 'owa'
+*****************
+In [51]: name
+Out[51]: ['老朱', '老李', '老刘', '老赵', '老朱', '老王', '老李', '老刘', '老赵']
+In [52]: name[0]
+Out[52]: '老朱'
+In [53]: name[2]
+Out[53]: '老刘'
+In [54]: name[2:5]
+Out[54]: ['老刘', '老赵', '老朱']
+*************************************************
+del:通关你想删除内容的坐标删除
+In [60]: name
+Out[60]: ['老朱', '老李', '老刘', '老赵', '老朱', '老王', '老李', '老刘', '老赵']
+In [61]: del name[0]
+In [62]: name
+Out[62]: ['老李', '老刘', '老赵', '老朱', '老王', '老李', '老刘', '老赵']
+********************************************************************************************
+修改
+name[下标]="xx"
+In [64]: name
+Out[64]: ['老李', '老刘', '老赵', '老朱', '老王', '老李', '老刘', '老赵']
+In [65]: name[0]="老牛"
+In [66]: name
+Out[66]: ['老牛', '老刘', '老赵', '老朱', '老王', '老李', '老刘', '老赵']
+********************************************************************************************
+查询：in or not in
+In [68]: name
+Out[68]: ['老牛', '老刘', '老赵', '老朱', '老王', '老李', '老刘', '老赵']
+In [69]: if "老牛" in name:
+   ....:     print("老牛在里面")
+   ....:     
+老牛在里面
+In [70]: if "老牛" not in name:
+   ....:     print("可以添加老牛了")
+   ....:     
+*******************************************************************************************
+字典:
+In [6]: banzhang = ["班长","山东",18]
+In [7]: print("%s %d %s"%(banzhang[0],banzhang[2],banzhang[1]))
+班长 18 山东
+In [8]: #字典
+In [9]: #infor = {键:值,键:值}
+In [10]: infor = {"name":"班长","addr":"山东","age":18}
+In [15]: print("%s %d %s"%(infor["name"],infor["age"],infor["addr"]))
+班长 18 山东
+*******************************************************************************************
+字典里的增删改查:
+增加：
+In [2]: infor = {"name":"banzhang"}
+In [3]: infor
+Out[3]: {'name': 'banzhang'}
+In [4]: infor["age"] = 18
+In [5]: infor
+Out[5]: {'name': 'banzhang', 'age': 18}
+In [6]: infor["QQ"] = 10086
+In [7]: infor
+Out[7]: {'name': 'banzhang', 'age': 18, 'QQ': 10086}
+********************************************
+删除：
+In [10]: del infor['QQ']
+In [11]: infor
+Out[11]: {'name': 'banzhang', 'age': 18}
+********************************************
+修改：
+In [8]: infor['QQ']=10000
+In [9]: infor
+Out[9]: {'name': 'banzhang', 'age': 18, 'QQ': 10000}
+********************************************
+查询:
+In [13]: infor
+Out[13]: {'name': 'banzhang', 'age': 18}
+In [14]: infor['name']
+Out[14]: 'banzhang'
+In [15]: infor['age']
+Out[15]: 18
+In [17]: infor['addr']
+---------------------------------------------------------------------------
+KeyError                                  Traceback (most recent call last)
+<ipython-input-17-6f6c0bcc778e> in <module>()
+----> 1 infor['addr']
+
+KeyError: 'addr'
+
+In [18]: infor.get("name")
+Out[18]: 'banzhang'
+In [19]: infor.get("age")
+Out[19]: 18
+In [20]: infor.get("addr")
+*******************************************************************************************
+遍历列表的方式
+  1 print("---while遍历---")
+  2 nums = [11,22,33,44,55]
+  3 i = 0
+  4 while i<5:
+  5     print(nums[i])
+  6     i+=1
+  7 print("while遍历不用数下表的方式")
+  8 nums = [11,22,33,44,55]
+  9 nums_lenght = len(nums)
+ 10 i = 0
+ 11 while i<nums_lenght:
+ 12     print(nums[i])
+ 13     i+=1
+ 14 print("---for遍历:不用控制元素的个数以及下表---")
+ 15 for num in nums:
+ 16     print(num)
+---while遍历---
+11
+22
+33
+44
+55
+while遍历不用数下表的方式
+11
+22
+33
+44
+55
+---for遍历:不用控制元素的个数以及下表---
+11
+22
+33
+44
+55
+*******************************************************************************************
+for循环中的else(几乎用的很少因为for循环里面一般嵌套if else来实现)
+  1 nums = [11,22,33,44,55]
+  2 for temp in nums:
+  3     print(temp)
+  4 else:
+  5     print("============")
+  6 #不管执行不执行for循环都会打印print("===========")
+  7 nums = []
+  8 for temp in nums:
+  9     print(temp)
+ 10 else:
+ 11     print("============")
+ 12 #想要不执行print("===========")就需要加入break
+ 13 
+ 14 nums = [11,22,33,44,55]
+ 15 for temp in nums:
+ 16     print(temp)
+ 17     break
+ 18 else:
+ 19     print("============")
+以上代码运行结果如下
+python@ubuntu:~/Desktop/Python基础03$ python3 2-for循环中的else.py 
+11
+22
+33
+44
+55
+============
+============
+11
+*******************************************
+名片管理系统中的for else:
+  1 card_infors = [{"name":"laowang","age":18},{"name":"laoli","age":19},{"name"    :"laozhao","age":20}]
+  2 find_name = input("请输入你要查询的名字:")
+  3 for temp in card_infors:
+  4     if temp['name']==find_name:
+  5         print("找到了...")
+  6         break
+  7 else:
+  8     print("没有找到...")
+*****************************************************************************************
+append和extend的区别
+  1 print("---extend----")把b列表里面的元素一个一个往a里面加
+  2 a = [11,22,33]
+  3 b = [44,55]
+  4 a.extend(b)
+  5 print(a)
+  6 print("---append---")相当于把b列表当做整体扔到里面去
+  7 a = [11,22,33]
+  8 b = [44,55]
+  9 a.append(b)
+ 10 print(a)
+输出结果
+---extend----
+[11, 22, 33, 44, 55]
+---append---
+[11, 22, 33, [44, 55]]
+*****************************************************************************************
+append的注意点(因为a.append(b)是没有结果的为None将None赋值给c所以输出结果肯定为None)
+  1 a = [11,22,33]
+  2 b = [44,55]
+  3 c = a.append(b)
+  4 print(c)
+输出结果
+python@ubuntu:~/Desktop/Python基础03$ python3 5-列表append注意点.py 
+None #相当于c语音中的NULL
+*****************************************************************************************
+字典常见操作
+infor.keys():获取字典中的键    infor.values():获取字典中的值  infor.get('name'):获取name键的值
+In [1]: infor = {"name":"laowang","age":18}
+In [2]: infor
+Out[2]: {'age': 18, 'name': 'laowang'}
+In [3]: infor.keys()
+Out[3]: dict_keys(['age', 'name'])
+In [4]: infor.values()
+Out[4]: dict_values([18, 'laowang'])
+In [5]: infor.get('name')
+Out[5]: 'laowang'
+******************************************
+for循环遍历分别打印键和值：
+In [9]: infor
+Out[9]: {'age': 18, 'name': 'laowang'}
+In [10]: for temp in infor.keys():
+   ....:     print(temp)
+   ....:     
+age
+name
+In [11]: for temp in infor.values():
+   ....:     print(temp)
+   ....:     
+18
+laowang
+******************************************
+整体打印键和值
+In [13]: infor.items()
+Out[13]: dict_items([('age', 18), ('name', 'laowang')])
+In [14]: for temp in infor.items():
+   ....:     print(temp)
+   ....:     
+('age', 18)
+('name', 'laowang')
+In [15]: for temp in infor.items():
+   ....:     print("keys=%s,values=%s"%(temp[0],temp[1]))
+   ....:     
+keys=age,values=18
+keys=name,values=laowang
+还有一种方式：前提是清楚列表里面的元组
+In [23]: infor
+Out[23]: {'age': 18, 'name': 'laowang'}
+In [24]: for A,B in infor.items():
+   ....:     print("key=%s,value=%s"%(A,B))
+   ....:     
+key=age,value=18
+key=name,value=laowang
+
+******************************************
+元组拆包:c,d = a
+In [17]: a = [11,22]
+In [18]: b = a
+In [19]: b
+Out[19]: [11, 22]
+In [20]: c,d = a
+In [21]: c
+Out[21]: 11
+In [22]: d
+Out[22]: 22
+*****************************************************************************************
+元组：(只能查，不能添加删除修改)
+In [3]: nums = [11,22,33,44]
+In [4]: type(nums)
+Out[4]: list
+In [5]: nums[0]=1
+In [6]: nums
+Out[6]: [1, 22, 33, 44]
+In [7]: nums2 = (11,22,33,44)
+In [8]: type(nums2)
+Out[8]: tuple
+In [9]: nums2[0]=1
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+<ipython-input-9-83c20acce7c8> in <module>()
+----> 1 nums2[0]=1
+
+TypeError: 'tuple' object does not support item assignment
+*****************************************************************************************
+*****************************************************************************************
+(重点)函数:把具有独立功能的代码块当做一个整体，这个整体称之为函数
+定义函数(封装)
+def 函数名():
+  1 def print_menu():
+  2     print("*"*50)
+  3     print("　　名片管理系统V1.01   ")
+  4     print("1.xxx")
+  5     print("2.xxx")
+  6     print("*"*50)
+  7 def print_sanjiaoxing():
+  8     print("*")
+  9     print("*"*2)
+ 10     print("*"*3)
+ 11     print("*"*4)
+ 12     print("*"*5)
+ 13 print_menu()
+ 14 print_sanjiaoxing()
+带有参数的函数
+  1 #定义一个函数
+  2 def sum_1_nums():
+  3     a = 10
+  4     b = 20
+  5     result = a+b
+  6     print("%d+%d=%d"%(a,b,result))
+  7 #调用函数
+  8 sum_1_nums()
+  9 print("="*50)
+  ***********************************************
+ 10 #定义一个函数
+ 11 def sum_2_nums(a,b):  定义a,b两个变量用来接收函数传递的num1,num2的值
+ 12     result = a+b
+ 13     print("%d+%d=%d"%(a,b,result))
+ 14 num1 = int(input("请输入第1个数字:"))
+ 15 num2 = int(input("请输入第2个数字:"))
+ #调用函数
+ 16 sum_2_nums(num1,num2)
+运行结果如下：
+python@ubuntu:~/Desktop/Python基础03$ python3 9-带有参数的函数.py 
+10+20=30
+==================================================
+请输入第1个数字:1
+请输入第2个数字:2
+1+2=3
+***************************************************
+函数return(返回)
+  1 def get_wendu():
+  2     wendu = 25
+  3     print("当前温度是:%d"%wendu)
+  4     return wendu
+  5 def get_huashi(wendu):
+  6     wendu = wendu*9/5+32
+  7     print("当前华氏温度是:%d"%wendu)
+  8 result = get_wendu()#将获取的返回值赋值给result
+  9 get_huashi(result)#将result的值传递给变量wendu
+ 10 #程序运行流程:将第一个函数的值25　return返回给get_wendu()这个函数,然后再将这
+    个值赋值给result这个变量,最后通过get_huashi(result)将result的值传递给def get    _huashi(wendu)函数中的wendu
+***************************************************
+函数中多个return
+1 def test():
+  2     a = 1
+  3     b = 2
+  4     c = 3
+  5    #第一种
+  6    #d = [a,b,c]
+  7    #return d
+  8 
+  9    #第二种
+ 10    #return [a,b,c]
+ 11 
+ 12    #第三种
+ 13    return a,b,c
+ 14 nums = test()
+ 15 print(nums)
+***************************************************
+四种函数:
+def 函数名():
+    pass
+def 函数名():
+    return xxx
+def 函数名(参数):
+    pass
+def 函数名(参数):
+    return xxx
+***************************************************
+函数的嵌套调用应用1
+ def print_line():
+  2     print("-"*50)
+  3 
+  4 def print_5_line():
+  5     i = 0
+  6     while i<5:
+  7         print_line()
+  8         i+=1
+  9 
+ 10 print_5_line()
+ 输出结果:
+ python@ubuntu:~/Desktop/Python基础03$ python3 13-函数的嵌套调用应用-1.py 
+--------------------------------------------------
+--------------------------------------------------
+--------------------------------------------------
+--------------------------------------------------
+--------------------------------------------------
+***************************************************
+函数的嵌套调用应用2
+下面代码仔细理解传参和接收参数 返回结果接收结果
+1 def sum_3_nums(a,b,c):#形参2
+  2     result = a+b+c
+  3     #print("%d+%d+%d=%d"%(a,b,c,result))
+  4     return result
+  5 def average_3_nums(a1,a2,a3):#形参1
+  6     result = sum_3_nums(a1,a2,a3)#实参2
+  7     result = result/3
+  8     #print("平均值:%d"%result)
+  9     return result
+ 10 def square_3_nums(a2,b2,c2):
+ 11     result = average_3_nums(a2,b2,c2)
+ 12     result = result**2
+ 13     print("和的平均值的平方:%d"%result)
+ 14 
+ 15 num1 = int(input("请输入第1个数:"))
+ 16 num2 = int(input("请输入第2个数:"))
+ 17 num3 = int(input("请输入第3个数:"))
+ 18 #sum_3_nums(num1,num2,num3)
+ 19 #average_3_nums(num1,num2,num3)#实参1
+ 20 square_3_nums(num1,num2,num3)
+解释:程序从上往下执行定义了3个函数分别是sum_3_nums(),average_3_nums(),square_3_nums()
+开始执行请输入1,2,3个数后，到最下面开始调用square_3_nums()函数时
+将用户输入的num1,num2,num3的值传到square_3_nums()里，并执行该函数下的代码用a2,b2,c2接收后
+然后执行result=average_3_nums(a2,b2,c2),紧接着执行=号右边的代码，然后调用average_3_nums()函数
+将a2,b2,c2的值传到average_3_nums()，用a1,a2,a3接收，然后执行result = sum_3_nums(a1,a2,a3)
+同理调用sum_3_nums()函数,将a1,a2,a3的值传到sum_3_nums()里用a,b,c来接收
+执行sum_3_nums()代码 运行result = a+b+c 并return result 将这个返回值返回给 average_3_nums()
+执行average_3_nums()里代码result = result/3 并return result 将这个返回值返回给square_3_nums()
+执行square_3_nums()里代码result = result**2 打印结果print("和的平均值的平方:%d"%result)，程序运行完毕
+*****************************************************************************************
+局部变量
+  1 def test1(): 
+  2     a = 100 #这个变量a只能在test1函数中使用
+  3 
+  4 def test2():
+  5     print("a=%d"%a)
+  6 
+  7 #test1()
+  8 test2()
+  9 print("a=%d"%a) #程序运行到这里会报错因为没有定义变量a
+ 运行结果如下:
+python@ubuntu:~/Desktop/Python基础04$ python3 1-局部变量.py 
+Traceback (most recent call last):
+  File "1-局部变量.py", line 8, in <module>
+    test2()
+  File "1-局部变量.py", line 5, in test2
+    print("a=%d"%a)
+NameError: name 'a' is not defined
+*****************************************************************************************
+全局变量
+  1 a = 100
+  2 def test1():
+  3     print("a=%d"%a)
+  4 def test2():
+  5     print("a=%d"%a)
+  6 test1()
+  7 test2()
+*********************************************
+全局变量和局部变量的区别:
+  1 '''
+  2 def get_wendu():
+  3     wendu = 30
+  4     return wendu
+  5 def print_wendu(wendu):#这个wendu与get_wendu()函数里定义的wendu没有任何关系
+  6     print("当前的温度是:%d度"%wendu)
+  7 result = get_wendu()#如果一个函数有返回值,但是没有在调用函数之前，用个变量保
+    存的话那么没有任何意义
+  8 print_wendu(result)
+  9 '''
+ 10 
+ 11 #定义一个全局变量wendu
+ 12 wendu = 0
+ 13 
+ 14 def get_wendu():
+ 15     #如果wendu这个变量已经在全局变量的位置定义了，此时还想再函数中对这个全局
+    变量进行修改的话那么仅仅是wendu=一个值 这还不够,,,此时wendu这个变量是一个局部变量，仅仅是和全局变量的名字相同罢了
+ 16     #wendu = 30
+ 17 
+ 18     #使用global用来对一个全局变量的声明,那么这个函数中的wendu=33就不是定义一
+    个局部变量,而是对全局变量进行修改
+ 19     global wendu
+ 20     wendu = 30
+ 21 
+ 22 def print_wendu():
+ 23     print("当前的温度是:%d度"%wendu)
+ 24 get_wendu()
+ 25 print_wendu()
+*********************************************
+全局变量定义的注意点(放在test()调用函数之前的位置都行，最好是定义函数之前的稳住def test()之前定义)
+  1 a = 100
+  2 def test():
+  3     print("a=%d"%a)
+  4     print("b=%d"%b)
+  5     print("c=%d"%c)
+  6 
+  7 b = 200
+  8 
+  9 test()
+ 10 c = 300
+运行结果:
+python@ubuntu:~/Desktop/Python基础04$ python3 4-全局变量定义的注意点.py 
+a=100
+b=200
+Traceback (most recent call last):
+  File "4-全局变量定义的注意点.py", line 9, in <module>
+    test()
+  File "4-全局变量定义的注意点.py", line 5, in test
+    print("c=%d"%c)
+NameError: name 'c' is not defined
+正确的位置为:
+ 15 a = 100
+ 16 b = 200
+ 17 c = 300
+ 18 def test():
+ 19     print("a=%d"%a)
+ 20     print("b=%d"%b)
+ 21     print("c=%d"%c)
+ 22 
+ 23 test()
+*********************************************
+全局变量和局部变量名字相同时的情况:
+ 1 a = 100
+ 2 
+ 3 def test():
+ 4     a = 200#在函数中 如果对一个和全局变量名相同的变量进行=value的时候，默认定义一个变量
+               #只不过这个变量的名字和全局变量的名字相同罢了
+	       #如果想在执行a=value时，不是定义局部变量，而是对全局变量修改，那么可以添加global进行声明
+ 5     print("a=%d"%a)
+ 6 
+ 7 def test1():
+ 8     print("a=%d"%a)#如果这里打印了100就声明了test函数没有对全局变量进行修改，而是定义了一个局部变量
+ 9 
+ 10 test()
+ 11 test1()
+以上代码运行时，从上往下执行test()调用时使用局部变量a=200，test1()调用时使用全部变量a=100，切记要想用局部变量修改全局变量，需要在局部变量前加global a即可
+运行结果为
+python@ubuntu:~/Desktop/Python基础04$ python3 5-全局变量和局部变量名字相同.py 
+a=200
+a=100
+*********************************************
+全局变量命名-建议 g_a = 100
+  1 g_a = 100
+  2 
+  3 def test():
+  4     #global a
+  5     a = 200
+  6     print("a=%d"%a)
+  7 
+  8 def test1():
+  9     print("a=%d"%a)
+ 10 
+ 11 test()
+ 12 test1()
+*****************************************************************************************
+在当前路径下cp拷贝上个路径下的文件xxx到当前路径下
+python@ubuntu:~/Desktop/Python基础04$ cp ../Python基础02/4-名字管理系统.py ./
+*****************************************************************************************
+列表，字典全当作全局变量不用使用global
+  1 nums = [11,22,33]
+  2 infor = {"name":"laowang"}
+  3 def test():
+  4     #for num in nums:
+  5         #print(num)
+  6     nums.append(44)
+  7     infor['age']=18
+  8 
+  9 def test1():
+ 10     print(nums)
+ 11     print(infor)
+ 12 
+ 13 test()
+ 14 test1()
+*****************************************************************************************
+缺省参数:默认没传值得时候用b=22，只要是传值了 就用我传给你的值test1(44,44) b=22取值为44
+缺省参数只能放在最后面，不能test1(a=22,b),只能是test1(a,b=22)
+  1 """1"""
+  2 def test(a,b):
+  3     result = a+b
+  4     print("result=%d"%result)
+  5 
+  6 test(11,22)
+  7 test(33,22)
+  8 test(44,22)
+  9 print("="*50)
+ 10 """2"""
+ 11 def test1(a,b=22):
+ 12     result = a+b
+ 13     print("result=%d"%result)
+ 14 
+ 15 test1(11)
+ 16 test1(33)
+ 17 test1(44,44)
+ 18 print("="*50)
+ 19 """3"""
+ 20 def test2(a,b=22,c=33):
+ 21     print(a)
+ 22     print(b)
+ 23     print(c)
+ 24 
+ 25 test2(11,c=44)
+ 26 print("="*50)
+ 27 """4"""
+ 28 def test3(a,d,b=22,c=33):
+ 29     print(a)
+ 30     print(b)
+ 31     print(c)
+ 32     print(d)
+ 33 
+ 34 test3(11,22,c=44)
+ 35 print("="*50)
+ 36 """5"""
+ 37 def test4(a,d,b=22,c=33):  b=22,c=33这个叫缺省参数
+ 38     print(a)
+ 39     print(b)
+ 40     print(c)
+ 41     print(d)
+ 42 
+ 43 test4(d=11,a=22,c=44)  d=11,a=22,c=44这个参数叫命名参数
+运行结果:
+python@ubuntu:~/Desktop/Python基础04$ python3 8-缺省参数.py 
+result=33
+result=55
+result=66
+==================================================
+result=33
+result=55
+result=88
+==================================================
+11
+22
+44
+==================================================
+11
+22
+44
+22
+==================================================
+22
+22
+44
+11
+*****************************************************************************************
+不定长参数:  *args(以元组方式保存参数)
+  1 def sum_2_nums(a,b,*args):
+  2     print("*"*20)
+  3     print(a)
+  4     print(b)
+  5     print(args)
+  6     result = a+b
+  7     for num in args: #求所有的形参的和，使用for循环遍历取args元组中每个元素的值
+  8         result=result+num
+  9     print("result=%d"%result)
+ 10 
+ 11 sum_2_nums(11,22,33,44,55,66,77)
+ 12 sum_2_nums(11,22,33)
+ 13 sum_2_nums(11,22)
+ 14 #sum_2_nums(11)错误,因为行参中至少要2个参数
+运行结果:
+python@ubuntu:~/Desktop/Python基础04$ python3 9-不定长参数.py 
+******************
+11
+22
+(33, 44, 55, 66, 77)
+result=308
+*******************
+11
+22
+(33,)
+result=66
+********************
+11
+22
+()
+result=33
+****************************************************
+****************************************************
+不定长参数2: **kwargs(以字典方式来保存参数)
+  1 def test(a,b,c=33,*args,**kwargs):
+  2     print("="*50)
+  3     print(a)
+  4     print(b)
+  5     print(c)
+  6     print(args)
+  7     print(kwargs)
+  8 
+  9 test(11,22,33,44,55)
+ 10 test(11,22,33,90,89)
+ 11 test(11,22,33,44,55,66,task=90,done=89)如果传的参数多余的没名字的就给args(元组)，有名字的就给
+ 
+运行结果:
+python@ubuntu:~/Desktop/Python基础04$ python3 10-不定长参数2.py 
+==================================================
+11
+22
+33
+(44, 55)
+{}
+==================================================
+11
+22
+33
+(90, 89)
+{}
+==================================================
+11
+22
+33
+(44, 55, 66)
+{'done': 89, 'task': 90}
+总结：
+def test(a,b,c=33,*args,**kwargs): 一个函数所有的形参都写上的样子 就是这个样子
+test(11,22,33,44,55,66,task=90,done=89)如果传的参数多余的没名字的就给*args(元组)，多余的有名字
+的就给**kwargs，*多余没名字的，**多余有名字的 args呵kwargs参数名而已，一般使用这个见名知意
+*****************************************************************************************
+拆包，元组和字典
+  1 def test(a,b,c=33,*args,**kwargs):
+  2     print("="*50)
+  3     print(a)
+  4     print(b)
+  5     print(c)
+  6     print(args)
+  7     print(kwargs)
+  8 
+  9 A = (44,55,66)
+ 10 B = {"name":"laowang","age":18}
+ 11 
+ 12 test(11,22,33,A,B)没有命名的多余的实参当做元组传给*args
+ 13 test(11,22,33,*A,**B)将A拆包给*args，将B拆包给**kwargs
+运行结果:
+python@ubuntu:~/Desktop/Python基础04$ python3 11-拆包-元组字典.py 
+==================================================
+11
+22
+33
+((44, 55, 66), {'age': 18, 'name': 'laowang'})
+{}
+==================================================
+11
+22
+33
+(44, 55, 66)
+{'age': 18, 'name': 'laowang'}
+*****************************************************************************************
+引用: a=100 b=a 是a和b都指向了100这个位置这就是引用
+在python中赋值 = 都叫引用
+In [2]: a = 100
+In [3]: b = a
+In [4]: b
+Out[4]: 100
+In [5]: id(a)
+Out[5]: 10922592
+In [6]: id(b)
+Out[6]: 10922592
+In [7]: A = [11,22,33]
+In [8]: B = A
+In [9]: id(A)
+Out[9]: 140225272271816
+In [10]: id(B)
+Out[10]: 140225272271816
+
+In [11]: A.append(44)
+
+In [12]: A
+Out[12]: [11, 22, 33, 44]
+
+In [13]: B
+Out[13]: [11, 22, 33, 44]
+*****************************************************************************************
+不可变类型和可变类型
+不可变类型:数字，字符串，元组
+可变类型:列表，字典
+可变类型不可以当字典中的key值
+In [2]: infor = {"name":"laowang",100:"laoli",3.14:"wd",(11,22):"wewq"}
+In [3]: infor
+Out[3]: {3.14: 'wd', 100: 'laoli', (11, 22): 'wewq', 'name': 'laowang'}
+In [4]: infor = {"name":"laowang",100:"laoli",3.14:"wd",(11,22):"wewq",[33,44]:"sdaa"}
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+<ipython-input-4-e65f43d555d4> in <module>()
+----> 1 infor = {"name":"laowang",100:"laoli",3.14:"wd",(11,22):"wewq",[33,44]:"sdaa"}
+
+TypeError: unhashable type: 'list'
+*****************************************************************************************
+***递归***
+ #阶层
+  2 #5! = 5*4*3*2*1
+  3 #4! = 4*3*2*1
+  4 i = 1
+  5 result = 1
+  6 while i<=5:
+  7     result = result*i
+  8     i+=1
+  9 print(result)
+ 10 
+ 11 #5! = 5*4!
+ 12 #4! = 4*3!
+ 13 
+ 14 def getNums(num):
+ 15     if num>1:
+ 16         return num*getNums(num-1)
+ 17     else:
+ 18         return num
+ 19 
+ 20 result = getNums(int(input("清输入一个整数:")))
+ 21 print(result)
+ 解释以上递归代码:
+ 比如输入5时:
+ 程序运行流程:
+ 第一次调用
+ num=5
+ 进行if判断>1
+ num*getNums(5)
+ return 5*4*3*2*1
+ 5*第二次调用
+ *************
+ num=4
+ 进行if判断>1
+ num*getNums(4)
+ return 4*3*2*1
+ 4*第三次调用
+ *************
+ num=3
+ 进行if判断>1
+ num*getNums(3)
+ return 3*2*1
+ 3*第四次调用
+ *************
+ num=2
+ 进行if判断>1
+ num*getNums(2)
+ return 2*1
+ 2*第五次调用
+ *************
+ num=1
+ 进行if判断>1
+ else
+ return num =1
+   
+ 递归注意点:
+ 用递归的时候切记要想到什么时候结束递归，不然就是死循环，一直循坏到内存占满程序死掉
+  1 def test():
+  2     print("hehe")
+  3     test()
+  4 
+  5 test()
+运行结果:
+hehe
+hehe
+····
+/home/python/Desktop/Python基础04/13-递归的问题.py in test()
+      1 def test():
+      2     print("hehe")
+----> 3     test()
+      4 
+      5 test()
+总结：小经验，程序闪退基本都是内存溢出导致的
+*****************************************************************************************
+匿名函数: lambda x:x 冒号后面相当于返回值
+  1 def test1(a, b):
+  2         return a+b
+  3 result1 = test1(11,22)
+  4 test2 = lambda a,b:a+b
+  5 result2 = test2(11,22)#调用匿名函数
+  6 print("result1=%d,result2=%d"%(result1, result2))
+
+ 9 def test3(c,d):
+ 10     return c+d
+ 11 result3 = test3(33,44)
+ 12 test4 = lambda c,d:d-c
+ 13 result4 = test4(33,44)
+ 14 print("result3=%d,result4=%d"%(result3,result4))
+*********************************************
+匿名函数的应用
+sort():从小到大排序
+sort(reverse=True):从大到小排序
+reverse():按倒叙排列
+infors.sort(key=lambda x:x['name']):列表中字典按name排序
+In [2]: nums=[123,221413,21,321,243214,12,321]
+In [3]: nums.sort()
+In [4]: nums
+Out[4]: [12, 21, 123, 321, 321, 221413, 243214]
+In [5]: nums.sort(reverse=True)
+In [6]: nums
+Out[6]: [243214, 221413, 321, 321, 123, 21, 12]
+In [7]: nums=[123,221413,21,321,243214,12,321]
+In [8]: nums.reverse()
+In [9]: nums
+Out[9]: [321, 12, 243214, 321, 21, 221413, 123]
+
+  1 nums = [2,321321,21321,2321,23,421421212,1,2]
+  2 nums.sort()
+  3 print(nums)
+  4 
+  5 infors = [{"name":"laowang","age":18},{"name":"zhangsan","age":19},{"name":"    xiaoqiang","age":20}]
+  6 infors.sort(key=lambda x:x['name'])
+  7 print(infors)
+*********************************************
+匿名函数当做实参:
+  1 def test(a,b,func):
+  2     result = func(a,b)
+  3     return result
+  4 num = test(11,22,lambda x,y:x+y)
+  5 print(num)
+程序执行流程:
+程序从上往下执行
+定义def test(a,b,func)函数,test(11,22,lambda x,y:x+y)调用函数，将11,22,lambda x,y:x+y分别传参给a,b,func然后执行result=func(a,b)先算等号右边的程序func(a,b)，调用匿名函数lambda x,y:x+y将a,b传参给x,y然后执行x+y就等于11+22把这个结果然后返回给函数func(a,b)并引用给result，再执行return result 将这个结果返回给test(11,22,lambda x,y:x+y)，最后引用给num然后打印num的值，完毕
+
+*********************************************
+匿名函数拓展:
+eval():将输入的内容当做表达式
+  1 def test(a,b,func):
+  2     result = func(a,b)
+  3     return result
+  4 func_new = input("请输入一个匿名函数:")
+  5 func_new = eval(func_new)
+  6 num = test(11,22,func_new)
+  7 print(num)
+*********************************************
+交换两个变量的值(三种方式)
+  1 a = 4
+  2 b = 5
+  3 #第一种
+  4 #c = 0
+  5 #c = a
+  6 #a = b
+  7 #b = c
+  8 
+  9 #第二种
+ 10 #a = a+b
+ 11 #b = a-b
+ 12 #a = a-b
+ 13 
+ 14 #第三种 python 独有方式
+ 15 a,b = b,a
+ 16 print("a=%d,b=%d"%(a,b))
+*********************************************
+知识补充点:
+当全局变量为不可变类型是函数里面num+=num不能对全局变量进行修改
+当全局变量为可变类型是函数里面num+=num是可以对全局变量进行修改
+num+=num时是用了赋值运算符而num=num+num是代表引用并不能修改变量的值num所以此时全局变量a不变
+  1 a = 100
+  2 def test(num):
+  3     num+=num
+  4     print(num)
+  5 test(a)
+  6 print(a)
+  7 
+  8 b = [100]
+  9 def test(num):
+ 10     num+=num
+ 11     print(num)
+ 12 test(b)
+ 13 print(b)
+ 14
+ 15 c = [100]
+ 16 def test(num):
+ 17     num = num+num
+ 18     print(num)
+ 19 test(c)
+ 20 print(c)
+
+代码运行结果:
+python@ubuntu:~/Desktop/Python基础05$ python3 6-知识补充点.py 
+200
+100
+[100, 100]
+[100, 100]
+[100, 100]
+[100]
+*****************************************************************************************
+文件的读写操作
+打开文件:open("文件名","访问模式")
+关闭文件:.close()
+读取文件:.read()
+In [9]: f = open("test1.py","w")
+In [10]: ls
+1-匿名函数.py        3-匿名函数当作实参.py  5-交换两个变量的值.py  test1.py
+2-匿名函数的应用.py  4-匿名函数拓展.py      6-知识补充点.py        test.py
+In [11]: f.close()
+In [12]: f = open("test.py","r")
+In [13]: f.read()
+Out[13]: 'import os\npid = os.fork()\nprint(pid)\n'
+*************************************************
+f.read(1):代表读取一个字节
+f.read(2):代表继续往下读取2个字节
+In [20]: f = open("test.py","r")
+In [21]: f.read(20)
+Out[21]: 'import os\npid = os.f'
+In [22]: f.read(1)
+Out[22]: 'o'
+*************************************************
+写文件: write(内容)
+In [50]: f = open("test1.py","w")
+In [51]: f.write("hello world")
+Out[51]: 11>>>>>>>>代表写入的内容的字节
+In [52]: f.write("\nhi")
+Out[52]: 3
+In [53]: f.write("\nnihaoma")
+Out[53]: 8
+*************************************************
+练习
+写入数据
+1 f = open("test1.py","a")
+2 f.write("\nwhat's your name?")
+3 f.close()
+*************************************************
+读取数据
+1 f = open("test1.py","r")
+2 result = f.read()
+3 print(result)
+4 f.close()
+*************************************************
+复制文件
+  1 #1.获取用户要复制的文件名
+  2 old_file_name = input("请输入你要复制的文件名:")
+  3 #2.打开要复制的文件
+  4 old_file = open(old_file_name,"r")
+  5 #3.新建一个文件
+  6 position = old_file_name.rfind(".")
+  7 new_file_name = old_file_name[:position]+"[复件]"+old_file_name[position:]
+  8 #new_file_name = "[复件]"+old_file_name
+  9 new_file = open(new_file_name,"w")
+ 10 #new_file = open("laowang.txt","w")
+ 11 #4.从旧文件中读取数据,并写入到新文件中
+ 12 content = old_file.read()
+ 13 new_file.write(content)
+ 14 #5.关闭文件
+ 15 old_file.close()
+ 16 new_file.close()
+ 17 #6.读取复制后的新文件内容
+ 18 old_file = open(new_file_name,"r")
+ 19 #old_file = open("laowang.txt","r")
+ 20 result = old_file.read()
+ 21 print(result)
+ 22 old_file.close()
+ 运行结果:
+python@ubuntu:~/Desktop/Python基础05$ python3 9-复制文件.py 
+请输入你要复制的文件名:test.py
+import os
+pid = os.fork()
+print(pid)
+
+python@ubuntu:~/Desktop/Python基础05$ ls
+1-匿名函数.py          5-交换两个变量的值.py  9-复制文件.py  test[复件].py
+2-匿名函数的应用.py    6-知识补充点.py        laowang.txt    [复件]test.py
+3-匿名函数当作实参.py  7-写入数据.py          test1.py
+4-匿名函数拓展.py      8-读取数据.py          test.py
+*************************************************
+大文件的处理
+注意点:
+当读取某个文件很大时，不能read()，因为会使程序假死，应该每次读一部分来读取大文件
+ 12 while True:
+ 13     content = old_file.read(1024)
+ 14     if len(content)==0:
+ 15         break
+ 16     new_file.write(content)
+*************************************************
+定位读写: seek(偏移量,方向)  f.seek(2,0):定位文件内容从0开头开始往后移动2个字节开始读
+方向0:表示文件开头
+方向1:表示当前位置
+方向2:表示文件末尾
+In [2]: f = open("test.py","r")
+In [3]: f.seek(2,0)
+Out[3]: 2
+In [4]: f.readline()
+Out[4]: 'port os\n'
+In [5]: f.read()
+Out[5]: 'pid = os.fork()\nprint(pid)\n'
+In [6]: f.read()
+Out[6]: ''
+In [7]: f.seek(0,0) #从文件内容开头开始读
+Out[7]: 0
+In [8]: f.read()
+Out[8]: 'import os\npid = os.fork()\nprint(pid)\n'
+获取当前读取位置
+*************************************************
+f.tell()
+In [9]: f.tell()
+Out[9]: 37
+In [10]: f.tell()
+Out[10]: 37
+*************************************************
+文件的重命名 os.rename("需要修改的文件名"，"新文件名")
+In [3]: import os
+In [4]: os.rename("xxx.txt","yyy.txt")
+*************************************************
+文件的删除 os.remove("所要删除的文件名")
+In [6]: os.remove("yyy.txt")
+*************************************************
+创建文件夹以及删除文件夹 os.mkdir("文件夹名")  os.rmdir("文件夹名")
+os.mkdir("test")
+os.rmdir("test")
+*************************************************
+获取当前路径 os.getcwd()
+In [16]: os.getcwd()
+Out[16]: '/home/python/Desktop/Python基础05'
+*************************************************
+在当前路径的上个路径创建一个xxx.txt文件
+In [20]: f = open("../xxx.txt","w")
+In [21]: f.close()
+*************************************************
+改变默认路径 os.chdir("路径")
+os.chdir("../")
+*************************************************
+获取当前路径下的文件列表
+In [30]: os.listdir("./")
+Out[30]: 
+['[复件]test.py',
+ '9-复制文件.py',
+ 'test[复件].py',
+ '5-交换两个变量的值.py',
+ 'test.py',
+ '8-读取数据.py',
+ 'test1.py',
+ '2-匿名函数的应用.py',
+ '4-匿名函数拓展.py',
+ '1-匿名函数.py',
+ 'laowang.txt',
+ '6-知识补充点.py',
+ '3-匿名函数当作实参.py',
+ '7-写入数据.py']
+*************************************************
+批量重命名1
+  1 import os
+  2 #1.获取重命名文件夹的名字
+  3 folder_name = input("请输入要重命名的文件夹:")
+  4 #2.获取指定文件夹中所有文件的名字
+  5 file_names = os.listdir(folder_name)
+  6 #改变默认路径
+  7 os.chdir(folder_name)
+  8 #print(file_names)#for test
+  9 #3.重命名
+ 10 i = 0
+ 11 for name in file_names:
+ 12     i+=1
+ 13     os.rename(name,"金瓶梅"+str(i)+".avi")
+ 14 test = os.getcwd()
+ 15 print(test)
+ 16#获取重命名后的文件名
+ 17 new_file_names = os.listdir("./")
+ 18 print(new_file_names)
+ 运行结果:
+ python@ubuntu:~/Desktop/Python基础05$ python3 10-批量重命名.py 
+请输入要重命名的文件夹:test
+/home/python/Desktop/Python基础05/test
+['金瓶梅5.avi', '金瓶梅1.avi', '金瓶梅7.avi', '金瓶梅3.avi', '金瓶梅2.avi', '金瓶梅4.avi', '金瓶梅6.avi']
+*************************************************
+批量重命名2
+  1 import os
+  2 #1.获取重命名文件夹的名字
+  3 folder_name = input("请输入要重命名的文件夹:")
+  4 #folder_name = "/test/"
+  5 #2.获取指定文件夹中所有文件的名字
+  6 file_names = os.listdir(folder_name)
+  7 #改变默认路径
+  8 #os.chdir(folder_name)
+  9 #print(file_names)#for test
+ 10 #3.重命名
+ 11 for name in file_names:
+ 12     old_file_names = folder_name+"/"+name
+ 13     new_file_names = folder_name+"/"+"[东京出品]-"+name
+ 14     os.rename(old_file_names,new_file_names)
+*********************************************
+批量修改文件名
+  1 import os
+  2 folder_name = input("请输入要修改名称的文件夹:")
+  3 file_names = os.listdir(folder_name)
+  4 for name in file_names:
+  5     #例:将[东京出品]-1.txt　修改成1.txt把前面的给删除了
+  6     #找到将去掉的下标,[0:-]这部分不要,[-+1:]是要的
+  7     ls = name.rfind("-")
+  8     #截取自己想要的格式用切片
+  9     new = name[ls+1:]
+ 10     old_file_names = folder_name+"/"+name
+ 11     new_file_names = folder_name+"/"+new
+ 12     os.rename(old_file_names,new_file_names)
+*******************************************************************************************
+*******************************************************************************************
+面向过程:什么都要自己去考虑
+面向对象:找一个靠谱的对象去做事情，你什么都不考虑
+定义一个类
+  1 class Cat:
+  2     #属性
+  3 
+  4     #方法
+  5     def eat(self):
+  6         print("猫在吃鱼...")
+  7     def drink(self):
+  8         print("猫在喝水...")
+************************************
+创建一个对象
+  1 class Cat:
+  2     #属性
+  3 
+  4     #方法
+  5     def eat(self):
+  6         print("猫在吃鱼...")
+  7     def drink(self):
+  8         print("猫在喝水...")
+  9 #创建一个对象
+ 10 tom = Cat()
+************************************
+调用对象的方法
+ #调用tom指向的对象中的方法
+ 12 tom.eat()
+ 13 tom.drink()
+运行结果:python@ubuntu:~/Desktop/Python基础06-面向对象1$ python3 3-调用对象的方法.py 
+猫在吃鱼...
+猫在喝水...
+************************************
+给对象添加属性
+ 14 #向tom指向的对象中添加name.age属性
+ 15 tom.name="汤姆"
+ 16 tom.age=18
+************************************
+获取对象的属性
+#获取属性的一种方式
+21 #print("%s的年龄是:%d"%(tom.name,tom.age))
+#定义个方法再调用方法
+9     def introduce(self):
+10         print("%s的年龄是:%d"%(tom.name,tom.age))
+11 tom.introduce()
+************************************
+创建多个对象
+ 24 lanmao = Cat()
+ 25 lanmao.name="蓝猫"
+ 26 lanmao.age=12
+ 27 lanmao.introduce()
+************************************
+self: 通过哪个对象去调用introduce方法，这个self就是指向这个对象
+def introduce(self):
+    print("%s的年龄是:%d"%(self.name,self.age))
+************************************
+__init__方法(魔法方法)
+  1 class Cat:
+  2     def __init__(self):
+  3         print("---hehe---")
+  4     def eat(self):
+  5         print("猫在吃鱼...")
+  6     def drink(self):
+  7         print("猫在喝水...")
+  8     def introduce(self):
+  9         print("%s的年龄是:%d"%(self.name,self.age))
+ 10 tom = Cat()
+ 11 tom.eat()
+ 12 tom.drink()
+ 13 tom.name="汤姆"
+ 14 tom.age=18
+ 15 tom.introduce()
+ 16 lanmao = Cat()
+ 17 lanmao.name="蓝猫"
+ 18 lanmao.age=12
+ 19 lanmao.introduce()
+ 运行结果如下:
+ python@ubuntu:~/Desktop/Python基础06-面向对象1$ python3 8-__init__方法.py 
+---hehe---
+猫在吃鱼...
+猫在喝水...
+汤姆的年龄是:18
+---hehe---
+蓝猫的年龄是:12
+以上代码中 tom=Cat()分三步
+1.创建一个对象
+2.Python解释器会自动调用__init__方法，会使self指向我这个对象
+3.返回创建对象的引用给tom
+************************************
+调用__init__方法流程
+  1 class Cat:
+  2     def __init__(self,new_name,new_age):
+  3         self.name = new_name
+  4         self.age = new_age
+  5     def eat(self):
+  6         print("猫在吃鱼...")
+  7     def drink(self):
+  8         print("猫在喝水...")
+  9     def introduce(self):
+ 10         print("%s的年龄是:%d"%(self.name,self.age))
+ 11 tom = Cat("汤姆",18)
+ 12 tom.eat()
+ 13 tom.drink()
+ 14 #tom.name="汤姆"
+ 15 #tom.age=18
+ 16 tom.introduce()
+ 17 lanmao = Cat("蓝猫",12)
+ 18 #lanmao.name="蓝猫"
+ 19 #lanmao.age=12
+ 20 lanmao.introduce()
+流程:
+1.创建一个对象
+2.调用__init__方法将"汤姆" 18分别传给形参new_name和new_age,此时self指向这个对象
+self.name 在对象里创建name属性，self.age在对象里创建age属性
+此时的name="汤姆" age=18
+3.返回对象的引用 把这个对象的引用给tom  就是把Cat("汤姆",18)值引用给tom >>>tom=cat("汤姆",18)
+同理
+1.创建一个对象
+2.调用__init__方法将"蓝猫" 12分别传给形参new_name和new_age,此时self指向这个对象
+self.name 在对象里创建name属性，self.age在对象里创建age属性
+此时的name="蓝猫" age=12
+3.返回对象的引用 把这个对象的引用给lanmao  就是把Cat("蓝猫",12)值引用给lanmao >>>lanmao=cat("蓝猫",12)
+************************************
+__str__方法  当你想直接取这个对象的描述信息时，Python解释器会自动调用__str__方法，这个方法return什么，将来print就打印什么
+  1 class Cat:
+  2     def __init__(self,new_name,new_age):
+  3         self.name = new_name
+  4         self.age = new_age
+  5     def __str__(self):
+  6         return "%s的年龄是:%d"%(self.name,self.age)
+  7     def eat(self):
+  8         print("猫在吃鱼...")
+  9     def drink(self):
+ 10         print("猫在喝水...")
+ 11     def introduce(self):
+ 12         print("%s的年龄是:%d"%(self.name,self.age))
+ 13 tom = Cat("汤姆",18)
+ 14 lanmao = Cat("蓝猫",12)
+ 15 
+ 16 print(tom)
+ 17 print(lanmao)
+运行结果:
+python@ubuntu:~/Desktop/Python基础06-面向对象1$ python3 9-__str__方法.py 
+汤姆的年龄是:18
+蓝猫的年龄是:12
+==============
+总结:
+Befor                           Now
+全局变量                        对象1       对象2
+函数1                           属性        属性
+函数2                           方法1       方法3
+函数3                           方法2       方法4
+====================================
+相似点:
+函数之间通过全局变量来共享
+对象里面的方法通过属性来共享
+通过全局变量，通过属性来完成多个函数，多个方法之间共享数据
+不同点
+用函数不小心修改了全局变量  其他函数的变量也会改变
+在一个对象里面不管你怎么修改属性，其他对象里的属性是不会改变的
+特点:
+函数:将独立的功能封装起来
+对象:将函数的功能和一些全局变量给封装起来
+*******************************************************************************************
+ 1 class Home:
+  2     def __init__(self,new_area,new_info,new_addr):
+  3         self.area = new_area
+  4         self.info = new_info
+  5         self.addr = new_addr
+  6         self.resi_area = new_area#默认房屋可用面积=总面积
+  7         self.contain_items = []
+  8     def __str__(self):
+  9         if len(self.contain_items)>0:
+ 10             msg = "房屋总面积为:%d平米\n可用面积为:%d\n户型为:%s\n地理位置:%s\n"%(self.area,self.resi_area,self.info,self.addr)
+ 11             msg+="当前房屋里的家具有:%s"%(str(self.contain_items))
+ 12         else:
+ 13             msg = "房屋总面积为:%d平米\n可用面积为:%d\n户型为:%s\n地理位置:%s\n"%(self.area,self.area,self.info,self.addr)
+ 14         return msg
+ 15     def add_item(self,item):
+ 16         #self.resi_area-=item.area
+ 17         #self.contain_items.append(item.name)
+ 18         self.resi_area-=item.get_area()
+ 19         self.contain_items.append(item.get_name())
+ 20 class Bed:
+ 21     def __init__(self,new_name,new_area):
+ 22         self.name = new_name
+ 23         self.area = new_area
+ 24     def __str__(self):
+ 25         return "%s的占用面积为:%d平米"%(self.name,self.area)
+ 26     def get_area(self):
+ 27         return self.area
+ 28     def get_name(self):
+ 29         return self.name
+ 30 
+ 31 fangzi = Home(120,"三室一厅","北京市-朝阳区-长安街-888号")
+ 32 print(fangzi)
+ 33 print("*"*50)
+ 34 bed1 = Bed("席梦思",4)
+ 35 print(bed1)
+ 36 print("*"*50)
+ 37 fangzi.add_item(bed1)
+ 38 print(fangzi)
+********************************************
+class Home:
+     def add_item(self,item):
+         #self.resi_area-=item.area
+         #self.contain_items.append(item.name)
+         self.resi_area-=item.get_area()
+         self.contain_items.append(item.get_name())
+class Bed:
+     def get_area(self):
+         return self.area
+     def get_name(self):
+         return self.name
+解释fangzi.add_item(bed1)运行流程:
+fangzi这个对象去调用add_item(bed1)方法时
+执行Home里面的add_item(self,item)方法
+此时self指向fangzi这个对象，item指向bed1这个对象
+然后执行item.get_area(),调用bed 里面的get_area(self)方法，这个self是谁调的就是指向谁，所以这个self指向item
+return self.area  返回bed1.area的值给item.get_area()
+同理
+return self.name  返回bed1.name的值给item.get_name()
+*******************************************************************************************
+隐藏对象的属性
+  1 class Dog:
+  2     #def __str__(self):
+  3         #return "%s的年龄是:%d"%(self.name,self.age)
+  4     def set_name_age(self,new_name,new_age):
+  5         self.name = new_name
+  6         if new_age>0 and new_age<=100:
+  7             self.age = new_age
+  8         else:
+  9             self.age = 0
+ 10     def get_name_age(self):
+ 11 
+ 12         return self.name,self.age
+ 13 dog = Dog()
+ 14 dog.set_name_age("小黑",10)
+ 15 name_age = dog.get_name_age()
+ 16 print(name_age)
+ 17 #print(dog)
+ 18 #dog.name = "小黑"
+ 19 #dog.age = 10
+ 20 #print("%s的年龄是:%d"%(dog.name,dog.age))
+*************************************************
+私有属性
+如果在属性名前面加了2个下划线'__'，则表明该属性是私有属性
+  1 class Dog:
+  2     def __init__(self,new_name):
+  3         self.name = new_name
+  4         self.__age = 0 #定义了一个私有属性,属性的名字是__age
+  5     def set_age(self,new_age):
+  6         if new_age>0 and new_age<=100:
+  7             self.__age = new_age
+  8         else:
+  9             self.__age = 0
+ 10     def get_age(self):
+ 11         return self.__age
+ 12 dog = Dog("小黑")
+ 13 dog.set_age(10)
+ 14 age = dog.get_age()
+ 15 print(age)
+ 16 print(dog.__age)
+运行结果:
+python@ubuntu:~/Desktop/Python基础07-面向对象2$ python3 2-隐藏对象的属性-私有属性.py 
+10
+Traceback (most recent call last):
+  File "2-隐藏对象的属性-私有属性.py", line 16, in <module>
+    print(dog.__age)
+AttributeError: 'Dog' object has no attribute '__age'
+*************************************************
+私有方法
+  1 class Dog:
+  2     #私有方法
+  3     def __test1(self):
+  4         print("---1---")
+  5     #公有方法
+  6     def test2(self):
+  7         print("---2---")
+  8 dog = Dog()
+  9 dog.__test1()
+ 10 dog.test2()
+运行结果
+python@ubuntu:~/Desktop/Python基础07-面向对象2$ python3 3-私有方法.py 
+Traceback (most recent call last):
+  File "3-私有方法.py", line 9, in <module>
+    dog.__test1()
+AttributeError: 'Dog' object has no attribute '__test1'
+*************************************************
+ 13 class Dog:
+ 14     def __send_msg(self):
+ 15         print("正在发送短信...")
+ 16     def send_msg(self,new_money):
+ 17         if new_money>10000:
+ 18             self.__send_msg()
+ 19         else:
+ 20             print("余额不足,请充值后,再发送短信...")
+ 21 dog = Dog()
+ 22 dog.send_msg(100)
+ 总结:一般实际工作定义的私有方法是不想在外面调用，而是在一个公有方法里面进行条件判断后，在方法里面去调用这个私有方法
+*******************************************************************************************
+__del__方法:
+创建对象后，python解释器默认调用__init__()方法；
+当删除一个对象时，python解释器也会默认调用一个方法，这个方法为__del__()方法
+下面程序当没有删除完所有的引用时当程序运行结束的之前那还是会执行__del__()方法 del dog1
+当删除完最后一个引用时程序会立即调用__del__()方法再接着运行下面的代码 del dog1 del dog2
+  1 class Dog():
+  2     def __del__(self):
+  3         print("游戏结束GameOver!")
+  4 dog1 = Dog()
+  5 dog2 = dog1
+  6 del dog1#不会调用__del__方法,因为这个对象还有其他变量指向它,即引用计数不为0
+  7 del dog2#此时会调用__del__方法,即引用计数为0
+  8 print("=============")
+  9 #如果在程序结束时,有些对象还存在，那么python解释器会自动调用它们的__del__方法来完成清理工作
+
+*******************************************************************************************
+获取一个对象的引用计数:sys.getrefcount(x-1)  
+In [17]: import sys
+In [18]: class T:
+   ....:     pass
+   ....: 
+In [19]: t = T()
+In [20]: sys.getre
+sys.getrecursionlimit  sys.getrefcount        
+In [20]: sys.getrefcount(t)
+Out[20]: 2
+In [21]: t1 = t
+In [22]: sys.getrefcount(t)
+Out[22]: 3
+In [23]: del t1
+In [24]: sys.getrefcount(t)
+Out[24]: 2
+In [25]: del t
+In [26]: sys.getrefcount(t)
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+<ipython-input-26-db87dac58216> in <module>()
+----> 1 sys.getrefcount(t)
+
+NameError: name 't' is not defined
+*******************************************************************************************
+继承: class xxx(yyy) xxx继承yyy
+  1 class Animal:
+  2     def eat(self):
+  3         print("---吃---")
+  4     def drink(self):
+  5         print("---喝---")
+  6     def sleep(self):
+  7         print("---睡---")
+  8     def run(self):
+  9         print("---跑---")
+ 10 
+ 11 class Dog(Animal):
+ 12     '''
+ 13     def eat(self):
+ 14         print("---吃---")
+ 15     def drink(self):
+ 16         print("---喝---")
+ 17     def sleep(self):
+ 18         print("---睡---")
+ 19     def run(self):
+ 20         print("---跑---")
+ 21     '''
+ 22     def bark(self):
+ 23         print("---叫---")
+ 24 class Cat(Animal):
+ 25     def catch(self):
+ 26         print("---抓老鼠---")
+ 27 a = Animal()
+ 28 a.eat()
+ 29 wangcai = Dog()
+ 30 wangcai.eat()
+ 31 tom = Cat()
+ 32 tom.eat()
+ 33 tom.catch()
+总结:wangcai只能使用Dog和Animal类里的的方法，同理tom只能使用Cat喝Animal类里的方法
+不允许出现，wangcai使用Cat类里的方法或者是tom使用Dog类里的方法
+*********************************************
+继承拓展: 继承可以是多次继承
+  1 class Animal:
+  2     def eat(self):
+  3         print("---吃---")
+  4     def drink(self):
+  5         print("---喝---")
+  6     def sleep(self):
+  7         print("---睡---")
+  8     def run(self):
+  9         print("---跑---")
+ 10 
+ 11 class Dog(Animal):
+ 12     def bark(self):
+ 13         print("---叫---")
+ 14 
+ 15 class Xiaotq(Dog):
+ 16     def fly(self):
+ 17         print("---飞---")
+ 18 xiaotq = Xiaotq()
+ 19 xiaotq.fly()
+ 20 xiaotq.bark()
+ 21 xiaotq.eat()
+*******************************************************************************************
+重写:
+如果你发现了父类的方法不是你想要的，那么可以在子类里面定义一个和父类的方法的名字一模一样的方法
+将来去调用的时候就会调用自己的方法，而不去调父类的方法，这种时候就叫做方法的重写
+  1 class Animal:
+  2     def eat(self):
+  3         print("---吃---")
+  4     def drink(self):
+  5         print("---喝---")
+  6     def sleep(self):
+  7         print("---睡---")
+  8     def run(self):
+  9         print("---跑---")
+ 10 
+ 11 class Dog(Animal):
+ 12     def bark(self):
+ 13         print("---叫---")
+ 14 
+ 15 class Xiaotq(Dog):
+ 16     def fly(self):
+ 17         print("---飞---")
+ 18     def bark(self):
+ 19         print("---狂叫---")
+ 20 xiaotq = Xiaotq()
+ 21 xiaotq.fly()
+ 22 xiaotq.bark()
+ 23 xiaotq.eat()
+运行结果如下:
+python@ubuntu:~/Desktop/Python基础07-面向对象2$ python3 7-重写.py 
+---飞---
+---狂叫---
+---吃---
+*******************************************************************************************
+调用被重写的方法
+  1 class Animal:
+  2     def eat(self):
+  3         print("---吃---")
+  4     def drink(self):
+  5         print("---喝---")
+  6     def sleep(self):
+  7         print("---睡---")
+  8     def run(self):
+  9         print("---跑---")
+ 10 
+ 11 class Dog(Animal):
+ 12     def bark(self):
+ 13         print("---汪汪叫---")
+ 14 
+ 15 class Xiaotq(Dog):
+ 16     def fly(self):
+ 17         print("---飞---")
+ 18     def bark(self):
+ 19         print("---狂叫---")
+ 20         #第1种调用被重写的父类的方法
+ 21         Dog.bark(self)
+ 22         #第2种
+ 23         super().bark()
+ 24 xiaotq = Xiaotq()
+ 25 xiaotq.fly()
+ 26 xiaotq.bark()
+ 27 xiaotq.eat()
+*******************************************************************************************
+私有方法-私有属性在继承中的表现
+  1 class A:
+  2     def __init__(self):
+  3         self.num1 = 100
+  4         self.__num2 = 200
+  5     def test1(self):
+  6         print("------test1-----")
+  7     def __test2(self):
+  8         print("------test2-----")
+  9     def test3(self):
+ 10         self.__test2()
+ 11         print(self.__num2)
+ 12 class B(A):
+ 13     def test4(self):
+ 14         self.__test2()
+ 15         print(self.__num2)
+ 16 b = B()
+ 17 #b.test1()
+ 18 #b.__test2() 私有方法并不能被继承
+ 19 #print(b.num1)
+ 20 #print(b.__num2) 私有属性不能被继承
+ 21 
+ 22 b.test3()
+ 23 b.test4()
+总结:
+如果调用是继承的父类中的公有方法，那么可以在这个共有方法中去访问父类中的私有属性和私有方法
+但是 如果在子类中实现了一个共有方法,那么这个方法是不能调用父类中的私有属性和私有方法的
+*******************************************************************************************
+多继承:把所有的的功能都继承与一身
+  1 class Base(object):  #object类 是Python3默认必须继承的基类 写不写都是继承object类
+  2     def test(self):
+  3         print("---test---")
+  4 
+  5 class A(Base):
+  6     def test1(self):
+  7         print("---test1---")
+  8 
+  9 class B(Base):
+ 10     def test2(self):
+ 11         print("---test2---")
+ 12 
+ 13 class C(A,B):
+ 14     pass
+ 15 
+ 16 c = C()
+ 17 c.test()
+ 18 c.test1()
+ 19 c.test2()
+*******************************************************************************************
+多继承注意点
+print(C.__mro__) :打印类名.__mro__ 决定调用一个方法时候搜索的顺序，如果在某个类中找到了方法就停止搜索
+  1 class Base(object):
+  2     def test(self):
+  3         print("---Base---")
+  4 
+  5 class A(Base):
+  6     def test(self):
+  7         print("---A---")
+  8 
+  9 class B(Base):
+ 10     def test(self):
+ 11         print("---B---")
+ 12 
+ 13 class C(A,B):
+ 14     def test(self):
+ 15         print("---C---")
+ 16 
+ 17 c = C()
+ 18 #c.test()
+ 19 print(C.__mro__)
+运行结果如下:
+python@ubuntu:~/Desktop/Python基础07-面向对象2$ python3 11-多继承-注意点.py 
+(<class '__main__.C'>, <class '__main__.A'>, <class '__main__.B'>, <class '__main__.Base'>, <class 'object'>)
+*******************************************************************************************
+多态:定义时的类型和运行时的类型不一样，此时就成为多态
+定义的时候不知道调用哪个方法，当我执行的一刹那才知道是调哪个方法
+  1 class Dog(object):
+  2     def print_self(self):
+  3         print("大家好,我是xxx,以后请大家多多关照...")
+  4 
+  5 class Xiaotq(Dog):
+  6     def print_self(self):
+  7         print("Hello,everybody,我是你们的大佬,我是xxx...")
+  8 
+  9 def introduce(temp):
+ 10     temp.print_self()
+ 11 
+ 12 dog1 = Dog()
+ 13 dog2 = Xiaotq()
+ 14 introduce(dog1)
+ 15 introduce(dog2)
+运行结果:
+python@ubuntu:~/Desktop/Python基础07-面向对象2$ python3 12-多态.py 
+大家好,我是xxx,以后请大家多多关照...
+Hello,everybody,我是你们的大佬,我是xxx...
+总结:
+面向对象的三个要素:封装，继承，多态
+*******************************************************************************************
+类属性和实例属性
+  1 class Tool(object): #类对象
+  2     #类属性
+  3     num = 0
+  4     def __init__(self,new_name):
+  5         #实例属性
+  6         self.name = new_name
+  7         #类属性+1
+  8         Tool.num+=1
+  9 tool1 = Tool("镰刀")#实例对象
+ 10 tool2 = Tool("铁锹")#实例对象
+ 11 tool3 = Tool("工兵铲")#实例对象
+ 12 print(Tool.num)
+总结:
+实例属性:和具体的某个实例对象有关系，并且一个实例对象和另外一个实例对象是不共享属性的
+类属性:类属性所属于类对象，并且多个实例对象之间共享同一个类属性
+*******************************************************************************************
+类方法-实例方法-静态方法
+ 1 class Game(object):
+  2     #类属性
+  3     num = 0
+  4     #实例方法
+  5     def __init__(self):
+  6         #实例属性
+  7         self.name = "laowang"
+  8     #类方法
+  9     @classmethod
+ 10     def add_num(cls):#3.不管是使用类去调还是对象去调,这个cls永远都指向Game这个类
+ 11         cls.num = 100
+ 12     #静态方法 类方法和实例方法都必须要有一个参数,而静态方法可以没有,静态方法一般完成最基本
+    的功能,既和类没有关系也和实例对象没关系
+ 13     @staticmethod
+ 14     def print_menu():
+ 15         print("-----------------------")
+ 16         print("-----穿越火线V11.1-----")
+ 17         print("------1.开始游戏-------")
+ 18         print("------2.结束游戏-------")
+ 19         print("-----------------------")
+ 20 
+ 21 game = Game()
+ 22 #Game.add_num()#1.可以通过这个类的名字来调用类方法
+ 23 game.add_num()#2.还可以通过这个类创建出来的对象来调用这个类方法
+ 24 print(Game.num)
+ 25 #Game.print_menu()#通过类去调用静态方法
+ 26 game.print_menu()#通过实例对象去调用静态方法
+*******************************************************************************************
+设计4S店详情请看Pycharm test.py
+*******************************************************************************************
+__new__方法
+  1 class Dog(object):
+  2     def __init__(self):
+  3         print("---init方法---")
+  4     def __str__(self):
+  5         print("---str方法---")
+  6         return "对象的描述信息"
+  7     def __del__(self):
+  8         print("---del方法---")
+  9     def __new__(cls):#cls此时是Dog指向的那个类对象
+ 10         print(id(cls))
+ 11         print("---new方法---")
+ 12         return object.__new__(cls)
+ 13 print(id(Dog))
+ 14 xtq = Dog()#相当于要做三件事情:
+ 15 #1.调用__new__方法来创建对象,然后找一个变量来接收__new__的返回值,这个返回值表示创建出来的对象的引用
+ 16 #2.__init__(刚刚创建出来的对象的引用)
+ 17 #3.返回对象的引用
+总结:
+__new__至少要有一个参数cls，代表要实例化的类，此参数在实例化时由Python解释器自动提供
+__new__必须要有返回值，返回实例化出来的实例，这点在自己实现__new__时要特别注意，可以return父类__new__出来的实例，或者直接是object的__new__出来的实例
+__init__有一个参数self，就是这个__new__返回的实例，__init__在__new__的基础上可以完成一些其它初始化的动作，__init__不需要返回值
+我们可以将类比作制造商，__new__方法就是前期的原材料购买环节，__init__方法就是在有原材料的基础上，加工，初始化商品环节
+*******************************************************************************************
+创建单例对象:(无论你怎么创建只有一个对象)
+  1 class Dog(object):
+  2     __instance = None
+  3     def __new__(cls):
+  4         if cls.__instance==None:
+  5             cls.__instance=object.__new__(cls)
+  6             return cls.__instance
+  7         else:
+  8             #return 上一次返回对象的引用
+                return cls.__instance
+  9 
+ 10 
+ 11 a = Dog()
+ 12 print(id(a))
+ 13 b = Dog()
+ 14 print(id(b))
+python@ubuntu:~/Desktop/Python基础08$ python3 2-创建一个单例.py 
+140287176796648
+140287176796648
+*******************************************************************************************
+只初始化一次对象:
+  1 class Dog(object):
+  2     __instance = None
+  3     __init__flag=False
+  4     def __new__(cls,name):
+  5         if cls.__instance==None:
+  6             cls.__instance=object.__new__(cls)
+  7             return cls.__instance
+  8         else:
+  9             return cls.__instance
+ 10     def __init__(self,name):
+ 11         if Dog.__init__flag==False:
+ 12             Dog.__init__flag=True
+ 13             self.name=name
+ 14 
+ 15 
+ 16 a = Dog("旺财")
+ 17 print(id(a))
+ 18 print(a.name)
+ 19 b = Dog("孝天犬")
+ 20 print(id(b))
+ 21 print(b.name)
+运行结果:
+python@ubuntu:~/Desktop/Python基础08$ python3 3-只初始化一次.py 
+139880313035296
+旺财
+139880313035296
+旺财
+*******************************************************************************************
+异常处理:try...except...
+  1 try:
+  2     print(num)
+  3     print("---1---")
+  4 except NameError:
+  5     print("捕获异常后的处理...")
+  6 print("---2---")
+*************************************************
+except Exception: 上面的异常没有捕获到 这个异常一定能捕获到
+  1 try:
+  2     11/0
+  3     #print(num)
+  4     open("xxx.txt")
+  5     print("---1---")
+  6 except (NameError,FileNotFoundError):
+  7     print("捕获异常后的处理...")
+  8 except Exception:
+  9     print("如果用了Exception,那么意味着只要上面的except没有捕获到异常,这个except一
+    定能捕获到")
+ 10 print("---2---")
+*************************************************
+except Exception as ret: 将异常的核心结果用变量ret保存  然后可以print(ret)
+  1 try:
+  2     11/0
+  3     #print(num)
+  4     open("xxx.txt")
+  5     print("---1---")
+  6 except (NameError,FileNotFoundError):
+  7     print("捕获异常后的处理...")
+  8 except Exception as ret:
+  9     print("如果用了Exception,那么意味着只要上面的except没有捕获到异常,这个except一
+    定能捕获到")
+ 10     print(ret)
+ 11 print("---2---")
+运行结果：
+python@ubuntu:~/Desktop/Python基础08$ python3 5-异常2.py 
+如果用了Exception,那么意味着只要上面的except没有捕获到异常,这个except一定能捕获到
+division by zero
+---2---
+*************************************************
+try...except...else: 没有异常才会执行的功能
+  1 try:
+  2     #11/0
+  3     #print(num)
+  4     #open("xxx.txt")
+  5     print("---1---")
+  6 except (NameError,FileNotFoundError):
+  7     print("捕获异常后的处理...")
+  8 except Exception as ret:
+  9     print("如果用了Exception,那么意味着只要上面的except没有捕获到异常,这个except一
+    定能捕获到")
+ 10     print(ret)
+ 11 else:
+ 12     print("没有异常才会执行的功能...")
+ 13 print("---2---")
+*************************************************
+finally :不管有没有异常最后都会执行finally
+  1 try:
+  2     11/0
+  3     #print(num)
+  4     #open("xxx.txt")
+  5     print("---1---")
+  6 except (NameError,FileNotFoundError):
+  7     print("捕获异常后的处理...")
+  8 except Exception as ret:
+  9     print("如果用了Exception,那么意味着只要上面的except没有捕获到异常,这个except一
+    定能捕获到")
+ 10     print(ret)
+ 11 else:
+ 12     print("没有异常才会执行的功能...")
+ 13 finally:
+ 14     print("---finally---")
+ 15 print("---2---")
+*******************************************************************************************
+抛出自定义异常
+
+class ShortInputException(Exception):
+    def __init__(self,length,atleast):
+        print("1")
+        self.length = length
+        self.atleast = atleast
+def main():
+    print("2")
+    try:
+        s = input("Please input:")
+        if len(s)<3:
+            raise ShortInputException(len(s),3) #创建一个对象，把len(s),3分别传入__init__方法的length,atleast
+    except ShortInputException as result: #变量result指向了抛出异常raise ShortInputException(len(s),3)这个对象的引用
+        print("ShortInputException:您输入的长度为 %d,长度至少应该是 %d"%  (result.length,result.atleast))
+    else:
+        print("没有异常")
+main()
+运行结果:
+D:\ProgramData\Anaconda3\python.exe C:/Users/Administrator/PycharmProjects/untitled1/自定义异常.py
+Please input:hi
+ShortInputException:您输入的长度为 2,长度至少应该是 3
+*******************************************************************************************
+异常处理中抛出异常
+class Test(object):
+    def __init__(self,switch):
+        self.switch = switch
+    def throw(self,a,b):
+        try:
+            return a/b
+        except Exception as result:
+            if self.switch:
+                print("已捕获到异常，信息如下:")
+                print(result)
+            else:
+                raise
+test = Test(True)
+test.throw(11,0)
+
+print("-----------华丽的分割线-----------")
+
+test.switch = False
+test.throw(11,0)
+运行结果:
+已捕获到异常，信息如下:
+division by zero
+-----------华丽的分割线-----------
+Traceback (most recent call last):
+  File "C:/Users/Administrator/PycharmProjects/untitled1/异常处理中抛出异常.py", line 19, in <module>
+    test.throw(11,0)
+  File "C:/Users/Administrator/PycharmProjects/untitled1/异常处理中抛出异常.py", line 6, in throw
+    return a/b
+ZeroDivisionError: division by zero
+*******************************************************************************************
+if的各种真假判断
+if "",if None,if [],if {},if 0 这些都是'假',字典，字符串，元组，列表只要是空的全是假，0代表假，非0标示真
+In [6]: if "":
+   ...:     print("haha")
+   ...:     
+In [7]: if None:
+   ...:     print("haha")
+   ...:     
+In [8]: if 0:
+   ...:     print("haha")
+   ...:     
+In [9]: if []:
+   ...:     print("haha")
+   ...:     
+In [10]: if {}:
+   ....:     print("haha")
+   ....:     
+
+In [13]: if "1":
+   ....:     print("haha")
+   ....:     
+haha
+
+In [14]: if "-1":
+   ....:     print("haha")
+   ....:     
+haha
+总结:
+if xxx = yyy:  看条件是否成立
+if xxx: 看结果是真还是假
+*******************************************************************************************
+模块
+查找模块的路径:os.__file__
+In [1]: import os
+In [2]: os.__file__
+Out[2]: '/usr/lib/python3.5/os.py'
+In [3]: exit
+python@ubuntu:~/Desktop/Python基础08$ cd /usr/lib/python3.5
+python@ubuntu:/usr/lib/python3.5$ ls
+python@ubuntu:/usr/lib/python3.5$ ls random.py 
+random.py
+模块就是一个py文件
+****************************************
+安装pygame模块sudo pip3 install pygame
+pip3代表安装在python3路径下
+pip代表安装在python2路径下
+python@ubuntu:/usr/lib/python3.5$ sudo pip3 install pygame
+[sudo] python 的密码： 
+在交互模式下ipython3下 import pygame不报错代表安装模块成功
+In [1]: import pygame
+In [2]: exit
+不成功显示为:
+In [1]: import pygame
+---------------------------------------------------------------------------
+ImportError                               Traceback (most recent call last)
+<ipython-input-1-4a415d16fbed> in <module>()
+----> 1 import pygame
+
+ImportError: No module named pygame
+*******************************************************************************************
+创建模块
+  1 #import sendmsg
+  2 #sendmsg.test1()
+  3 #sendmsg.test2()
+  4 
+  5 #from sendmsg import test1,test2
+  6 #from sendmsg import test2
+  7 #尽量不要使用import * 当出现相同的方法时候,后者的recvmsg模块中的test1()方法会覆盖前者senmsg中的test1()方法
+  8 from sendmsg import *
+  9 from recvmsg import *
+ 10 test1()
+ 11 test2()
+运行结果:
+python@ubuntu:~/Desktop/Python基础08/7-模块$ python3 main.py 
+---recvmsg---test1---
+---test2---
+总结:
+当你导入一个模块时,程序会先去搜索当前路径下是否存在该模块，如果没有才回去系统路径去查找
+*******************************************
+当导入的模块名字很长时,就可以使用以下方法 as....xxx
+In [3]: import time as tt
+In [4]: tt.sleep(3)
+*******************************************
+导入一个模块时，实际上会把这个模块从头到尾执行一遍
+sendmsg.py
+1 def test1():
+2     print("---test1---")
+3 def test2():
+4     print("---test2---")
+5 
+6 test1()
+7 test2()
+
+recvmsg.py
+1 def test1():
+2     print("---recvmsg---test1---")
+
+main.py 
+1 import sendmsg
+2 import recvmsg
+3 sendmsg.test1()
+4 sendmsg.test2()
+5 recvmsg.test1()
+运行main.py的结果
+python@ubuntu:~/Desktop/Python基础08/7-模块$ python3 main.py 
+---test1---
+---test2---
+---test1---
+---test2---
+---recvmsg---test1---
+*******************************************************************************************
+__name__ :非常独特，执行方式不一样 这个值就不一样
+ 在sendmsg.py里面打印
+  1 def test1():
+  2     print("---test1---")
+  3 def test2():
+  4     print("---test2---")
+  5 
+  6 print(__name__)
+  7 test1()
+  8 test2()
+直接运行sendmsg.py 打印出来的值为__main__
+python@ubuntu:~/Desktop/Python基础08/7-模块$ python3 sendmsg.py 
+__main__
+---test1---
+---test2---
+通过运行main.py   打印出来的值为 sendmsg
+python@ubuntu:~/Desktop/Python基础08/7-模块$ python3 main.py 
+sendmsg
+---test1---
+---test2---
+---test1---
+---test2---
+---recvmsg---test1---
+那么根据以上的情况，可以做到当我自己去运行测试的时候结果为我想要的，当执行main.py时候不去执行sendmsg.py中的test1() test2()
+修改sendmsg.py代码
+  1 def test1():
+  2     print("---test1---")
+  3 def test2():
+  4     print("---test2---")
+  5 
+  6 if __name__=="__main__":
+  7     test1()
+  8     test2()
+python@ubuntu:~/Desktop/Python基础08/7-模块$ python3 sendmsg.py 
+---test1---
+---test2---
+python@ubuntu:~/Desktop/Python基础08/7-模块$ python3 main.py 
+---test1---
+---test2---
+---recvmsg---test1---
+*******************************************************************************************
+以后写代码的大概方式
+import xxx
+class xxx(object):
+	pass
+def yyy():
+	pass
+def zzz():
+	pass
+if __name__=="__main__":
+	main()
+*******************************************************************************************
+模块中__all__的作用 __all__ = [] 通过from msgnew import *导入模块方式只执行[]的内容
+  1 __all__ = ["test2","Test"]
+  2 def test1():
+  3     print("---test1---")
+  4 def test2():
+  5     print("---test2---")
+  6 class Test(object):
+  7     pass
+在ipython3交互模式中
+In [11]: from msgnew import *
+In [12]: test1()
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+<ipython-input-12-e3097d5bf3e6> in <module>()
+----> 1 test1()
+NameError: name 'test1' is not defined
+In [13]: test2()
+---test2---
+In [14]: t = Test()
+In [15]: num
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+<ipython-input-15-cb54072dd80a> in <module>()
+----> 1 num
+*******************************************************************************************
+在TestMsg这个包的__init__文件里面写上 from . import sendmsg后不管在ipython3和ipython交互模式中
+都可以通过import TestMsg 直接使用TestMsg.sendmsg.test1()来调用test1这个方法
+python@ubuntu:~/Desktop/Python基础09/2-包.py$ ipython3
+In [1]: import TestMsg
+In [2]: Tes
+TestMsg   TestMsg/  
+In [2]: TestMsg.sendmsg.test1()
+---sendmsg-test1---
+In [3]: exit
+python@ubuntu:~/Desktop/Python基础09/2-包.py$ ipython
+In [1]: import TestMsg
+In [2]: Tes
+TestMsg   TestMsg/  
+In [2]: TestMsg.sendmsg.test1()
+---sendmsg-test1---
+*******************************************************************************************
+总结:
+把__all__变量放在在模块里面将来影响的是你从模块里面能不能导哪些功能
+把__all__变量放在__init__.py里面将来从包里面导模块的时候能导哪些模块
+如果在一个文件夹里面有__init__.py我们就称这个文件夹为包，只要你导这个包__init__.py里面的内容就会被执行，如果__init__.py里面没有内容不影响你导入包，但是会影响你无法使用这个包里面的模块，在包里面的__init__文件里的__all__变量影响的是from 这个包的时候能不能使用某个模块，而在模块里的__all__变量影响的是你from 这个模块能不能使用某个功能。
+*******************************************************************************************
+*******************************************************************************************
+***模块发布共享步骤:
+1.在当前包的路径创建setup.py文件，在里面写入
+2.编辑setup.py文件写入以下内容:
+from distutils.core import setup
+setup(name="Taogang", version="1.0", description="Taogang's module", author=    "Taogang", py_modules=['TestMsg.sendmsg','TestMsg.recvmsg'])
+3.构建模块 
+python3 setup.py build
+4.生成压缩包 
+python3 setup.py sdist
+将这个压缩包拷贝到桌面并解压
+cp ./dist/Taogang-1.0.tar.gz ~/Desktop/
+cd ~/Desktop/
+tar -zxvf Taogang-1.0.tar.gz 
+紧接着进入解压后的文件夹Taogang-1.0
+python@ubuntu:~/Desktop$ cd Taogang-1.0/
+python@ubuntu:~/Desktop/Taogang-1.0$ tree
+.
+├── PKG-INFO
+├── setup.py
+└── TestMsg
+    ├── __init__.py
+    ├── recvmsg.py
+    └── sendmsg.py
+
+1 directory, 5 files
+查看PKG-INFO文件
+python@ubuntu:~/Desktop/Taogang-1.0$ cat PKG-INFO 
+Metadata-Version: 1.0
+Name: Taogang
+Version: 1.0
+Summary: Taogang's module
+Home-page: UNKNOWN
+Author: Taogang
+Author-email: UNKNOWN
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+5.最后一步:安装包到Python3里面
+python@ubuntu:~/Desktop/Taogang-1.0$ sudo python3 setup.py install
+测试:
+python@ubuntu:~/Desktop/Taogang-1.0$ cd ..
+python@ubuntu:~/Desktop$ ls
+1.txt  A             Python基础02  Python基础06-面向对象1  Taogang-1.0
+2.txt  B             Python基础03  Python基础07-面向对象2  Taogang-1.0.tar.gz
+3.txt  gebilaowang   Python基础04  Python基础08            test.py
+4      Python基础01  Python基础05  Python基础09            yyy.txt
+python@ubuntu:~/Desktop$ ipython3
+In [1]: import TestMsg
+In [2]: TestMsg.sendmsg
+TestMsg.sendmsg
+In [2]: TestMsg.sendmsg.test1()
+---sendmsg-test1---
+*******************************************************************************************
+给程序传递参数
+1 import sys
+2 print(sys.argv)
+3 
+4 name = sys.argv[1]
+5 print("热烈欢迎　%s的到来"%name)
+运行结果如下:
+python@ubuntu:~/Desktop/Python基础09$ python3 4-给程序传递参数.py laowang
+['4-给程序传递参数.py', 'laowang']
+热烈欢迎　laowang的到来
+*******************************************************************************************
+列表生成式
+In [1]: a = []
+In [2]: i = 10
+In [4]: while i<=77:
+   ...:     a.append(i)
+   ...:     i+=1
+   ...:     
+In [5]: print(a)
+[10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77]
+In [7]: for i in range(10,78):
+   ...:     print(i)
+   ...:     
+****************************************
+面试问使用range风险:
+使用range有个不好的点就是当你获取一个很大列表时，只需要取列表中的几个数，那么程序就非常占用内存
+比如range(1.1000000000)时要了很大的内存空间，将来系统不给你，或者说你要了一个很大的内存空间将来忘了用，这个内存空间就会一直被占用，这个问题只在python2里出现，python3已完美解决这个问题
+****************************************
+在ipython3中列表生成式
+In [6]: a = [i for i in range(1,18)]
+In [7]: a
+Out[7]: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+
+In [8]: b = [11 for i in range(1,18)]
+In [9]: b
+Out[9]: [11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11]
+解释:
+[]里面的for i in range(1,18)的意思是只负责控制循环的次数，for前面的值是谁，将来影响的是列表中的值
+[i for i in range(1,18)] 循环17次每循环一次都会把i的值放在列表中来
+[11 for i in range(1,18)]循环17次每循环一次都会把11这个值放在列表中来
+****************************************
+列表生成式中的if判断
+In [10]: c = [i for i in range(10) if i%2==0]
+In [11]: c
+Out[11]: [0, 2, 4, 6, 8]
+****************************************
+列表生成式中的for循环嵌套
+In [16]: d = [i for i in range(3) for j in range(2)]
+In [17]: d
+Out[17]: [0, 0, 1, 1, 2, 2]
+****************************************
+将i j的值放在列表中:(i,j)
+In [18]: d = [(i,j) for i in range(3) for j in range(2)]
+In [19]: d
+Out[19]: [(0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1)]
+****************************************
+三个for循环: 每循环一次 后面的for k in range(3)都会执行完 0 1 2
+0,0,0
+0,0,1
+0,0,2
+In [21]: e = [(i,j,k) for i in range(3) for j in range(2) for k in range(3)]
+In [22]: e
+Out[22]: 
+[(0, 0, 0),
+ (0, 0, 1),
+ (0, 0, 2),
+ (0, 1, 0),
+ (0, 1, 1),
+ (0, 1, 2),
+ (1, 0, 0),
+ (1, 0, 1),
+ (1, 0, 2),
+ (1, 1, 0),
+ (1, 1, 1),
+ (1, 1, 2),
+ (2, 0, 0),
+ (2, 0, 1),
+ (2, 0, 2),
+ (2, 1, 0),
+ (2, 1, 1),
+ (2, 1, 2)]
+上面列表生成式中的for嵌套循环写成程序如下:
+d = []
+for i in range(3):
+    for j in range(2):
+	d.append((i,j))
+print(d)
+*******************************************************************************************
+集合，元组，列表
+集合类型为:set 用{}来表示，{}不仅仅代表字典 集合有自动去重功能
+In [2]: a = [11,22,33,44,11,22,33]
+In [3]: a
+Out[3]: [11, 22, 33, 44, 11, 22, 33]
+In [4]: b = (11,22,33,44,11,22,33)
+In [5]: b
+Out[5]: (11, 22, 33, 44, 11, 22, 33)
+In [6]: c = {11,22,33,44,11,22,33}
+In [7]: c
+Out[7]: {11, 22, 33, 44}
+In [8]: type(a)
+Out[8]: list
+In [9]: type(b)
+Out[9]: tuple
+In [10]: type(c)
+Out[10]: set
+*****************************************
+列表去重1:
+使用程序代码去重
+In [2]: a = [11,22,33,44,11,22,33]
+In [3]: b = []
+In [4]: for i in a:
+   ...:     if i not in b:
+   ...:         b.append(i)
+   ...:         
+In [5]: b
+Out[5]: [11, 22, 33, 44]
+列表去重2:
+使用转换set集合类型去重再使用list转换成列表
+In [6]: c = set(a)
+In [7]: c
+Out[7]: {11, 22, 33, 44}
+In [8]: b = list(c)
+In [9]: b
+Out[9]: [33, 11, 44, 22]
+*****************************************
+总结:
+元组是不允许增删改的，允许查
+集合的特点是没有重复的值，但是可以增删改查的
+In [10]: c
+Out[10]: {11, 22, 33, 44}
+In [11]: c.
+c.add                          c.issubset
+c.clear                        c.issuperset
+c.copy                         c.pop
+c.difference                   c.remove
+c.difference_update            c.symmetric_difference
+c.discard                      c.symmetric_difference_update
+c.intersection                 c.union
+c.intersection_update          c.update
+c.isdisjoint                   
+*******************************************************************************************
+补充:
+在5-名片管理系统-文件版.py中 eval()还有个作用就是在转成字符串之前是什么样子用eval将这个字符串转成以前的样子
+*******************************************************************************************
+循环遍历列表时出现的bug
+In [2]: a = [11,22,33,44,55,66,77]
+In [3]: for i in a:
+   ...:     print(i)
+   ...:     if i==33:
+   ...:         a.remove(i)
+   ...:         
+11
+22
+33
+55
+66
+77
+In [4]: a
+Out[4]: [11, 22, 44, 55, 66, 77]
+****************************************
+In [8]: a
+Out[8]: [11, 22, 33, 44, 55, 66, 77]
+
+In [9]: for i in a:
+   ...:     if i==33 or i==44:
+   ...:         a.remove(i)
+   ...:         
+
+In [10]: a
+Out[10]: [11, 22, 44, 55, 66, 77]
+当循环遍历a列表时，当满足a==33时会删除此元素，一旦删除33这个元素时候，列表会出现一个空缺，会使44去填补这个空缺，导致此时的i指向的是下一个元素55
+****************************************
+除了再次循环可以避免此bug，还可以通过以下方式:
+找一个b列表来存储你要删除元素，再通过遍历b列表 最后a.remove(i)
+In [14]: a
+Out[14]: [11, 22, 33, 44, 55, 66, 77]
+In [15]: b = []
+In [16]: for i in a:
+   ....:     if i==33 or i==44:
+   ....:         b.append(i)
+   ....:         
+In [17]: b
+Out[17]: [33, 44]
+In [18]: for i in b:
+   ....:     a.remove(i)
+   ....:     
+In [19]: a
+Out[19]: [11, 22, 55, 66, 77]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

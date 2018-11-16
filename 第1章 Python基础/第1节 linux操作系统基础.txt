@@ -1,0 +1,1039 @@
+1.ubuntu命令
+ls：查询当前路径目录文件
+python@ubuntu:~$ ls
+dbs      Documents  dump.rdb          Music     Public     Videos
+Desktop  Downloads  examples.desktop  Pictures  Templates  workspace
+******************************************************************
+pwd：查询当前家目录（默认目录）
+python@ubuntu:~$ pwd
+/home/python（根目录下的home文件夹下的Python文件夹）
+******************************************************************
+cd Desktop：切换到桌面后再pwd得到home/python/Desktop
+python@ubuntu:~$ cd Desktop
+python@ubuntu:~/Desktop$ pwd
+/home/python/Desktop
+******************************************************************
+cd ..(返回上一层目录)
+python@ubuntu:~/Desktop/laowang/laoli$ cd ..
+python@ubuntu:~/Desktop/laowang$ pwd
+******************************************************************
+cd / (快速返回到磁盘根目录)
+python@ubuntu:~/Desktop/laowang$ cd /
+******************************************************************
+touch 1.txt(创建一个文件)
+python@ubuntu:~/Desktop$ touch 2.txt
+******************************************************************
+mkdir laowang(创建一个文件夹)
+python@ubuntu:~/Desktop$ mkdir laowang
+******************************************************************
+问：在laowang文件夹下创建1.txt文件并查询是否有该文件
+cd laowang 后再 touch 1.txt 然后ls
+python@ubuntu:~/Desktop$ cd laowang
+python@ubuntu:~/Desktop/laowang$ touch 1.txt
+python@ubuntu:~/Desktop/laowang$ ls
+******************************************************************
+LInux命令格式
+command [-options] [parameter1]``` 命令 选项 参数
+ls /（根目录下的所有文件）
+python@ubuntu:~/Desktop/laowang/laoli$ ls /
+bin    dev   initrd.img      lib32   lost+found  opt   run   srv  usr      vmlinuz.old
+boot   etc   initrd.img.old  lib64   media       proc  sbin  sys  var
+cdrom  home  lib             libx32  mnt         root  snap  tmp  vmlinuz
+
+ls /bin (显示根目录bin文件夹下所有文件)
+python@ubuntu:~/Desktop/laowang/laoli$ ls /bin
+******************************************************************
+ls -a a代表选项
+python@ubuntu:~/Desktop/laowang/laoli$ ls -a
+.  ..  2.txt
+创建点开头的文件touch .1234.txt用ls查询时不显示（创建隐藏文件），ls -a显示所有文件包括隐藏文件
+python@ubuntu:~/Desktop/laowang/laoli$ touch 123.txt
+python@ubuntu:~/Desktop/laowang/laoli$ ls
+123.txt  2.txt
+python@ubuntu:~/Desktop/laowang/laoli$ touch .1234.txt
+python@ubuntu:~/Desktop/laowang/laoli$ ls
+123.txt  2.txt
+python@ubuntu:~/Desktop/laowang/laoli$ ls -a
+.  ..  .1234.txt  123.txt  2.txt
+******************************************************************
+ls -l （以列表方式显示）
+python@ubuntu:~/Desktop/laowang/laoli$ ls -l
+总用量 0
+-rw-rw-r-- 1 python python 0 5月   4 16:36 123.txt
+-rw-rw-r-- 1 python python 0 5月   4 15:09 2.txt
+python@ubuntu:~/Desktop/laowang/laoli$ ls
+123.txt  2.txt
+******************************************************************
+ls -h （其实看不出区别需要在TXT文件里加入数字后根据大小显示查看区别↓）
+python@ubuntu:~/Desktop/laowang/laoli$ ls -h
+123.txt  2.txt
+python@ubuntu:~/Desktop/laowang/laoli$ ls -l -h
+总用量 0
+-rw-rw-r-- 1 python python 0 5月   4 16:36 123.txt
+-rw-rw-r-- 1 python python 0 5月   4 15:09 2.txt
+python@ubuntu:~/Desktop/laowang/laoli$ ls -l
+总用量 0
+-rw-rw-r-- 1 python python 0 5月   4 16:36 123.txt
+-rw-rw-r-- 1 python python 0 5月   4 15:09 2.txt
+******************************************************************
+python@ubuntu:~/Desktop/laowang/laoli$ ls -l
+总用量 56
+-rw-rw-r-- 1 python python 53650 5月   4 17:29 123.txt
+-rw-rw-r-- 1 python python     0 5月   4 15:09 2.txt
+python@ubuntu:~/Desktop/laowang/laoli$ ls -l -h
+总用量 56K
+-rw-rw-r-- 1 python python 53K 5月   4 17:29 123.txt
+-rw-rw-r-- 1 python python   0 5月   4 15:09 2.txt
+******************************************************************
+vi 123.txt（编辑文件，编辑完后先按esc后再:wq后回车即可，不保存按:q!）
+python@ubuntu:~/Desktop/laowang/laoli$ vi 123.txt
+（用vi编辑文件内容复制粘贴命令用法）
+yy复制当前行
+yw复制一个单词
+y$复制光标到结尾
+y^复制光标到行首
+#yy复制#行
+#yw复制#个单词
+m,ny复制m到n行内容
+******************************************************************
+ls -a -l -h
+python@ubuntu:~/Desktop/laowang/laoli$ ls -a -l -h
+总用量 64K
+drwxrwxr-x 2 python python 4.0K 5月   4 17:29 .
+drwxrwxr-x 3 python python 4.0K 5月   4 15:08 ..
+-rw-rw-r-- 1 python python    0 5月   4 16:36 .1234.txt
+-rw-rw-r-- 1 python python  53K 5月   4 17:29 123.txt
+-rw-rw-r-- 1 python python    0 5月   4 15:09 2.txt
+******************************************************************
+ls -h -l -a（不在乎顺序查询结果也一样）
+python@ubuntu:~/Desktop/laowang/laoli$ ls -h -l -a
+总用量 64K
+drwxrwxr-x 2 python python 4.0K 5月   4 17:29 .
+drwxrwxr-x 3 python python 4.0K 5月   4 15:08 ..
+-rw-rw-r-- 1 python python    0 5月   4 16:36 .1234.txt
+-rw-rw-r-- 1 python python  53K 5月   4 17:29 123.txt
+-rw-rw-r-- 1 python python    0 5月   4 15:09 2.txt
+-lah -hal (合在一起查询结果也是一样的)
+python@ubuntu:~/Desktop/laowang/laoli$ ls -lah
+python@ubuntu:~/Desktop/laowang/laoli$ ls -hal
+******************************************************************
+ls /bin -alh或者ls -alh /bin （都是查询根目录下bin文件所有文件的大小时间列表）
+python@ubuntu:~/Desktop/laowang/laoli$ ls /bin -alh
+python@ubuntu:~/Desktop/laowang/laoli$ ls -alh /bin
+（↑两种写法都可以）
+总用量 13M
+drwxr-xr-x  2 root root  4.0K 8月   4  2016 .
+drwxr-xr-x 26 root root  4.0K 7月  30  2016 ..
+-rwxr-xr-x  1 root root 1014K 6月  24  2016 bash
+-rwxr-xr-x  1 root root   31K 5月  20  2015 bunzip2
+-rwxr-xr-x  1 root root  1.9M 8月  19  2015 busybox
+-rwxr-xr-x  1 root root   31K 5月  20  2015 bzcat
+******************************************************************
+ls--help （前面加上你需要查询命令用法） man ls(也是查询命令用法)
+python@ubuntu:~/Desktop/laowang/laoli$ ls --help
+用法：ls [选项]... [文件]...
+List information about the FILEs (the current directory by default).
+Sort entries alphabetically if none of -cftuvSUX nor --sort is specified.
+******************************************************************
+gedit ds+Tab键即可（后按enter将打开此文件）
+创建一个文件名特长的文件，使用自动补全功能
+python@ubuntu:~/Desktop/laowang/laoli$ touch dsahsadhhsafiuqhfuQCBSAH
+python@ubuntu:~/Desktop/laowang/laoli$ ls
+123.txt  2.txt  dsahsadhhsafiuqhfuQCBSAH
+python@ubuntu:~/Desktop/laowang/laoli$ gedit dsahsadhhsafiuqhfuQCBSAH 
+******************************************************************
+cat (与gedit用法一样按Tab键，但是cat为查询文件里的内容，而不是编辑并打开文件)
+python@ubuntu:~/Desktop/laowang/laoli$ cat dsahsadhhsafiuqhfuQCBSAH 
+`````````````211``
+******************************************************************
+history （查询历史命令记录）
+python@ubuntu:~/Desktop/laowang/laoli$ history
+******************************************************************
+!907(代表去执行历史记录命令中907行的命令)
+907  ls -lah
+python@ubuntu:~/Desktop/laowang/laoli$ !907
+ls -lah
+总用量 68K
+drwxrwxr-x 2 python python 4.0K 5月   4 18:53 .
+drwxrwxr-x 3 python python 4.0K 5月   4 15:08 ..
+-rw-rw-r-- 1 python python    0 5月   4 16:36 .1234.txt
+-rw-rw-r-- 1 python python  53K 5月   4 17:29 123.txt
+-rw-rw-r-- 1 python python    0 5月   4 15:09 2.txt
+-rw-rw-r-- 1 python python   19 5月   4 18:53 dsahsadhhsafiuqhfuQCBSAH
+-rw-rw-r-- 1 python python    0 5月   4 18:18 dsahsjoisa9298
+******************************************************************
+rm 文件名（删除命令，删除所要删除的文件，无法删除目录）
+******************************************************************
+python@ubuntu:~/Desktop/laowang/laoli$ ls
+123.txt  2.txt  dsahsadhhsafiuqhfuQCBSAH  dsahsjoisa9298
+python@ubuntu:~/Desktop/laowang/laoli$ rm dsahsadhhsafiuqhfuQCBSAH 
+python@ubuntu:~/Desktop/laowang/laoli$ ls
+123.txt  2.txt  dsahsjoisa9298
+******************************************************************
+rm 目录名 -d  (删除所要删除的目录，必须该目录为空时，不为空时如下↓)
+python@ubuntu:~/Desktop/laowang/laoli$ rm 555.txt -d 
+python@ubuntu:~/Desktop/laowang/laoli$ ls
+123.txt  143.txt  183.txt  234     256.txt  nihaolaoli.txt  zzz.txt
+133.txt  153.txt  23       24.txt  288.txt  xxx.txt
+******************************************************************
+rm 目录名 -r  (所删目录非空时)
+python@ubuntu:~/Desktop/laowang/laoli$ rm 555 -r 
+python@ubuntu:~/Desktop/laowang/laoli$ ls
+123.txt  143.txt  183.txt  23   24.txt   288.txt         xxx.txt
+133.txt  153.txt  1.txt    234  256.txt  nihaolaoli.txt  zzz.txt
+******************************************************************
+ls 2* (代表只看当前目录下以2开头的文件名文件，不管有多少位只要是2开头的都满足)
+python@ubuntu:~/Desktop/laowang/laoli$ ls
+123.txt  133.txt  143.txt  153.txt  256.txt  288.txt  nihaolaoli.txt
+python@ubuntu:~/Desktop/laowang/laoli$ ls 2*
+256.txt  288.txt
+******************************************************************
+ls 2?(代表2开头文件名后面只有一位数)，ls 2??(代表2开头文件名后面只有2位数)↓↓↓
+python@ubuntu:~/Desktop/laowang/laoli$ ls
+123.txt  133.txt  143.txt  153.txt  23  234  256.txt  288.txt  nihaolaoli.txt
+python@ubuntu:~/Desktop/laowang/laoli$ ls 2?
+23
+python@ubuntu:~/Desktop/laowang/laoli$ ls 2??
+234
+******************************************************************
+ls 1?3.txt（查询当前目录下1什么3的txt文件）
+python@ubuntu:~/Desktop/laowang/laoli$ ls 1?3.txt
+123.txt  133.txt  143.txt  153.txt  183.txt
+******************************************************************
+ls 1[12345]3.txt和ls 1[1-5]3.txt(查询当前目录下文件名小于163的文件)
+python@ubuntu:~/Desktop/laowang/laoli$ ls 1[12345]3.txt
+123.txt  133.txt  143.txt  153.txt
+python@ubuntu:~/Desktop/laowang/laoli$ ls 1[1-5]3.txt
+123.txt  133.txt  143.txt  153.txt
+********************************************************************************************
+2.重定向*
+ls >xxx.txt（在当前目录下产生xxx.txt文件并且将当前的所有文件名称写入xxx.txt文件内容里去）
+python@ubuntu:~/Desktop/laowang/laoli$ ls >xxx.txt
+python@ubuntu:~/Desktop/laowang/laoli$ ls
+123.txt  133.txt  143.txt  153.txt  183.txt  23  234  256.txt  288.txt  nihaolaoli.txt  xxx.txt
+使用gedit xxx.txt 命令来查看xxx.txt文件里的内容
+python@ubuntu:~/Desktop/laowang/laoli$ gedit xxx.txt 命令来查看xxx.txt文件里的内容 
+
+ls -alh >xxx.txt（将ls -alh列表格式下的内容写入到xxx.txt文件中去）
+python@ubuntu:~/Desktop/laowang/laoli$ ls -alh >xxx.txt
+同上用gedit xxx.txt 命令来查看xxx.txt文件里的内容
+********************************************************************************************
+ls >xxx.txt(一个大于号会把文件里面原来的内容删了再写进去，上面括号未写删除原来的内容)
+ls >>xxx.txt(两个大于号会在文件最末尾把当前应该写的东西写到里面去)
+快捷键：B是网上翻，F是往下翻
+********************************************************************************************
+more xxx.txt(对于数据比较庞大比较多时用more xxx.txt 数据相对比较小用 cat xxx.txt以及gedit xxx.xttx)
+python@ubuntu:~/Desktop/laowang/laoli$ more xxx.txt
+********************************************************************************************
+(将/bin下的文件按ahl列表格式排列后重定向到laoli文件夹zzz.txt下)
+python@ubuntu:~/Desktop/laowang/laoli$ ls -ahl/bin >>zzz.txt
+(再使用more zzz.txt查询即可)
+python@ubuntu:~/Desktop/laowang/laoli$ more zzz.txt
+********************************************************************************************
+将上面查询方法简单化
+ls -ahl /bin | more（|代表管道意思，将ls -ahl /bin的查询内容放在|里，再由more进行分屏显示）
+python@ubuntu:~/Desktop/laowang/laoli$ ls -ahl /bin | more
+********************************************************************************************
+想连续用连个命令即：
+python@ubuntu:~/Desktop/laowang/laoli$ ls;ls -ahl（这种分好可以用，一般不用）
+********************************************************************************************
+********************************************************************************************
+重点！！！！！
+相对路径和绝对路径
+相对路径：从当前路径开始算起的路径
+python@ubuntu:~/Desktop/laowang/laoli$ cd A
+python@ubuntu:~/Desktop/laowang/laoli/A$ pwd
+/home/python/Desktop/laowang/laoli/A
+绝对路径：从根目录开始算起的路径（从当前路径跳回到根目录开始）
+python@ubuntu:~/Desktop/laowang/laoli/A$ cd /
+python@ubuntu:/$ cd /bin
+python@ubuntu:/bin$ pwd
+/bin
+python@ubuntu:/bin$ cd /home/python/Desktop/laowang/laoli/A/
+python@ubuntu:~/Desktop/laowang/laoli/A$ pwd  (不知道当前路径下有没有文件夹敲击2次Tab)
+/home/python/Desktop/laowang/laoli/A
+********************************************************************************************
+关于.和..的用法
+cd ./A (./A的意思是跳到当前路径下的A文件夹下，命令结果和 cd A一样)
+python@ubuntu:~/Desktop/laowang/laoli$ cd ./A
+python@ubuntu:~/Desktop/laowang/laoli/A$ pwd
+/home/python/Desktop/laowang/laoli/A
+cd .. (..的意思就是当前路径的上个路径的意思)
+python@ubuntu:~/Desktop/laowang/laoli/A$ cd ..
+python@ubuntu:~/Desktop/laowang/laoli$ pwd
+/home/python/Desktop/laowang/laoli
+问：分别用相对路径和绝对路径从当前laoli跳到Desktop？
+相对路径: cd ../..(在当前路径下往上调2级)
+python@ubuntu:~/Desktop/laowang/laoli$ cd ../..
+python@ubuntu:~/Desktop$ pwd
+/home/python/Desktop
+绝对路径: cd /home/python/Desktop
+python@ubuntu:~/Desktop/laowang/laoli$ cd /home/python/Desktop
+python@ubuntu:~/Desktop$ 
+总结：哪个离当前用户比较近就用哪个路径(差不多时用绝对路径)
+********************************************************************************************
+cd - (快速回到你上一次你所在的路径！！！不是上一级是上一次你在的路径！！！！)
+python@ubuntu:~/Desktop/laowang/laoli$ cd /home/python/Desktop
+python@ubuntu:~/Desktop$ cd -
+/home/python/Desktop/laowang/laoli
+python@ubuntu:~/Desktop/laowang/laoli$ 
+cd ~ (回到家目录)
+python@ubuntu:~/Desktop/laowang/laoli$ cd ~
+python@ubuntu:~$ pwd
+/home/python
+********************************************************************************************
+tree 查看当前用户下的文件用树形图表示
+python@ubuntu:~/Desktop/laowang/laoli$ tree
+.
+├── 123.txt
+├── 133.txt
+├── 143.txt
+├── 153.txt
+├── 183.txt
+├── 1.txt
+├── 234
+├── 24.txt
+├── 256.txt
+├── 288.txt
+├── A
+├── nihaolaoli.txt
+├── xxx.txt
+└── zzz.txt
+
+1 directory, 13 files
+
+********************************************************************************************
+mkdir 拓展
+(要在当前用户下创建A再在A里创建B，B里创建C，C里创建D，D里创建E)
+mkdir A/B/C/D/E -p (-p你所需的依赖文件会先创建)
+python@ubuntu:~/Desktop/laowang/laoli$ mkdir A/B/C/D/E -p
+python@ubuntu:~/Desktop/laowang/laoli$ tree
+.
+├── 123.txt
+├── 133.txt
+├── 143.txt
+├── 153.txt
+├── 183.txt
+├── 1.txt
+├── 234
+├── 24.txt
+├── 256.txt
+├── 288.txt
+├── A
+│?? └── B
+│??     └── C
+│??         └── D
+│??             └── E
+├── nihaolaoli.txt
+├── xxx.txt
+└── zzz.txt
+****************************************************************************************
+rmdir （删除一个空文件夹和rm -d一个意思，上面笔记有详细说过rm -d，删除非空文件夹用rm -r）
+python@ubuntu:~/Desktop/laowang/laoli/A$ rmdir c (空文件夹)
+python@ubuntu:~/Desktop/laowang/laoli/A$ rm B -r (非空文件夹)
+python@ubuntu:~/Desktop/laowang/laoli/A$ tree
+.
+└── 1.txt
+********************************************************************************************
+软链接
+在Linux下创建快捷方式:ln -s (原文件名) 后面是你所想创建快捷方式名称 ln -s 源文件 链接文件
+python@ubuntu:~/Desktop/A$ ln -s 1.txt 1-softlink.txt
+python@ubuntu:~/Desktop/A$ ls
+1-softlink.txt  1.txt
+使用查看
+python@ubuntu:~/Desktop/A$ cat 1.txt
+Hello World nihaoma
+python@ubuntu:~/Desktop/A$ cat 1-softlink.txt 
+Hello World nihaoma
+删除源文件后快捷方式变红
+python@ubuntu:~/Desktop/A$ rm 1.txt
+python@ubuntu:~/Desktop/A$ ls
+1-softlink.txt
+python@ubuntu:~/Desktop/A$ cat 1-softlink.txt 
+cat: 1-softlink.txt: 没有那个文件或目录
+********************************************************************************************
+硬链接
+ln 源文件 链接文件
+python@ubuntu:~/Desktop/A$ ln 1.txt 1-hardlink.txt
+删除源文件后快捷方式内容一样存在
+python@ubuntu:~/Desktop/A$ rm 1.txt
+python@ubuntu:~/Desktop/A$ cat 1-hardlink.txt 
+nihaoma,yes i'm very good
+总结(软链接指向源文件文件名，而硬链接指向源文件内容，所以删除源文件1.txt后，硬链接存在内容也在↑↑↑)
+********************************************************************************************
+软链接与硬链接区别(硬链接的硬链接数为2，而软链接只有1,)
+python@ubuntu:~/Desktop/A$ ln -s 1.txt 1-softlink.txt
+python@ubuntu:~/Desktop/A$ ls -hl
+总用量 4.0K
+lrwxrwxrwx 1 python python 5 5月   7 14:51 1-softlink.txt -> 1.txt
+-rw-rw-r-- 1 python python 8 5月   7 14:49 1.txt
+python@ubuntu:~/Desktop/A$ ln 1.txt 1-hardlink.txt
+python@ubuntu:~/Desktop/A$ ls -hl
+总用量 8.0K
+-rw-rw-r-- 2 python python 8 5月   7 14:49 1-hardlink.txt
+lrwxrwxrwx 1 python python 5 5月   7 14:51 1-softlink.txt -> 1.txt
+-rw-rw-r-- 2 python python 8 5月   7 14:49 1.txt
+********************************************************************************************
+cat与重定向相结合（达到将两个文件内容合并后重定向到xxx.txt）
+cat 1.txt 2.txt >xxx.txt (cat 可同时查看多个文件内容)
+python@ubuntu:~/Desktop$ cat 1.txt 2.txt >xxx.txt
+python@ubuntu:~/Desktop$ ls
+1.txt  2.txt  4  A  laowang  xxx.txt
+python@ubuntu:~/Desktop$ gedit xxx.txt
+********************************************************************************************
+grep "ntfs" xxx.txt (在xxx.txt文件内容里查找ntfs相关的文件名文件)
+python@ubuntu:~/Desktop$ grep "ntfs" xxx.txt
+lowntfs-3g
+ntfs-3g
+ntfs-3g.probe
+ntfs-3g.secaudit
+ntfs-3g.usermap
+ntfscat
+ntfscluster
+ntfscmp
+ntfsfallocate
+ntfsfix
+ntfsinfo
+ntfsls
+ntfsmove
+ntfstruncate
+ntfswipe
+********************************************************************************************
+grep -n "ntfs" xxx.txt (是显示你所查找文件的索引）
+python@ubuntu:~/Desktop$ grep -n "ntfs" xxx.txt
+64:lowntfs-3g
+84:ntfs-3g
+85:ntfs-3g.probe
+86:ntfs-3g.secaudit
+87:ntfs-3g.usermap
+88:ntfscat
+89:ntfscluster
+90:ntfscmp
+91:ntfsfallocate
+92:ntfsfix
+93:ntfsinfo
+94:ntfsls
+95:ntfsmove
+96:ntfstruncate
+97:ntfswipe
+grep -v "ntfs" xxx.txt (查找不包括ntfs相关的文件名文件)
+python@ubuntu:~/Desktop$ grep -v "ntfs" xxx.txt
+bash
+bunzip2
+busybox
+bzcat
+bzcmp
+bzdiff
+bzegrep
+bzexe
+bzfgrep
+bzgrep
+bzip2
+bzip2recover
+bzless
+bzmore
+cat
+grep "^ntfs" xxx.txt  (查找以ntfs开头的文件名文件，^代表必须是以ntfs开头的文件名文件)
+python@ubuntu:~/Desktop$ grep "^ntfs" xxx.txt
+ntfs-3g
+ntfs-3g.probe
+ntfs-3g.secaudit
+ntfs-3g.usermap
+ntfscat
+ntfscluster
+ntfscmp
+ntfsfallocate
+ntfsfix
+ntfsinfo
+ntfsls
+ntfsmove
+ntfstruncate
+ntfswipe
+grep "ntfs$" xxx.txt (查找以ntfs结尾的文件名文件)
+python@ubuntu:~/Desktop$ grep "s$" xxx.txt
+bzless
+dumpkeys
+less
+loadkeys
+ls
+ntfsls
+ps
+run-parts
+ss
+systemd-tmpfiles
+uncompress
+zless
+********************************************************************************************
+mv 源文件名 新文件名 （重命名文件，实际mv做大的功能是移动move）
+python@ubuntu:~/Desktop/A$ mv 1-softlink.ttx 1-softlink.txt
+python@ubuntu:~/Desktop/A$ ls
+1-softlink.txt  1.txt
+mv 2.txt laowang(将当前用户下的2.txt文件剪切到laowang目录下)
+python@ubuntu:~/Desktop$ mv 2.txt laowang
+********************************************************************************************
+cp 2.txt A (将当前用户下2.txt文件复制粘贴到A目录下 copy)
+python@ubuntu:~/Desktop$ cp 2.txt A
+cp A gebilaowang -r (对于复制粘贴文件夹需在后面加-r 就跟rm文件夹一样)
+python@ubuntu:~/Desktop$ cp A gebilaowang -r 
+********************************************************************************************
+find / -name "*name*" (查找根目录下含有name名称的所有文件)
+python@ubuntu:~/Desktop$ find / -name "*name*" 
+sudo find / -name "*name*"(前面加入sudo 过滤权限不足的文件)
+********************************************************************************************
+tar -cvf test.tar *.py （打包当前目录下.py结尾的文件）
+python@ubuntu:~/Desktop/4$ tar -cvf test.tar *.py 
+python@ubuntu:~/Desktop/4$ ls
+1.py  2.py  3.py  test.tar
+tar -xvf test.tar (解包test.tar文件)
+python@ubuntu:~/Desktop/4/test2$ tar -xvf test.tar
+1.py
+2.py
+3.py
+python@ubuntu:~/Desktop/4/test2$ ls
+1.py  2.py  3.py  test.tar
+tar -zcvf xxx.tar.gz *.py (打包既压缩.tar.gz格式记得在cvf前面加上z，切记)
+python@ubuntu:~/Desktop/4$ tar -zcvf xxx.tar.gz *.py
+********************************************************************************************
+(这里面ls -al与ll一样查询结果，从下面查询结果看出打包同样大小数量相同的文件，.tar格式和.tar.gz大小不一样)
+python@ubuntu:~/Desktop/4/test2$ ls -al
+总用量 24
+drwxrwxr-x 2 python python  4096 5月   7 18:22 .
+drwxrwxr-x 3 python python  4096 5月   7 18:22 ..
+-rw-rw-r-- 1 python python     0 5月   7 18:04 1.py
+-rw-rw-r-- 1 python python     0 5月   7 18:05 2.py
+-rw-rw-r-- 1 python python     0 5月   7 18:05 3.py
+-rw-rw-r-- 1 python python 10240 5月   7 18:05 test.tar
+-rw-rw-r-- 1 python python   160 5月   7 18:22 xxx.tar.gz
+python@ubuntu:~/Desktop/4/test2$ ll
+总用量 24
+drwxrwxr-x 2 python python  4096 5月   7 18:22 ./
+drwxrwxr-x 3 python python  4096 5月   7 18:22 ../
+-rw-rw-r-- 1 python python     0 5月   7 18:04 1.py
+-rw-rw-r-- 1 python python     0 5月   7 18:05 2.py
+-rw-rw-r-- 1 python python     0 5月   7 18:05 3.py
+-rw-rw-r-- 1 python python 10240 5月   7 18:05 test.tar
+-rw-rw-r-- 1 python python   160 5月   7 18:22 xxx.tar.gz
+********************************************************************************************
+tar -zxvf xxx.tar.gz (同样的解包解压缩文件也要在xvf前面加上z)
+python@ubuntu:~/Desktop/4/test2/test3$ tar -zxvf xxx.tar.gz 
+1.py
+2.py
+3.py
+python@ubuntu:~/Desktop/4/test2/test3$ ls
+1.py  2.py  3.py  xxx.tar.gz
+python@ubuntu:~/Desktop/4/test2/test3$ 
+********************************************************************************************
+还有一种打包压缩格式 tar -jcvf yyy.tar.bz2 *.py(.bz2实在cvf前面加j，一定记住这两种打包压缩方式)
+python@ubuntu:~/Desktop/4/test2/test3$ tar -jcvf yyy.tar.bz2 *.py
+1.py
+2.py
+3.py
+python@ubuntu:~/Desktop/4/test2/test3$ ls
+1.py  2.py  3.py  xxx.tar.gz  yyy.tar.bz2
+python@ubuntu:~/Desktop/4/test2/test3$ ll
+总用量 28
+drwxrwxr-x 2 python python  4096 5月   7 18:39 ./
+drwxrwxr-x 3 python python  4096 5月   7 18:31 ../
+-rw-rw-r-- 1 python python 10240 5月   7 18:18 1.py
+-rw-rw-r-- 1 python python     0 5月   7 18:05 2.py
+-rw-rw-r-- 1 python python     0 5月   7 18:05 3.py
+-rw-rw-r-- 1 python python   160 5月   7 18:22 xxx.tar.gz
+-rw-rw-r-- 1 python python   174 5月   7 18:39 yyy.tar.bz2
+tar -jxvf yyy.tar.bz2(解压bz2文件同理)
+python@ubuntu:~/Desktop/4/test2/test3/test4$ tar -jxvf yyy.tar.bz2
+1.py
+2.py
+3.py
+python@ubuntu:~/Desktop/4/test2/test3/test4$ ls
+1.py  2.py  3.py  yyy.tar.bz2
+总结:用哪种方式压缩的就用哪种方式解压
+
+which (查看用的命令到底是在哪个路径下的文件)
+python@ubuntu:~/Desktop/4/test2/test3/test4$ which ls
+/bin/ls
+python@ubuntu:~/Desktop/4/test2/test3/test4$ which rm
+/bin/rm
+********************************************************************************************
+查看日历 (cal -y 2008)
+python@ubuntu:~/Desktop$ cal -y 2008
+                            2008
+         一月                    二月                    三月           
+日 一 二 三 四 五 六  日 一 二 三 四 五 六  日 一 二 三 四 五 六  
+       1  2  3  4  5                  1  2                     1  
+ 6  7  8  9 10 11 12   3  4  5  6  7  8  9   2  3  4  5  6  7  8  
+13 14 15 16 17 18 19  10 11 12 13 14 15 16   9 10 11 12 13 14 15  
+20 21 22 23 24 25 26  17 18 19 20 21 22 23  16 17 18 19 20 21 22  
+27 28 29 30 31        24 25 26 27 28 29     23 24 25 26 27 28 29  
+                                            30 31           
+重定向到文件里面打开
+python@ubuntu:~/Desktop$ cal -y 2008 >3.txt
+python@ubuntu:~/Desktop$ gedit 3.txt 
+查看日期显示不一样的格式
+python@ubuntu:~/Desktop$ date "+%Y==%m==%d"
+2018==05==07
+python@ubuntu:~/Desktop$ date "+%y==%m==%d"
+18==05==07
+********************************************************************************************
+任务管理器
+1:python@ubuntu:~/Desktop$ ps -aux
+2:python@ubuntu:~/Desktop$ top
+3:python@ubuntu:~/Desktop$ htop
+结束进程
+Desktop$ kill -9 (-9代表强制结束的意思)
+python@ubuntu:~/Desktop$ kill -9 2503
+********************************************************************************************
+reboot (重启)
+shutdown(关机)
+shutdown -r now (重启操作系统，shutdown会给其他用户提示)
+shutdown -h now (立即关机，其中now相当于时间为0的意思)
+shutdown -h 20:00 (系统在今天20:00关机)
+shutdown -h +10 (十分钟后关机)
+init 0(关机)
+init 6(重启)
+
+显示硬盘的使用情况
+python@ubuntu:~/Desktop$ df -h
+文件系统        容量  已用  可用 已用% 挂载点
+udev            972M     0  972M    0% /dev
+tmpfs           199M  8.8M  190M    5% /run
+/dev/sda1        21G  9.5G   11G   49% /
+tmpfs           992M  216K  991M    1% /dev/shm
+tmpfs           5.0M  4.0K  5.0M    1% /run/lock
+tmpfs           992M     0  992M    0% /sys/fs/cgroup
+tmpfs           199M   68K  199M    1% /run/user/1000
+显示当前路径使用情况
+python@ubuntu:~/Desktop$ du -h
+********************************************************************************************
+查看IP地址情况
+python@ubuntu:~/Desktop$ ifconfig
+修改IP地址
+python@ubuntu:~/Desktop$ sudo ifconfig ens33 192.168.2.1
+********************************************************************************************
+创建一个用户(不确定是否是个账户)
+python@ubuntu:~/Desktop$ sudo useradd Taogang -m(m代表默认在根目录下创建一个家目录的意思)
+确定方法：
+python@ubuntu:/etc$ cat /etc/passwd
+查看最下面会有：Taogang:x:1001:1001::/home/Taogang: 代表创建的是一个账户
+给新创建的用户设置密码(也可以拿来修改密码)
+python@ubuntu:/etc$ sudo passwd Taogang
+切换用户以及推出当前用户
+Taogang@ubuntu:~$ whoami
+Taogang
+Taogang@ubuntu:~$ exit
+exit
+python@ubuntu:/etc$ whoami
+python
+python@ubuntu:/etc$ 
+远程其他ubuntu电脑
+ssh python@192.168.245.128
+Taogang@ubuntu:/home/python/Desktop$ ssh python@192.168.245.128
+打开新的标签
+Ctrl Shift +T
+删除用户(只删除远程登录的用户，家目录还存在)
+python@ubuntu:~/Desktop$ sudo userdel gebilaowang
+彻底删除
+python@ubuntu:~/Desktop$ sudo userdel -r gebilaowang
+如果删除用户后主目录还在，可手动删除
+python@ubuntu:~/Desktop$ sudo rm -rf /home/gebilaowang/
+python@ubuntu:~/Desktop$ ls /home
+python  Taogang
+********************************************************************************************
+在当前用户目录下切换用户，新用户默认也是之前用户的路径
+python@ubuntu:~$ pwd
+/home/python
+python@ubuntu:~$ su Taogang
+密码： 
+Taogang@ubuntu:/home/python$ 
+********************************************************************************************
+使用 su - Taogang (-前后都有空格！)(-的意思就是切换用户时也切换到用户的家目录)
+Taogang@ubuntu:/home/python$ exit
+exit
+python@ubuntu:~$ su - Taogang 
+密码： 
+Taogang@ubuntu:~$ pwd
+/home/Taogang
+Taogang@ubuntu:~$ 
+********************************************************************************************
+切换超级管理员两种方式($代表普通用户，#代表超级管理员)
+python@ubuntu:~$ su root
+密码： 
+root@ubuntu:/home/python# 
+**************************
+python@ubuntu:~$ sudo -s
+root@ubuntu:~# 
+****************************************************************************************
+查看当前所有的用户组(两种方式)
+cat /etc/group
+python@ubuntu:~/Desktop$ cat /etc/group
+groupmod+三次Tab键
+******************************
+创建组
+groupadd 组名
+python@ubuntu:~/Desktop$ sudo groupadd yyy
+[sudo] python 的密码： 
+python@ubuntu:~/Desktop$ cat /etc/group
+删除组
+python@ubuntu:~/Desktop$ sudo groupdel yyy
+python@ubuntu:~/Desktop$ groupmod 
+默认的普通账户没有切换管理员的权限
+Taogang@ubuntu:/home/python/Desktop$ sudo -s
+[sudo] Taogang 的密码： 
+Taogang 不在 sudoers 文件中。此事将被报告。
+******************************
+为创建的普通用户添加sudo权限和adm权限
+python@ubuntu:~/Desktop$ sudo usermod -a -G sudo Taogang
+[sudo] python 的密码： 
+python@ubuntu:~/Desktop$ sudo usermod -a -G adm Taogang
+python@ubuntu:~/Desktop$ su Taogang 
+密码： 
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+
+Taogang@ubuntu:/home/python/Desktop$ sudo -s
+[sudo] Taogang 的密码： 
+root@ubuntu:/home/python/Desktop# 
+******************************
+查找当前用户组下的sudo和adm相关的组
+Taogang@ubuntu:/home/python/Desktop$ cat /etc/group | grep sudo
+sudo:x:27:python
+Taogang@ubuntu:/home/python/Desktop$ cat /etc/group | grep adm
+adm:x:4:syslog,python
+lpadmin:x:113:python
+********************************************************************************************
+修改文件所属组
+chgrp 组名 文件
+root@ubuntu:/home/python/Desktop/4# chgrp YYY 2.py
+root@ubuntu:/home/python/Desktop/4# ll
+总用量 24
+drwxrwxr-x 3 python python  4096 5月   7 18:22 ./
+drwxr-xr-x 6 python python  4096 5月   8 10:21 ../
+-rw-rw-r-- 1 python python 10240 5月   7 18:18 1.py
+-rw-rw-r-- 1 python YYY        0 5月   7 18:05 2.py
+-rw-rw-r-- 1 python python     0 5月   7 18:05 3.py
+drwxrwxr-x 3 python python  4096 5月   7 18:31 test2/
+修改文件所有者
+chown 组名 文件
+root@ubuntu:/home/python/Desktop/4# chown Taogang 2.py 
+root@ubuntu:/home/python/Desktop/4# ll
+总用量 24
+drwxrwxr-x 3 python  python  4096 5月   7 18:22 ./
+drwxr-xr-x 6 python  python  4096 5月   8 10:21 ../
+-rw-rw-r-- 1 python  python 10240 5月   7 18:18 1.py
+-rw-rw-r-- 1 Taogang YYY        0 5月   7 18:05 2.py
+-rw-rw-r-- 1 python  python     0 5月   7 18:05 3.py
+drwxrwxr-x 3 python  python  4096 5月   7 18:31 test2/
+********************************************************************************************
+********************************************************************************************
+有下面查询结果来解析文件和文件夹
+drwxrwxr-x 3 python  python  4096 5月   7 18:22 ./
+drwxr-xr-x 6 python  python  4096 5月   8 10:21 ../
+-rw-rw-r-- 1 python  python 10240 5月   7 18:18 1.py
+-rw-rw-r-- 1 Taogang YYY        0 5月   7 18:05 2.py
+-rw-rw-r-- 1 python  python     0 5月   7 18:05 3.py
+drwxrwxr-x 3 python  python  4096 5月   7 18:31 test2/
+解：以2.py来说明
+Taogang:指的是文件的所有者；YYY:代表哪一个组拥有这个文件 1：代表硬链接数
+-rw-rw-r--解析：10个字段分成四组 |-| ，|rw-|， |rw-| ，|r--| 
+  - :判断该文件是文件而不是文件夹 d：代表文件的意思
+rw- :文件拥有者权限
+rw- :同组者权限
+r-- :其他人权限
+*******************************
+rmx:可读可写可执行
+r:只可读
+rx :可读可执行不可写
+举例：- rw- rw- r-- 1 Taogang YYY        0 5月   7 18:05 2.py
+        1   2   3
+1：解释就是文件所有者权限是可读可写不可执行权限
+2：解释就是同组者权限是可读可写不可执行权限
+3: 解释就是其他人权限是只读权限
+********************************************************************************************
+修改文件权限
+chmod 
+修改文件拥有者权限
+root@ubuntu:/home/python/Desktop/4# chmod u=rwx 2.py
+修改同组者权限
+root@ubuntu:/home/python/Desktop/4# chmod g=rwx 2.py
+修改其他人权限
+root@ubuntu:/home/python/Desktop/4# chmod o=rwx 2.py
+*******************************************************
+root@ubuntu:/home/python/Desktop/4# ll
+总用量 24
+drwxrwxr-x 3 python  python  4096 5月   7 18:22 ./
+drwxr-xr-x 6 python  python  4096 5月   8 10:21 ../
+-rw-rw-r-- 1 python  python 10240 5月   7 18:18 1.py
+-rwxrwxrwx 1 Taogang YYY        0 5月   7 18:05 2.py*
+-rw-rw-r-- 1 python  python     0 5月   7 18:05 3.py
+drwxrwxr-x 3 python  python  4096 5月   7 18:31 test2/
+一次修改多个权限
+chmod u=rw,g=rw,o=r 2.py
+root@ubuntu:/home/python/Desktop/4# chmod u=rw,g=rw,o=r 2.py
+root@ubuntu:/home/python/Desktop/4# ll
+总用量 24
+drwxrwxr-x 3 python  python  4096 5月   7 18:22 ./
+drwxr-xr-x 6 python  python  4096 5月   8 10:21 ../
+-rw-rw-r-- 1 python  python 10240 5月   7 18:18 1.py
+-rw-rw-r-- 1 Taogang YYY        0 5月   7 18:05 2.py
+-rw-rw-r-- 1 python  python     0 5月   7 18:05 3.py
+drwxrwxr-x 3 python  python  4096 5月   7 18:31 test2/
+修改文件所有权限为空
+root@ubuntu:/home/python/Desktop/4# chmod u=,g=,o= 2.py
+---------- 1 Taogang YYY        0 5月   7 18:05 2.py
+退出超级管理员权限后查看
+Taogang@ubuntu:/home/python/Desktop$ gedit 2.py
+No protocol specified
+Failed to connect to Mir: Failed to connect to server socket: 权限不够
+Unable to init server: 无法连接： 拒绝连接
+
+(gedit:8332): Gtk-WARNING **: cannot open display: :0
+********************************************************************************************
+通过数字法来修改文件权限
+r	读取权限，数字代号为 "4"
+w	写入权限，数字代号为 "2"
+x	执行权限，数字代号为 "1"
+-	不具任何权限，数字代号为 "0"
+chmod 764 2.py 
+解释：意思就是7代表所有者权限 6代表同组者权限 4代表其他人权限
+7是由(4+2+1)就相当于 u=rwx
+6是由(2+1)就相当于   u=rw
+4是由(4)就相当于     u=r
+Taogang@ubuntu:/home/python/Desktop/4$ chmod 764 2.py
+Taogang@ubuntu:/home/python/Desktop/4$ ll
+总用量 24
+drwxrwxr-x 3 python  python  4096 5月   7 18:22 ./
+drwxr-xr-x 6 python  python  4096 5月   8 10:21 ../
+-rw-rw-r-- 1 python  python 10240 5月   7 18:18 1.py
+-rwxrw-r-- 1 Taogang YYY        0 5月   7 18:05 2.py*
+-rw-rw-r-- 1 python  python     0 5月   7 18:05 3.py
+drwxrwxr-x 3 python  python  4096 5月   7 18:31 test2/
+********************************************************************************************
+********************************************************************************************
+重点vim
+三种模式
+1.命令模式
+2.编辑模式
+3.末行模式
+vi命令
+yy :复制 光标所在的这一行  4yy :复制 光标所在的这一行开始向下的4行
+p :粘贴
+dd :删除(实际上是剪切只要你不粘贴) 光标所在的这一行  2dd :删除 光标所在的向下两行
+D:从当前光标开始剪接，一直到行末
+d0 :从当前光标开始剪接，一直到行首
+x :删除当前的光标，每次只会删除一个
+X :删除当前光标前面的一个，每次只会删除一个
+h:左   j:下  k:上  l:右 
+H :当前屏幕的上方 
+M :当前屏幕的中间   
+L :当前屏幕的下方    
+Ctrl+f :向下翻一页代码
+Ctrl+b :向上翻一页代码
+Ctrl+d :向下翻半页代码                         
+Ctrl+u :向上翻半页代码
+20G :快速定位到第20行代码
+G :快速回到整个代码的最后一行
+w:向后跳一个单词的长度，即调到下一个单词的开头处
+b:向前跳一个单词的长度，即调到上一个单词的开头处
+u:撤销刚刚的操作
+Ctrl+r：反撤销
+选中一片代码
+v:按字符移动,选中文本 
+V:按行移动,选中文本可视模式可以配合 d, y, >>, << 实现对文本块的删除,复制,左右移动
+>> :向右移动代码
+<< :向左移动代码
+. :重复上个命令
+r :替换一个字符
+R :替换光标以及光标后面的字符
+/ :查找
+n :下一个
+N :上一个
+替换命令：
+
+把abc全部替换成123
+
+末行模式下，将光标所在行的abc替换成123
+:%s/abc/123/g
+
+末行模式下，将第一行至第10行之间的abc替换成123
+:1, 10s/abc/123/g
+
+末行模式下下
+w:保存
+q:退出
+wq:保存退出
+q!:只退出不保存
+在命令模式下的保存退出
+Shift+zz :相当于:wq
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
